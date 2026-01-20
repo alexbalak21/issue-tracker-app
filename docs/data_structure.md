@@ -44,3 +44,15 @@ messages
 | body             | text        | Message content                 |
 | created_at       | timestamp   | Creation time                   |
 | updated_at       | timestamp   | Last update                     |
+
+
+users
+| Field       | Type        | Description                          |
+|-------------|-------------|--------------------------------------|
+| id          | int         | Primary key                          |
+| name        | string      | Full name of the user                |
+| email       | string      | Unique login identifier              |
+| password    | string      | Hashed password                      |
+| role        | string      | user, agent, manager, admin          |
+| created_at  | timestamp   | Account creation time                |
+| updated_at  | timestamp   | Last update                          |

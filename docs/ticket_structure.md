@@ -101,5 +101,3 @@ If you want, I can also generate:
 - Spring Boot entities with relationships  
 - TypeScript interfaces  
 - A Mermaid ERD diagram  
-
-Just tell me what you want next.
