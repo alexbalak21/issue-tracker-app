@@ -157,5 +157,10 @@ frontend/       # React + TS + Tailwind UI
 - Dark/light theme toggle  
 - SLA timers  
 - Audit trails  
+- Advanced attachments module (multiple files, previews, secure storage)  
+- Enhanced notification system (real‑time updates, WebSockets, push notifications)  
+- Expanded audit logging (user actions, ticket lifecycle history, security events)  
+- SLA timer engine (breach detection, escalation rules, automated reminders)  
+- Manager dashboards (KPIs, ticket metrics, agent performance, workload distribution)
 
 ---
