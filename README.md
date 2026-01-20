@@ -26,34 +26,80 @@ The system is designed to be extendable, minimal, and maintainable — with clea
 
 ---
 
-## 🧩 Issue Model
+## 🧩 Ticket Model (Database Schema)
 
-Each issue contains the following fields:
+### **ticket**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `title` | string | Short summary of the issue |
-| `description` | string | High‑level explanation |
-| `body` | text | Full detailed report |
-| `priority_id` | FK | Links to a priority table |
-| `created_by` | FK (user_id) | User who created the issue |
-| `assigned_to` | FK (agent_id) | Agent assigned to handle it |
-| `created_at` | timestamp | Auto‑generated |
-| `updated_at` | timestamp | Auto‑updated |
+| Field        | Type        | Description                     |
+|--------------|-------------|---------------------------------|
+| id           | int         | Primary key                     |
+| title        | string      | Ticket title                    |
+| body         | text        | Ticket description              |
+| priority_id  | int (FK)    | Priority reference              |
+| status_id    | int (FK)    | Status reference                |
+| created_by   | int (FK)    | User who created the ticket     |
+| assigned_to  | int (FK)    | Agent assigned                  |
+| created_at   | timestamp   | Creation time                   |
+| updated_at   | timestamp   | Last update                     |
+| resolved_at  | timestamp   | Resolution time                 |
 
 ---
 
-## 🔥 Priority / Relevance System
+### **notes** (Internal‑Only)
 
-Priorities are stored in a dedicated table so they can be added, edited, or removed dynamically.
+| Field       | Type        | Description                               |
+|-------------|-------------|-------------------------------------------|
+| id          | int         | Primary key                               |
+| ticket_id   | int (FK)    | Linked ticket                             |
+| created_by  | int (FK)    | Agent/manager/admin who created the note  |
+| updated_by  | int (FK)    | Agent/manager/admin who updated the note  |
+| body        | text        | Internal note content                     |
+| created_at  | timestamp   | Creation time                             |
+| updated_at  | timestamp   | Last update                               |
 
-Default priorities:
+---
 
-- **Urgent** — Blocks the work process  
-- **Normal** — Annoying but manageable  
-- **Small** — Minor bug or inconvenience  
+### **conversation**
 
-This design keeps the system flexible and future‑proof.
+| Field      | Type        | Description             |
+|------------|-------------|-------------------------|
+| id         | int         | Primary key             |
+| ticket_id  | int (FK)    | Linked ticket           |
+| created_at | timestamp   | Creation time           |
+| updated_at | timestamp   | Last update             |
+
+---
+
+### **messages**
+
+| Field            | Type        | Description                     |
+|------------------|-------------|---------------------------------|
+| id               | int         | Primary key                     |
+| conversation_id  | int (FK)    | Linked conversation             |
+| sender_id        | int (FK)    | User or agent who sent message  |
+| body             | text        | Message content                 |
+| created_at       | timestamp   | Creation time                   |
+| updated_at       | timestamp   | Last update                     |
+
+---
+
+## 🏷️ Priority Table
+
+| Field | Type        | Description                 |
+|-------|-------------|-----------------------------|
+| id    | int         | Primary key                 |
+| name  | string      | Priority label (e.g. Low)   |
+| level | int         | Numeric weight (1–5)        |
+
+---
+
+## 📌 Status Table
+
+| Field | Type        | Description                       |
+|-------|-------------|-----------------------------------|
+| id    | int         | Primary key                       |
+| name  | string      | Status label (e.g. Open)          |
+| type  | string      | Category (open, active, closed)   |
 
 ---
 
@@ -68,8 +114,8 @@ This design keeps the system flexible and future‑proof.
 ## 📂 Project Structure (High‑Level)
 
 issue-tracker-app/
-├── backend/        # Spring Boot API
-└── frontend/       # React + TS + Tailwind UI
+backend/        # Spring Boot API
+frontend/       # React + TS + Tailwind UI
 
 
 ---
@@ -79,7 +125,9 @@ issue-tracker-app/
 - JWT‑based authentication  
 - Role‑based access  
 - Issue creation & assignment  
-- Priority management  
+- Priority & status management  
+- Internal notes (private to staff)  
+- Public conversation messages  
 - Responsive UI  
 - PostgreSQL relational schema  
 
@@ -87,28 +135,20 @@ issue-tracker-app/
 
 ## 🗄️ Database Notes
 
-The `priority` table allows dynamic management of relevance levels.  
-Issues reference users and agents through foreign keys, ensuring clean relational integrity.
+- Tickets reference users, agents, priorities, and statuses  
+- Notes are **internal‑only** and never visible to end users  
+- Messages belong to a conversation thread per ticket  
+- Schema is clean, normalized, and scalable  
 
 ---
 
 ## 🧪 Future Enhancements
 
-- Comment system on issues  
 - File attachments  
 - Activity logs  
 - Email or in‑app notifications  
 - Dark/light theme toggle  
+- SLA timers  
+- Audit trails  
 
 ---
-
-## 📜 License
-
-MIT License (or your preferred license)
-
----
-
-## 🤝 Contributions
-
-Pull requests are welcome.  
-For major changes, open an issue to discuss what you’d like to modify.
