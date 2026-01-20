@@ -69,10 +69,3 @@ This approach is ideal for internal company environments where only authorized s
 | admin    | Full system control                       |
 
 ---
-
-If you want, I can also generate:
-
-- API endpoints for user creation  
-- Spring Boot entity + service + controller  
-- React UI for Admin/Manager user creation  
-- A role‑based access control (RBAC) diagram  
