@@ -26,6 +26,13 @@ The system is designed to be extendable, minimal, and maintainable — with clea
 
 ---
 
+## 📚 Documentation
+
+- [Roadmap](roadmap.md)  
+- [Ticket Structure](docs/ticket_structure.md)  
+
+---
+
 ## 🧩 Ticket Model (Database Schema)
 
 ### **ticket**
