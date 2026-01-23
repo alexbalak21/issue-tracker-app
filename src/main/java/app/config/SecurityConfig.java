@@ -28,19 +28,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable());
-
-        // DEV profile CORS configuration for React dev server
-        if (corsConfigurationSource != null) {
-            http.cors(cors -> cors.configurationSource(corsConfigurationSource));
-        }
-
+        
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/",
                         "/index.html",
                         "/assets/**",
-                        "/*.svg",
-                        "/favicon.ico",
+                        "/favicon.svg",
                         "/static/**")
                 .permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
