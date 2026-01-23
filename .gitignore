@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### LOGS ###
+*.log
+logs/
+
 ### REACT BUILD ###
 src/main/resources/static/*
 
