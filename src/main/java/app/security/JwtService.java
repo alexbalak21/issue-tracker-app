@@ -35,16 +35,25 @@ public class JwtService {
     // ACCESS TOKEN GENERATION
     // ---------------------------
 
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", user.getRole().name());
         claims.put("email", user.getEmail());
         claims.put("name", user.getName());
 
-        return createAccessToken(claims, String.valueOf(user.getId()));
+        String jti = UUID.randomUUID().toString();
+
+        return Jwts.builder()
+            .setClaims(claims)
+            .setId(jti)
+            .setSubject(String.valueOf(user.getId()))
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + accessExpirationMs))
+            .signWith(getAccessKey(), SignatureAlgorithm.HS256)
+            .compact();
     }
 
-    public String generateToken(CustomUserDetails userDetails) {
+    public String generateAccessToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -52,20 +61,16 @@ public class JwtService {
         claims.put("email", userDetails.getEmail());
         claims.put("name", userDetails.getName());
 
-        return createAccessToken(claims, String.valueOf(userDetails.getId()));
-    }
-
-    private String createAccessToken(Map<String, Object> claims, String subject) {
         String jti = UUID.randomUUID().toString();
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setId(jti)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + accessExpirationMs))
-                .signWith(getAccessKey(), SignatureAlgorithm.HS256)
-                .compact();
+            .setClaims(claims)
+            .setId(jti)
+            .setSubject(String.valueOf(userDetails.getId()))
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + accessExpirationMs))
+            .signWith(getAccessKey(), SignatureAlgorithm.HS256)
+            .compact();
     }
 
     // ---------------------------
