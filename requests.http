@@ -1,4 +1,12 @@
-POST http://localhost:8100/api/auth/register
+
+@baseUrl = http://localhost:8100/api
+# @baseUrl = https://app-latest-4nnj.onrender.com/api
+@token = ""
+@refreshToken = ""
+
+
+### REGISTER USER ###
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
@@ -8,11 +16,21 @@ Content-Type: application/json
 }
 
 ###LOCAL REQUEST###
-POST http://localhost:8100/api/auth/login
+# @name login
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
     "email": "testuser@example.com",
     "password": "password123"
 }
+
+@token = {{login.response.body.data.accessToken}}
+
+
+
+### GET CURRENT USER ###
+GET {{baseUrl}}/user
+Content-Type:  application/json
+Authorization: Bearer {{token}}
 

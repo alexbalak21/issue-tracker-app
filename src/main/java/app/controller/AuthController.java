@@ -23,11 +23,6 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
