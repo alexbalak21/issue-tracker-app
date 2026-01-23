@@ -2,9 +2,17 @@ POST http://localhost:8100/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "test_user1",
+    "name": "test_user1",
     "email": "testuser@example.com",
     "password": "password123"
 }
 
+###LOCAL REQUEST###
+POST http://localhost:8100/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "testuser@example.com",
+    "password": "password123"
+}
 
