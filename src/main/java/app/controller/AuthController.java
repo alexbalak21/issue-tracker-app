@@ -4,20 +4,24 @@ import app.dto.ApiResponse;
 import app.dto.RegisterRequest;
 import app.service.UserService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
-    
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     private final UserService userService;
-    
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -29,7 +33,7 @@ public class AuthController {
             log.info("Received registration request for user: {}", registerRequest.getUsername());
             var user = userService.registerUser(registerRequest);
             log.info("User registered successfully: {}", user.getUsername());
-            
+
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new ApiResponse<>(

@@ -1,4 +1,4 @@
-POST http://localhost:8080/api/auth/register
+POST http://localhost:8100/api/auth/register
 Content-Type: application/json
 
 {
@@ -6,3 +6,5 @@ Content-Type: application/json
     "email": "testuser@example.com",
     "password": "password123"
 }
+
+

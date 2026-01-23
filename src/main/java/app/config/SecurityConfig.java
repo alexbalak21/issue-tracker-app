@@ -29,15 +29,22 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 
-        //DEV profile CORS configuration for React dev server
+        // DEV profile CORS configuration for React dev server
         if (corsConfigurationSource != null) {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource));
         }
 
         http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                        "/",
+                        "/index.html",
+                        "/assets/**",
+                        "/*.svg",
+                        "/favicon.ico",
+                        "/static/**")
+                .permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-        );
+                .anyRequest().authenticated());
 
         http.httpBasic(httpBasic -> httpBasic.disable());
         http.formLogin(form -> form.disable());
