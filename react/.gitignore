@@ -10,6 +10,9 @@ lerna-debug.log*
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### React build ###
+/src/main/resources/static/*
+
 node_modules
 dist
 dist-ssr
