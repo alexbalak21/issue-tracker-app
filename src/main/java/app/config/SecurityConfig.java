@@ -7,17 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    private final CorsConfigurationSource corsConfigurationSource;
-
-    public SecurityConfig(CorsConfigurationSource corsConfigurationSource) {
-        this.corsConfigurationSource = corsConfigurationSource;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -27,20 +20,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        // CORS handled by CorsConfig
+        http.cors(cors -> {});
+
+        // Disable CSRF (API-only backend)
         http.csrf(csrf -> csrf.disable());
-        
+
         http.authorizeHttpRequests(auth -> auth
+                // React static build
                 .requestMatchers(
                         "/",
                         "/index.html",
                         "/assets/**",
                         "/favicon.svg",
-                        "/static/**")
-                .permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated());
+                        "/static/**"
+                ).permitAll()
 
-        http.httpBasic(httpBasic -> httpBasic.disable());
+                // Public API endpoints
+                .requestMatchers("/api/auth/**").permitAll()
+
+                // Everything else requires authentication
+                .anyRequest().authenticated()
+        );
+
+        // Disable form login + HTTP Basic (API uses tokens or custom auth)
+        http.httpBasic(basic -> basic.disable());
         http.formLogin(form -> form.disable());
 
         return http.build();

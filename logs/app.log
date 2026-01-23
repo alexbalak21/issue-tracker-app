@@ -2094,3 +2094,166 @@ This generated password is for development use only. Your security configuration
 2026-01-23T14:15:56.858+01:00  INFO 16276 --- [issue-tracker] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-01-23T14:15:56.891+01:00  INFO 16276 --- [issue-tracker] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-01-23T14:15:56.991+01:00  INFO 16276 --- [issue-tracker] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-01-23T14:20:13.445+01:00  INFO 15056 --- [issue-tracker] [main] app.Application                          : Starting Application v0.0.1-SNAPSHOT using Java 25 with PID 15056 (S:\DEV\issue-tracker-app\target\issue-tracker-0.0.1-SNAPSHOT.jar started by ALEX in S:\DEV\issue-tracker-app)
+2026-01-23T14:20:13.454+01:00  INFO 15056 --- [issue-tracker] [main] app.Application                          : The following 1 profile is active: "prod"
+2026-01-23T14:20:15.949+01:00  INFO 15056 --- [issue-tracker] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-23T14:20:16.153+01:00  INFO 15056 --- [issue-tracker] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 170 ms. Found 1 JPA repository interface.
+2026-01-23T14:20:17.979+01:00  INFO 15056 --- [issue-tracker] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8100 (http)
+2026-01-23T14:20:18.032+01:00  INFO 15056 --- [issue-tracker] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-23T14:20:18.035+01:00  INFO 15056 --- [issue-tracker] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-23T14:20:18.135+01:00  INFO 15056 --- [issue-tracker] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-23T14:20:18.138+01:00  INFO 15056 --- [issue-tracker] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4521 ms
+2026-01-23T14:20:18.887+01:00  INFO 15056 --- [issue-tracker] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-23T14:20:19.198+01:00  INFO 15056 --- [issue-tracker] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.41.Final
+2026-01-23T14:20:19.325+01:00  INFO 15056 --- [issue-tracker] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-01-23T14:20:20.252+01:00  INFO 15056 --- [issue-tracker] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-23T14:20:20.359+01:00  INFO 15056 --- [issue-tracker] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-23T14:20:20.996+01:00  INFO 15056 --- [issue-tracker] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7cca31fc
+2026-01-23T14:20:21.002+01:00  INFO 15056 --- [issue-tracker] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-01-23T14:20:21.137+01:00  WARN 15056 --- [issue-tracker] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-23T14:20:21.205+01:00  INFO 15056 --- [issue-tracker] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-23T14:20:24.951+01:00  INFO 15056 --- [issue-tracker] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-23T14:20:25.111+01:00  INFO 15056 --- [issue-tracker] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-23T14:20:25.274+01:00  INFO 15056 --- [issue-tracker] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-01-23T14:20:28.725+01:00  WARN 15056 --- [issue-tracker] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d9b3b861-2c97-4bdd-88c9-bdb4688c5bf5
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-23T14:20:28.821+01:00  INFO 15056 --- [issue-tracker] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-23T14:20:29.302+01:00 DEBUG 15056 --- [issue-tracker] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-01-23T14:20:30.189+01:00  INFO 15056 --- [issue-tracker] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8100 (http) with context path '/'
+2026-01-23T14:20:30.221+01:00  INFO 15056 --- [issue-tracker] [main] app.Application                          : Started Application in 18.517 seconds (process running for 19.935)
+2026-01-23T14:20:32.625+01:00  INFO 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-23T14:20:32.627+01:00  INFO 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-23T14:20:32.630+01:00  INFO 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-23T14:20:32.673+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /
+2026-01-23T14:20:32.702+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /
+2026-01-23T14:20:32.793+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /index.html
+2026-01-23T14:20:32.795+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /index.html
+2026-01-23T14:20:32.869+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:32.904+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-tn0RQdqM.css
+2026-01-23T14:20:32.909+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-DJy13hI6.js
+2026-01-23T14:20:32.913+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-tn0RQdqM.css
+2026-01-23T14:20:32.913+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-DJy13hI6.js
+2026-01-23T14:20:32.982+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:32.992+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:33.163+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /favicon.svg
+2026-01-23T14:20:33.172+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /favicon.svg
+2026-01-23T14:20:33.203+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:53.024+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /
+2026-01-23T14:20:53.036+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /
+2026-01-23T14:20:53.048+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /index.html
+2026-01-23T14:20:53.052+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /index.html
+2026-01-23T14:20:53.058+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:53.134+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-DJy13hI6.js
+2026-01-23T14:20:53.141+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-tn0RQdqM.css
+2026-01-23T14:20:53.143+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-DJy13hI6.js
+2026-01-23T14:20:53.145+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-tn0RQdqM.css
+2026-01-23T14:20:53.163+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:53.171+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:53.297+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /favicon.svg
+2026-01-23T14:20:53.301+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /favicon.svg
+2026-01-23T14:20:53.307+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:54.195+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /
+2026-01-23T14:20:54.198+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /
+2026-01-23T14:20:54.205+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /index.html
+2026-01-23T14:20:54.209+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /index.html
+2026-01-23T14:20:54.219+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:54.283+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-tn0RQdqM.css
+2026-01-23T14:20:54.284+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-DJy13hI6.js
+2026-01-23T14:20:54.285+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-tn0RQdqM.css
+2026-01-23T14:20:54.286+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-DJy13hI6.js
+2026-01-23T14:20:54.290+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:54.313+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:20:54.463+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /favicon.svg
+2026-01-23T14:20:54.467+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /favicon.svg
+2026-01-23T14:20:54.473+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:21:02.085+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /
+2026-01-23T14:21:02.087+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /
+2026-01-23T14:21:02.092+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /index.html
+2026-01-23T14:21:02.093+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /index.html
+2026-01-23T14:21:02.107+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:21:02.165+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-DJy13hI6.js
+2026-01-23T14:21:02.171+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-DJy13hI6.js
+2026-01-23T14:21:02.173+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /assets/index-tn0RQdqM.css
+2026-01-23T14:21:02.178+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /assets/index-tn0RQdqM.css
+2026-01-23T14:21:02.185+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:21:02.198+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:21:02.535+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /favicon.svg
+2026-01-23T14:21:02.540+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /favicon.svg
+2026-01-23T14:21:02.547+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:21:14.092+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-5] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/register
+2026-01-23T14:21:14.094+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-5] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/register
+2026-01-23T14:21:14.390+01:00  INFO 15056 --- [issue-tracker] [http-nio-8100-exec-5] app.controller.AuthController            : Received registration request for user: test_user
+2026-01-23T14:21:15.241+01:00  INFO 15056 --- [issue-tracker] [http-nio-8100-exec-5] app.controller.AuthController            : User registered successfully: test_user
+2026-01-23T14:21:15.318+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:21:34.840+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-7] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/register
+2026-01-23T14:21:34.843+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-7] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/register
+2026-01-23T14:21:34.848+01:00  INFO 15056 --- [issue-tracker] [http-nio-8100-exec-7] app.controller.AuthController            : Received registration request for user: test_user1
+2026-01-23T14:21:34.998+01:00  INFO 15056 --- [issue-tracker] [http-nio-8100-exec-7] app.controller.AuthController            : User registered successfully: test_user1
+2026-01-23T14:21:35.002+01:00 DEBUG 15056 --- [issue-tracker] [http-nio-8100-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:42:06.385+01:00  INFO 15056 --- [issue-tracker] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-23T14:42:06.485+01:00  INFO 15056 --- [issue-tracker] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-01-23T14:42:06.497+01:00  INFO 15056 --- [issue-tracker] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-01-23T14:42:06.532+01:00  INFO 15056 --- [issue-tracker] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-01-23T14:42:06.576+01:00  INFO 15056 --- [issue-tracker] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-01-23T14:43:16.126+01:00  INFO 5272 --- [issue-tracker] [main] app.Application                          : Starting Application v0.0.1-SNAPSHOT using Java 25 with PID 5272 (S:\DEV\issue-tracker-app\target\issue-tracker-0.0.1-SNAPSHOT.jar started by ALEX in S:\DEV\issue-tracker-app)
+2026-01-23T14:43:16.136+01:00  INFO 5272 --- [issue-tracker] [main] app.Application                          : The following 1 profile is active: "prod"
+2026-01-23T14:43:19.707+01:00  INFO 5272 --- [issue-tracker] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-23T14:43:19.946+01:00  INFO 5272 --- [issue-tracker] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 196 ms. Found 1 JPA repository interface.
+2026-01-23T14:43:22.548+01:00  INFO 5272 --- [issue-tracker] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8100 (http)
+2026-01-23T14:43:22.622+01:00  INFO 5272 --- [issue-tracker] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-23T14:43:22.624+01:00  INFO 5272 --- [issue-tracker] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-23T14:43:22.766+01:00  INFO 5272 --- [issue-tracker] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-23T14:43:22.771+01:00  INFO 5272 --- [issue-tracker] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6439 ms
+2026-01-23T14:43:23.565+01:00  INFO 5272 --- [issue-tracker] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-23T14:43:23.746+01:00  INFO 5272 --- [issue-tracker] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.41.Final
+2026-01-23T14:43:23.877+01:00  INFO 5272 --- [issue-tracker] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-01-23T14:43:24.988+01:00  INFO 5272 --- [issue-tracker] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-23T14:43:25.099+01:00  INFO 5272 --- [issue-tracker] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-23T14:43:25.862+01:00  INFO 5272 --- [issue-tracker] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3ac0a14b
+2026-01-23T14:43:25.868+01:00  INFO 5272 --- [issue-tracker] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-01-23T14:43:26.060+01:00  WARN 5272 --- [issue-tracker] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-23T14:43:26.199+01:00  INFO 5272 --- [issue-tracker] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.1
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-01-23T14:43:29.622+01:00  INFO 5272 --- [issue-tracker] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-23T14:43:29.758+01:00  INFO 5272 --- [issue-tracker] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-23T14:43:31.857+01:00  INFO 5272 --- [issue-tracker] [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-01-23T14:43:32.715+01:00  WARN 5272 --- [issue-tracker] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 03264933-dfd3-4d44-b0eb-e83b66672674
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-23T14:43:32.808+01:00  INFO 5272 --- [issue-tracker] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-23T14:43:33.206+01:00 DEBUG 5272 --- [issue-tracker] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-01-23T14:43:33.959+01:00  INFO 5272 --- [issue-tracker] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8100 (http) with context path '/'
+2026-01-23T14:43:34.003+01:00  INFO 5272 --- [issue-tracker] [main] app.Application                          : Started Application in 19.73 seconds (process running for 21.119)
+2026-01-23T14:43:45.582+01:00  INFO 5272 --- [issue-tracker] [http-nio-8100-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-23T14:43:45.584+01:00  INFO 5272 --- [issue-tracker] [http-nio-8100-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-23T14:43:45.587+01:00  INFO 5272 --- [issue-tracker] [http-nio-8100-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-23T14:43:45.655+01:00 DEBUG 5272 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/register
+2026-01-23T14:43:45.768+01:00 DEBUG 5272 --- [issue-tracker] [http-nio-8100-exec-1] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/register
+2026-01-23T14:43:46.277+01:00  INFO 5272 --- [issue-tracker] [http-nio-8100-exec-1] app.controller.AuthController            : Received registration request for user: test_user
+2026-01-23T14:43:47.280+01:00  INFO 5272 --- [issue-tracker] [http-nio-8100-exec-1] app.controller.AuthController            : User registered successfully: test_user
+2026-01-23T14:43:47.366+01:00 DEBUG 5272 --- [issue-tracker] [http-nio-8100-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-01-23T14:44:07.561+01:00  INFO 5272 --- [issue-tracker] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-23T14:44:07.580+01:00  INFO 5272 --- [issue-tracker] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-01-23T14:44:07.592+01:00  INFO 5272 --- [issue-tracker] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-01-23T14:44:07.624+01:00  INFO 5272 --- [issue-tracker] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-01-23T14:44:07.657+01:00  INFO 5272 --- [issue-tracker] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
