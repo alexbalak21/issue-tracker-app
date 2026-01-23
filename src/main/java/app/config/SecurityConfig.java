@@ -29,7 +29,6 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 
-        // Only enable CORS if the bean exists (dev profile)
         if (corsConfigurationSource != null) {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource));
         }
