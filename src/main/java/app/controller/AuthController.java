@@ -30,16 +30,16 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<?>> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try {
-            log.info("Received registration request for user: {}", registerRequest.getUsername());
+            log.info("Received registration request for user: {}", registerRequest.getName());
             var user = userService.registerUser(registerRequest);
-            log.info("User registered successfully: {}", user.getUsername());
+            log.info("User registered successfully: {}", user.getName());
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new ApiResponse<>(
                             true,
                             "User registered successfully",
-                            user.getUsername()
+                            user.getName()
                     ));
         } catch (RuntimeException e) {
             log.error("Registration failed: {}", e.getMessage());

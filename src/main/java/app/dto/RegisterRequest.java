@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class RegisterRequest {
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
-    private String username;
+    @NotBlank(message = "Name is required")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
+    private String name;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
@@ -18,12 +18,12 @@ public class RegisterRequest {
     private String password;
 
     // Getters and Setters
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;    
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {

@@ -21,16 +21,12 @@ public class UserService {
     }
 
     public User registerUser(RegisterRequest registerRequest) {
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new RuntimeException("Username is already taken!");
-        }
-
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new RuntimeException("Email is already in use!");
         }
 
         User user = new User(
-            registerRequest.getUsername(),
+            registerRequest.getName(),
             passwordEncoder.encode(registerRequest.getPassword()),
             registerRequest.getEmail(),
             UserRole.USER  // Default role
