@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.dto.ApiResponse;
+import app.dto.LoginRequest;
 import app.dto.RegisterRequest;
 import app.service.UserService;
 import jakarta.validation.Valid;
@@ -25,6 +26,21 @@ public class AuthController {
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<?>> login(@Valid @RequestBody LoginRequest loginRequest) {
+        try {
+            log.info("Login attempt for email: {}", loginRequest.getEmail());
+            var tokens = userService.login(loginRequest);
+            return ResponseEntity
+                    .ok(new ApiResponse<>(true, "Login successful", tokens));
+        } catch (RuntimeException e) {
+            log.error("Login failed for email {}: {}", loginRequest.getEmail(), e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse<>(false, e.getMessage()));
+        }
     }
 
     @PostMapping("/register")
