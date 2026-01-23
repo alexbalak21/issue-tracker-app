@@ -5,7 +5,17 @@ import path from "path"
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-   build: {
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8100",
+        changeOrigin: true,
+        secure: false,
+        cookieDomainRewrite: 'localhost'
+      },
+    },
+  },
+  build: {
     outDir: path.resolve(__dirname, "../src/main/resources/static"),
     emptyOutDir: true,
   },
