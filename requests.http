@@ -1,9 +1,12 @@
-
 @baseUrl = http://localhost:8100
-# @baseUrl = https://app-latest-4nnj.onrender.com/api
-@accessToken = ""
-@refreshToken = ""
 
+# Tokens from login
+@loginAccessToken = ""
+@loginRefreshToken = ""
+
+# Tokens from refresh
+@newAccessToken = ""
+@newRefreshToken = ""
 
 ### REGISTER USER ###
 POST {{baseUrl}}/api/auth/register
@@ -15,7 +18,7 @@ Content-Type: application/json
     "password": "password123"
 }
 
-### LOGIN REQUEST###
+### LOGIN REQUEST ###
 # @name login
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
@@ -25,15 +28,12 @@ Content-Type: application/json
     "password": "password123"
 }
 
-@accessToken = {{login.response.body.data.accessToken}}
-@refreshToken = {{login.response.body.data.refreshToken}}
+@loginAccessToken = {{login.response.body.data.accessToken}}
+@loginRefreshToken = {{login.response.body.data.refreshToken}}
 
-
-
-### GET CURRENT USER ###
+### GET CURRENT USER (using login token) ###
 GET {{baseUrl}}/api/user
-Content-Type:  application/json
-Authorization: Bearer {{accessToken}}
+Authorization: Bearer {{loginAccessToken}}
 
 ### REFRESH TOKEN ###
 # @name refresh
@@ -41,8 +41,12 @@ POST {{baseUrl}}/api/auth/refresh
 Content-Type: application/json
 
 {
-    "refreshToken": "{{refreshToken}}"
+    "refreshToken": "{{loginRefreshToken}}"
 }
 
-@accessToken = {{refresh.response.body.data.accessToken}}
-@refreshToken = {{refresh.response.body.data.refreshToken}}
+@newAccessToken = {{refresh.response.body.data.accessToken}}
+@newRefreshToken = {{refresh.response.body.data.refreshToken}}
+
+### GET CURRENT USER (using refreshed token) ###
+GET {{baseUrl}}/api/user
+Authorization: Bearer {{newAccessToken}}
