@@ -12,35 +12,24 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class CorsConfig {
 
-    @Value("${app.security.allowed-origin}")
-    private String ORIGIN;
+    // Only allow requests from static index.html
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        System.out.println("Allowed Origin for CORS: " + ORIGIN);
+        // Only allow requests from the static index.html served by backend
+        configuration.setAllowedOrigins(List.of()); // No external origins allowed
+        configuration.setAllowCredentials(false);
 
-        configuration.setAllowedOrigins(List.of(ORIGIN));
-        configuration.setAllowCredentials(true);
-
-        configuration.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-        ));
-
-        configuration.setAllowedHeaders(List.of(
-                "Authorization",
-                "Content-Type",
-                "Accept"
-        ));
-
-        // No CSRF headers, no XSRF tokens
+        configuration.setAllowedMethods(List.of("GET"));
+        configuration.setAllowedHeaders(List.of());
         configuration.setExposedHeaders(List.of());
-
-        configuration.setMaxAge(3600L);
+        configuration.setMaxAge(0L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        // Only allow CORS for /static/index.html
+        source.registerCorsConfiguration("/static/index.html", configuration);
 
         return source;
     }
