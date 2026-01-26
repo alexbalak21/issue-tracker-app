@@ -30,12 +30,12 @@ public class AuthController {
             log.info("Login attempt for email: {}", loginRequest.getEmail());
             var tokens = userService.login(loginRequest);
             return ResponseEntity
-                    .ok(new ApiResponse<>(true, "Login successful", tokens));
+                    .ok(new ApiResponse<>("Login successful", tokens));
         } catch (RuntimeException e) {
             log.error("Login failed for email {}: {}", loginRequest.getEmail(), e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse<>(false, e.getMessage()));
+                    .body(new ApiResponse<>(e.getMessage()));
         }
     }
 
@@ -49,7 +49,6 @@ public class AuthController {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(new ApiResponse<>(
-                            true,
                             "User registered successfully",
                             user.getName()
                     ));
@@ -57,7 +56,7 @@ public class AuthController {
             log.error("Registration failed: {}", e.getMessage());
             return ResponseEntity
                     .badRequest()
-                    .body(new ApiResponse<>(false, e.getMessage()));
+                    .body(new ApiResponse<>(e.getMessage()));
         }
     }
 
@@ -67,12 +66,12 @@ public class AuthController {
             log.info("Token refresh attempt");
             var tokens = userService.refreshToken(refreshRequest.getRefreshToken());
             return ResponseEntity
-                    .ok(new ApiResponse<>(true, "Token refreshed successfully", tokens));
+                    .ok(new ApiResponse<>("Token refreshed successfully", tokens));
         } catch (RuntimeException e) {
             log.error("Token refresh failed: {}", e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse<>(false, e.getMessage()));
+                    .body(new ApiResponse<>(e.getMessage()));
         }
     }
 }

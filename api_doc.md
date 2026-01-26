@@ -21,7 +21,6 @@ Creates a new user account.
 **Response:** `201 Created`
 ```json
 {
-  "success": true,
   "message": "User registered successfully",
   "data": "John Doe"
 }
@@ -48,7 +47,6 @@ Authenticates user and returns access & refresh tokens.
 **Response:** `200 OK`
 ```json
 {
-  "success": true,
   "message": "Login successful",
   "data": {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -77,7 +75,6 @@ Generates new access and refresh tokens using a valid refresh token.
 **Response:** `200 OK`
 ```json
 {
-  "success": true,
   "message": "Token refreshed successfully",
   "data": {
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -124,7 +121,6 @@ All API responses follow this structure:
 
 ```json
 {
-  "success": true/false,
   "message": "Description of the result",
   "data": {}  // Optional, contains response data
 }
