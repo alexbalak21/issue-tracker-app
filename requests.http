@@ -1,12 +1,12 @@
 @baseUrl = http://localhost:8100
 
 # Tokens from login
-@loginAccessToken = ""
-@loginRefreshToken = ""
+@loginAccess_token = ""
+@loginRefresh_token = ""
 
 # Tokens from refresh
-@newAccessToken = ""
-@newRefreshToken = ""
+@newAccess_token = ""
+@newRefresh_token = ""
 
 ### REGISTER USER ###
 POST {{baseUrl}}/api/auth/register
@@ -28,12 +28,12 @@ Content-Type: application/json
     "password": "password123"
 }
 
-@loginAccessToken = {{login.response.body.data.accessToken}}
-@loginRefreshToken = {{login.response.body.data.refreshToken}}
+@loginAccess_token = {{login.response.body.data.access_token}}
+@loginRefresh_token = {{login.response.body.data.refresh_token}}
 
 ### GET CURRENT USER (using login token) ###
 GET {{baseUrl}}/api/user
-Authorization: Bearer {{loginAccessToken}}
+Authorization: Bearer {{loginAccess_token}}
 
 ### REFRESH TOKEN ###
 # @name refresh
@@ -41,12 +41,11 @@ POST {{baseUrl}}/api/auth/refresh
 Content-Type: application/json
 
 {
-    "refreshToken": "{{loginRefreshToken}}"
+    "refresh_token": "{{loginRefresh_token}}"
 }
 
-@newAccessToken = {{refresh.response.body.data.accessToken}}
-@newRefreshToken = {{refresh.response.body.data.refreshToken}}
-
+@newAccess_token = {{refresh.response.body.data.access_token}}
+@newRefresh_token = {{refresh.response.body.data.refresh_token}}
 ### GET CURRENT USER (using refreshed token) ###
 GET {{baseUrl}}/api/user
-Authorization: Bearer {{newAccessToken}}
+Authorization: Bearer {{newAccess_token}}

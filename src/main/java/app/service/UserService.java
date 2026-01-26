@@ -52,8 +52,8 @@ public class UserService {
         String refreshToken = jwtService.generateRefreshToken(user.getId());
 
         return Map.of(
-                "accessToken", accessToken,
-                "refreshToken", refreshToken
+                "access_token", accessToken,
+                "refresh_token", refreshToken
         );
     }
 
@@ -75,8 +75,8 @@ public class UserService {
         String newRefreshToken = jwtService.generateRefreshToken(user.getId());
 
         return Map.of(
-                "accessToken", newAccessToken,
-                "refreshToken", newRefreshToken
+                "access_token", newAccessToken,
+                "refresh_token", newRefreshToken
         );
     }
 }
