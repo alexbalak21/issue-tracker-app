@@ -1,12 +1,12 @@
 
-@baseUrl = http://localhost:8100/api
+@baseUrl = http://localhost:8100
 # @baseUrl = https://app-latest-4nnj.onrender.com/api
 @accessToken = ""
 @refreshToken = ""
 
 
 ### REGISTER USER ###
-POST {{baseUrl}}/auth/register
+POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 ### LOGIN REQUEST###
 # @name login
-POST {{baseUrl}}/auth/login
+POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -26,11 +26,23 @@ Content-Type: application/json
 }
 
 @accessToken = {{login.response.body.data.accessToken}}
+@refreshToken = {{login.response.body.data.refreshToken}}
 
 
 
 ### GET CURRENT USER ###
-GET {{baseUrl}}/user
+GET {{baseUrl}}/api/user
 Content-Type:  application/json
 Authorization: Bearer {{accessToken}}
 
+### REFRESH TOKEN ###
+# @name refresh
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refreshToken}}"
+}
+
+@accessToken = {{refresh.response.body.data.accessToken}}
+@refreshToken = {{refresh.response.body.data.refreshToken}}

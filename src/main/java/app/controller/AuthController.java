@@ -2,6 +2,7 @@ package app.controller;
 
 import app.dto.ApiResponse;
 import app.dto.LoginRequest;
+import app.dto.RefreshTokenRequest;
 import app.dto.RegisterRequest;
 import app.service.UserService;
 import jakarta.validation.Valid;
@@ -56,6 +57,21 @@ public class AuthController {
             log.error("Registration failed: {}", e.getMessage());
             return ResponseEntity
                     .badRequest()
+                    .body(new ApiResponse<>(false, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<?>> refresh(@Valid @RequestBody RefreshTokenRequest refreshRequest) {
+        try {
+            log.info("Token refresh attempt");
+            var tokens = userService.refreshToken(refreshRequest.getRefreshToken());
+            return ResponseEntity
+                    .ok(new ApiResponse<>(true, "Token refreshed successfully", tokens));
+        } catch (RuntimeException e) {
+            log.error("Token refresh failed: {}", e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
                     .body(new ApiResponse<>(false, e.getMessage()));
         }
     }

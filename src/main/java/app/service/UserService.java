@@ -56,4 +56,27 @@ public class UserService {
                 "refreshToken", refreshToken
         );
     }
+
+    public Map<String, String> refreshToken(String refreshToken) {
+        // Validate refresh token
+        if (!jwtService.validateRefreshToken(refreshToken)) {
+            throw new RuntimeException("Invalid or expired refresh token");
+        }
+
+        // Extract user ID from refresh token
+        Long userId = jwtService.getUserIdFromRefreshToken(refreshToken);
+
+        // Fetch user from database
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Generate new tokens
+        String newAccessToken = jwtService.generateAccessToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user.getId());
+
+        return Map.of(
+                "accessToken", newAccessToken,
+                "refreshToken", newRefreshToken
+        );
+    }
 }
