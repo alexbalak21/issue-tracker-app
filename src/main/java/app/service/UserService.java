@@ -48,6 +48,13 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
+        // Set authentication in SecurityContext
+        app.security.CustomUserDetails userDetails = new app.security.CustomUserDetails(user);
+        org.springframework.security.authentication.UsernamePasswordAuthenticationToken authToken =
+            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(authToken);
+
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user.getId());
 

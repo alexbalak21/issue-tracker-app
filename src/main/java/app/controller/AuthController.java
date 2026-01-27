@@ -28,23 +28,19 @@ public class AuthController {
     public ResponseEntity<ApiResponse<?>> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             log.info("Login attempt for email: {}", loginRequest.getEmail());
-            // Expecting userService.login to return a map or DTO with user, access_token, refresh_token
             var loginResult = userService.login(loginRequest);
-            Object user = null;
-            String accessToken = null;
-            String refreshToken = null;
-            if (loginResult instanceof java.util.Map<?, ?> map) {
-                user = map.get("user");
-                accessToken = (String) map.get("access_token");
-                refreshToken = (String) map.get("refresh_token");
-            } else if (loginResult instanceof app.dto.LoginResponse resp) {
-                user = resp.getUser();
-                accessToken = resp.getAccessToken();
-                refreshToken = resp.getRefreshToken();
-            }
-            var response = new app.dto.LoginResponse(user, accessToken, refreshToken);
+
+            // After login(), SecurityContext is now populated
+            var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            var userDetails = (app.security.CustomUserDetails) auth.getPrincipal();
+            var userDto = new app.dto.UserInfo(userDetails);
+
+            java.util.Map<String, Object> responseData = new java.util.HashMap<>();
+            responseData.put("user", userDto);
+            responseData.put("access_token", loginResult.get("access_token"));
+            responseData.put("refresh_token", loginResult.get("refresh_token"));
             return ResponseEntity
-                    .ok(new ApiResponse<>("Login successful", response));
+                    .ok(new ApiResponse<>("Login successful", responseData));
         } catch (RuntimeException e) {
             log.error("Login failed for email {}: {}", loginRequest.getEmail(), e.getMessage());
             return ResponseEntity
