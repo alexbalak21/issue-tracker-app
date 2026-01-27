@@ -42,7 +42,7 @@ public class UserService {
 
     public Map<String, String> login(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+            .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
@@ -51,10 +51,11 @@ public class UserService {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user.getId());
 
-        return Map.of(
-                "access_token", accessToken,
-                "refresh_token", refreshToken
-        );
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("user", user);
+        result.put("access_token", accessToken);
+        result.put("refresh_token", refreshToken);
+        return (Map) result;
     }
 
     public Map<String, String> refreshToken(String refreshToken) {

@@ -28,9 +28,23 @@ public class AuthController {
     public ResponseEntity<ApiResponse<?>> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             log.info("Login attempt for email: {}", loginRequest.getEmail());
-            var tokens = userService.login(loginRequest);
+            // Expecting userService.login to return a map or DTO with user, access_token, refresh_token
+            var loginResult = userService.login(loginRequest);
+            Object user = null;
+            String accessToken = null;
+            String refreshToken = null;
+            if (loginResult instanceof java.util.Map<?, ?> map) {
+                user = map.get("user");
+                accessToken = (String) map.get("access_token");
+                refreshToken = (String) map.get("refresh_token");
+            } else if (loginResult instanceof app.dto.LoginResponse resp) {
+                user = resp.getUser();
+                accessToken = resp.getAccessToken();
+                refreshToken = resp.getRefreshToken();
+            }
+            var response = new app.dto.LoginResponse(user, accessToken, refreshToken);
             return ResponseEntity
-                    .ok(new ApiResponse<>("Login successful", tokens));
+                    .ok(new ApiResponse<>("Login successful", response));
         } catch (RuntimeException e) {
             log.error("Login failed for email {}: {}", loginRequest.getEmail(), e.getMessage());
             return ResponseEntity
