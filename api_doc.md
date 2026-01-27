@@ -32,7 +32,8 @@ Creates a new user account.
 ---
 
 ### Login
-Authenticates user and returns access & refresh tokens.
+
+Authenticates user and returns user info, access & refresh tokens.
 
 **Endpoint:** `POST /api/auth/login`
 
@@ -49,6 +50,14 @@ Authenticates user and returns access & refresh tokens.
 {
   "message": "Login successful",
   "data": {
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "roles": ["USER"],
+      "createdAt": "2024-01-01T12:00:00Z",
+      "updatedAt": "2024-01-01T12:00:00Z"
+    },
     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
