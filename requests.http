@@ -112,3 +112,31 @@ Content-Type: application/json
 GET {{baseUrl}}/api/admin/roles
 Authorization: Bearer {{adminAccess_token}}
 
+
+
+### CREATE USER ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "roleIds": [1]
+}
+
+
+### LIST USERS ###
+GET {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+
+
+### ASSIGN ROLES TO USER ###
+POST {{baseUrl}}/api/admin/users/2/roles
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "roleIds": [2, 3]   // Add more roles
+}
