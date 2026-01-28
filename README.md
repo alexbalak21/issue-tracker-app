@@ -171,12 +171,41 @@ Admins can:
 This makes the system fully dynamic and extendable without code changes.
 
 
+
 ## 📂 Project Structure (High‑Level)
 
+```
 issue-tracker-app/
-backend/        # Spring Boot API
-frontend/       # React + TS + Tailwind UI
+│
+├── src/main/java/app/
+│   ├── controller/   # REST controllers (Auth, User, Admin, Home)
+│   ├── service/      # Business logic (UserService, RoleService, PermissionService)
+│   ├── repository/   # Spring Data JPA repositories (User, Role, Permission)
+│   ├── security/     # JWT auth, permission checks, user details
+│   ├── config/       # Security, CORS, data initialization
+│   ├── model/        # Entities: User, Role, Permission, Ticket, Note, etc.
+│   └── dto/          # Data Transfer Objects for API
+│
+├── src/main/resources/
+│   └── application.properties  # Spring Boot config
+│
+├── sql/              # SQL scripts (e.g., create_tables.sql)
+├── docs/             # Documentation (RBAC, data structures, etc.)
+├── logs/             # Log output
+├── env/              # Environment/config files
+├── ...
+```
 
+**Backend Key Components:**
+- **Controllers:** Handle API endpoints for authentication, user info, admin actions, and home.
+- **Services:** Contain business logic for users, roles, permissions, etc.
+- **Repositories:** Provide database access via Spring Data JPA.
+- **Security:** Implements JWT authentication, permission checks, and user details.
+- **Config:** Security, CORS, and data initialization settings.
+- **Models:** Represent database entities (User, Role, Permission, Ticket, Note, Conversation, Message, Priority, Status, UserRole).
+- **DTOs:** Used for API requests and responses.
+
+*Frontend code is not present in this repository; the backend is the main focus.*
 
 ---
 
