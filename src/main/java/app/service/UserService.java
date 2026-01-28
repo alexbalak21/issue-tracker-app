@@ -3,7 +3,9 @@ package app.service;
 import app.dto.LoginRequest;
 import app.dto.RegisterRequest;
 import app.model.User;
-import app.model.UserRole;
+import app.model.Role;
+import app.repository.RoleRepository;
+import java.util.Collections;
 import app.repository.UserRepository;
 import app.security.JwtService;
 import java.util.Map;
@@ -16,11 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
@@ -30,13 +34,16 @@ public class UserService {
             throw new RuntimeException("Email is already in use!");
         }
 
+        // Assign default role (e.g., "USER")
+        Role defaultRole = roleRepository.findByName("USER")
+            .orElseThrow(() -> new RuntimeException("Default role USER not found"));
+
         User user = new User(
             registerRequest.getName(),
             passwordEncoder.encode(registerRequest.getPassword()),
             registerRequest.getEmail(),
-            UserRole.USER  // Default role
+            Collections.singleton(defaultRole)
         );
-
         return userRepository.save(user);
     }
 
