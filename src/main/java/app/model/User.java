@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -15,9 +16,13 @@ public class User {
     private String name;
     @Column(nullable = false, unique = true, length = 100)
     private String email;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
     @Column(nullable = false)
     private String password;
     @CreationTimestamp
@@ -30,11 +35,11 @@ public class User {
     public User() {
     }
 
-    public User(String name, String password, String email, UserRole role) {
+    public User(String name, String password, String email, Set<Role> roles) {
         this.name = name;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.roles = roles;
     }
 
     // Getters and Setters
@@ -62,12 +67,12 @@ public class User {
         this.email = email;
     }
 
-    public UserRole getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getPassword() {
