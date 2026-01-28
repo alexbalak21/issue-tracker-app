@@ -58,11 +58,10 @@ public class UserService {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user.getId());
 
-        java.util.Map<String, Object> result = new java.util.HashMap<>();
-        result.put("user", user);
+        java.util.Map<String, String> result = new java.util.HashMap<>();
         result.put("access_token", accessToken);
         result.put("refresh_token", refreshToken);
-        return (Map) result;
+        return result;
     }
 
     public Map<String, String> refreshToken(String refreshToken) {
@@ -75,8 +74,11 @@ public class UserService {
         Long userId = jwtService.getUserIdFromRefreshToken(refreshToken);
 
         // Fetch user from database
+        if (userId == null) {
+            throw new RuntimeException("User ID extracted from refresh token is null");
+        }
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Generate new tokens
         String newAccessToken = jwtService.generateAccessToken(user);

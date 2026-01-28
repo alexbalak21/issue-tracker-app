@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     /**
      * Used by JwtAuthenticationFilter when validating JWT (sub = user ID).
      */
-    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+    public UserDetails loadUserById(@org.springframework.lang.NonNull Long id) throws UsernameNotFoundException {
         return userRepository.findById(id)
                 .map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
