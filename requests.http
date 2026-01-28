@@ -49,3 +49,18 @@ Content-Type: application/json
 ### GET CURRENT USER (using refreshed token) ###
 GET {{baseUrl}}/api/user
 Authorization: Bearer {{newAccess_token}}
+
+
+### REGISTER ANOTHER USER ###
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+### REGISTER USER ###
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "max payne",
+    "email": "max.payne@example.com",
+    "password": "password@1234"
+}
