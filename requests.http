@@ -55,14 +55,20 @@ Authorization: Bearer {{newAccess_token}}
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
+{
+    "name": "Max Payne",
+    "email": "max.payne@example.com",
+    "password": "password@1234"
+}
+
 ### LOGIN ADMIN USER ###
 # @name admin
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "max.payne@example.com",
-    "password": "password@1234"
+    "email": "admin@example.com",
+    "password": "admin123"
 }
 
 @adminAccess_token = {{admin.response.body.data.access_token}}
@@ -71,3 +77,38 @@ Content-Type: application/json
 ### GET ADMIN USER ###
 GET {{baseUrl}}/api/user
 Authorization: Bearer {{adminAccess_token}}
+
+
+### CREATE PERMISSION ###
+POST {{baseUrl}}/api/admin/permissions
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "ticket.assign",
+    "description": "Assign tickets to users"
+}
+
+
+### LIST PERMISSIONS ###
+GET {{baseUrl}}/api/admin/permissions
+Authorization: Bearer {{adminAccess_token}}
+
+
+
+### CREATE ROLE ###
+POST {{baseUrl}}/api/admin/roles
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "SUPPORT",
+    "description": "Support team role",
+    "permissionIds": [1, 2]   // use real IDs from your DB
+}
+
+
+### LIST ROLES ###
+GET {{baseUrl}}/api/admin/roles
+Authorization: Bearer {{adminAccess_token}}
+
