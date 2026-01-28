@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import app.service.CustomUserDetailsService;
 
+
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,10 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-        protected void doFilterInternal(
-            @org.springframework.lang.NonNull HttpServletRequest request,
-            @org.springframework.lang.NonNull HttpServletResponse response,
-            @org.springframework.lang.NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         // Skip JWT validation for refresh token endpoint
         if ("/api/auth/refresh-token".equals(request.getRequestURI())) {
@@ -53,16 +55,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String subject = jwtService.extractSubject(jwt);
 
             if (subject != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
                 Long userId = Long.parseLong(subject);
                 UserDetails userDetails = userDetailsService.loadUserById(userId);
 
                 if (jwtService.validateToken(jwt, userId)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+
+                    // Extract permissions from JWT
+                    List<String> permissions = jwtService.extractPermissions(jwt);
+
+                    // Build custom authentication token
+                    JwtAuthenticationToken authToken = new JwtAuthenticationToken(
                             userDetails,
                             null,
-                            userDetails.getAuthorities());
+                            userDetails.getAuthorities(),
+                            permissions
+                    );
+
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    // Store in security context
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+
                 } else {
                     logger.warn("JWT validation failed for user ID {}", userId);
                 }
@@ -77,6 +91,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setHeader("X-Token-Expired", "true");
             response.setContentType("application/json");
             response.getWriter().write("{\"error\":\"access_token_expired\"}");
+
         } catch (Exception e) {
             logger.error("JWT authentication failed", e);
             filterChain.doFilter(request, response);

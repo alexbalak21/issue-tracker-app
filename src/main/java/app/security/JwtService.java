@@ -1,5 +1,6 @@
 package app.security;
 
+import app.model.Permission;
 import app.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -37,40 +39,56 @@ public class JwtService {
 
     public String generateAccessToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole().name());
+
+        // Basic user info
         claims.put("email", user.getEmail());
         claims.put("name", user.getName());
+
+        // Add permissions from roles
+        List<String> permissions = user.getRoles()
+                .stream()
+                .flatMap(role -> role.getPermissions().stream())
+                .map(Permission::getName)
+                .toList();
+
+        claims.put("permissions", permissions);
 
         String jti = UUID.randomUUID().toString();
 
         return Jwts.builder()
-            .setClaims(claims)
-            .setId(jti)
-            .setSubject(String.valueOf(user.getId()))
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + accessExpirationMs))
-            .signWith(getAccessKey(), SignatureAlgorithm.HS256)
-            .compact();
+                .setClaims(claims)
+                .setId(jti)
+                .setSubject(String.valueOf(user.getId()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpirationMs))
+                .signWith(getAccessKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public String generateAccessToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList());
+
         claims.put("email", userDetails.getEmail());
         claims.put("name", userDetails.getName());
+
+        // Permissions from authorities
+        List<String> permissions = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        claims.put("permissions", permissions);
 
         String jti = UUID.randomUUID().toString();
 
         return Jwts.builder()
-            .setClaims(claims)
-            .setId(jti)
-            .setSubject(String.valueOf(userDetails.getId()))
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + accessExpirationMs))
-            .signWith(getAccessKey(), SignatureAlgorithm.HS256)
-            .compact();
+                .setClaims(claims)
+                .setId(jti)
+                .setSubject(String.valueOf(userDetails.getId()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpirationMs))
+                .signWith(getAccessKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     // ---------------------------
@@ -121,7 +139,7 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getAccessKey()) // Access tokens only
+                .setSigningKey(getAccessKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -129,6 +147,20 @@ public class JwtService {
 
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
+    }
+
+    // ---------------------------
+    // PERMISSION EXTRACTION
+    // ---------------------------
+
+    public List<String> extractPermissions(String token) {
+        return extractClaim(token, claims -> {
+            Object raw = claims.get("permissions");
+            if (raw instanceof List<?> list) {
+                return list.stream().map(Object::toString).toList();
+            }
+            return List.of();
+        });
     }
 
     // ---------------------------
@@ -159,13 +191,11 @@ public class JwtService {
         try {
             Claims claims = extractRefreshClaims(token);
 
-            // Must be a refresh token
             Object type = claims.get("type");
             if (type == null || !"refresh".equals(type.toString())) {
                 return false;
             }
 
-            // Must not be expired
             return claims.getExpiration().after(new Date());
 
         } catch (Exception e) {
@@ -182,5 +212,4 @@ public class JwtService {
         Claims claims = extractRefreshClaims(token);
         return claims.getExpiration().before(new Date());
     }
-
 }

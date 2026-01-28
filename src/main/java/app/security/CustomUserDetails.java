@@ -1,5 +1,7 @@
 package app.security;
 
+import app.model.Permission;
+import app.model.Role;
 import app.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,27 +11,43 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
- * Custom implementation of Spring Security's UserDetails
- * that includes the user's ID, email, name, and timestamps.
- */
 public class CustomUserDetails implements UserDetails {
 
-    private final User user; // keep the full User entity
+    private final User user;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User user) {
         this.user = user;
-        this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        this.authorities = buildAuthorities(user);
     }
 
-    // Expose the full User entity
+    private Collection<? extends GrantedAuthority> buildAuthorities(User user) {
+        return user.getRoles().stream()
+                .flatMap(role -> {
+
+                    // ROLE_xxx authority
+                    Stream<GrantedAuthority> roleAuth =
+                            Stream.of(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+
+                    // permission.xxx authorities
+                    Stream<GrantedAuthority> permAuth =
+                            role.getPermissions().stream()
+                                    .map(Permission::getName)
+                                    .map(SimpleGrantedAuthority::new);
+
+                    // Explicit type fixes Java's inference issue
+                    return Stream.<GrantedAuthority>concat(roleAuth, permAuth);
+                })
+                .collect(Collectors.toSet());
+    }
+
     public User getUser() {
         return user;
     }
 
-    // Convenience getters
     public Long getId() {
         return user.getId();
     }
@@ -43,11 +61,15 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public Instant getCreatedAt() {
-        return user.getCreatedAt() != null ? user.getCreatedAt().toInstant(ZoneOffset.UTC) : null;
+        return user.getCreatedAt() != null
+                ? user.getCreatedAt().toInstant(ZoneOffset.UTC)
+                : null;
     }
 
     public Instant getUpdatedAt() {
-        return user.getUpdatedAt() != null ? user.getUpdatedAt().toInstant(ZoneOffset.UTC) : null;
+        return user.getUpdatedAt() != null
+                ? user.getUpdatedAt().toInstant(ZoneOffset.UTC)
+                : null;
     }
 
     @Override
@@ -55,11 +77,19 @@ public class CustomUserDetails implements UserDetails {
         return authorities;
     }
 
-    //Returns the pure ROLE
+    // Return pure role names
     public List<String> getRoles() {
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(role -> role.startsWith("ROLE_") ? role.substring(5) : role)
+        return user.getRoles().stream()
+                .map(Role::getName)
+                .toList();
+    }
+
+    // Return pure permission names
+    public List<String> getPermissions() {
+        return user.getRoles().stream()
+                .flatMap(role -> role.getPermissions().stream())
+                .map(Permission::getName)
+                .distinct()
                 .toList();
     }
 
