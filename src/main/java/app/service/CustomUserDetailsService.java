@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service that loads user details for Spring Security.
@@ -24,6 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      * Used by Spring Security during login (username = email).
      */
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .map(CustomUserDetails::new)
@@ -33,7 +35,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     /**
      * Used by JwtAuthenticationFilter when validating JWT (sub = user ID).
      */
-    public UserDetails loadUserById(@org.springframework.lang.NonNull Long id) throws UsernameNotFoundException {
+    @Transactional(readOnly = true)
+    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
         return userRepository.findById(id)
                 .map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));

@@ -104,7 +104,7 @@ Content-Type: application/json
 {
     "name": "SUPPORT",
     "description": "Support team role",
-    "permissionIds": [1, 2]   // use real IDs from your DB
+    "permissionIds": [1, 2]
 }
 
 

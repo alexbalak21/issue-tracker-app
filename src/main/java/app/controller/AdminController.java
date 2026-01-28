@@ -3,13 +3,13 @@ package app.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
-import app.model.Permission;
-import app.model.Role;
 import app.security.RequiresPermission;
 import app.service.PermissionService;
 import app.service.RoleService;
 import app.dto.CreatePermissionRequest;
 import app.dto.CreateRoleRequest;
+import app.dto.PermissionDto;
+import app.dto.RoleDto;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -29,14 +29,18 @@ public class AdminController {
 
     @PostMapping("/permissions")
     @RequiresPermission("admin.manage")
-    public Permission createPermission(@RequestBody CreatePermissionRequest req) {
-        return permissionService.create(req.name(), req.description());
+    public PermissionDto createPermission(@RequestBody CreatePermissionRequest req) {
+        return PermissionDto.from(
+                permissionService.create(req.name(), req.description())
+        );
     }
 
     @GetMapping("/permissions")
     @RequiresPermission("admin.manage")
-    public List<Permission> getPermissions() {
-        return permissionService.getAll();
+    public List<PermissionDto> getPermissions() {
+        return permissionService.getAll().stream()
+                .map(PermissionDto::from)
+                .toList();
     }
 
     // -----------------------------
@@ -45,13 +49,17 @@ public class AdminController {
 
     @PostMapping("/roles")
     @RequiresPermission("admin.manage")
-    public Role createRole(@RequestBody CreateRoleRequest req) {
-        return roleService.create(req.name(), req.description(), req.permissionIds());
+    public RoleDto createRole(@RequestBody CreateRoleRequest req) {
+        return RoleDto.from(
+                roleService.create(req.name(), req.description(), req.permissionIds())
+        );
     }
 
     @GetMapping("/roles")
     @RequiresPermission("admin.manage")
-    public List<Role> getRoles() {
-        return roleService.getAll();
+    public List<RoleDto> getRoles() {
+        return roleService.getAll().stream()
+                .map(RoleDto::from)
+                .toList();
     }
 }

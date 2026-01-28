@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.model.Permission;
 import app.model.Role;
@@ -39,6 +40,7 @@ public class RoleService {
         return roleRepo.save(role);
     }
 
+    @Transactional(readOnly = true)
     public List<Role> getAll() {
         return roleRepo.findAll();
     }
