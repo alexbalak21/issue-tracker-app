@@ -1,17 +1,16 @@
 package app.service;
 
-import app.dto.LoginRequest;
-import app.dto.RegisterRequest;
-import app.model.User;
-import app.model.Role;
-import app.repository.RoleRepository;
-import java.util.Collections;
-import app.repository.UserRepository;
-import app.security.JwtService;
-import java.util.Map;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.HashSet;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import app.model.Role;
+import app.model.User;
+import app.repository.RoleRepository;
+import app.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @Transactional
@@ -20,80 +19,75 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public UserService(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
     }
 
-    public User registerUser(RegisterRequest registerRequest) {
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new RuntimeException("Email is already in use!");
+    // ----------------------------------------------------
+    // Create user (admin)
+    // ----------------------------------------------------
+    public User create(String name, String email, String password, List<Long> roleIds) {
+
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException("Email already in use");
         }
 
-        // Assign default role (e.g., "USER")
-        Role defaultRole = roleRepository.findByName("USER")
-            .orElseThrow(() -> new RuntimeException("Default role USER not found"));
+        List<Role> roles = roleRepository.findAllById(
+                roleIds != null ? roleIds : List.of()
+        );
 
         User user = new User(
-            registerRequest.getName(),
-            passwordEncoder.encode(registerRequest.getPassword()),
-            registerRequest.getEmail(),
-            Collections.singleton(defaultRole)
+                name,
+                passwordEncoder.encode(password),
+                email,
+                new HashSet<>(roles)
         );
+
         return userRepository.save(user);
     }
 
-    public Map<String, String> login(LoginRequest loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-            .orElseThrow(() -> new RuntimeException("Invalid credentials"));
-
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
-
-        // Set authentication in SecurityContext
-        app.security.CustomUserDetails userDetails = new app.security.CustomUserDetails(user);
-        org.springframework.security.authentication.UsernamePasswordAuthenticationToken authToken =
-            new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities());
-        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user.getId());
-
-        java.util.Map<String, String> result = new java.util.HashMap<>();
-        result.put("access_token", accessToken);
-        result.put("refresh_token", refreshToken);
-        return result;
+    // ----------------------------------------------------
+    // List all users (admin)
+    // ----------------------------------------------------
+    @Transactional(readOnly = true)
+    public List<User> getAll() {
+        return userRepository.findAllWithRoles(); // requires EntityGraph
     }
 
-    public Map<String, String> refreshToken(String refreshToken) {
-        // Validate refresh token
-        if (!jwtService.validateRefreshToken(refreshToken)) {
-            throw new RuntimeException("Invalid or expired refresh token");
-        }
-
-        // Extract user ID from refresh token
-        Long userId = jwtService.getUserIdFromRefreshToken(refreshToken);
-
-        // Fetch user from database
-        if (userId == null) {
-            throw new RuntimeException("User ID extracted from refresh token is null");
-        }
+    // ----------------------------------------------------
+    // Assign roles to user
+    // ----------------------------------------------------
+    public User assignRoles(Long userId, List<Long> roleIds) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Generate new tokens
-        String newAccessToken = jwtService.generateAccessToken(user);
-        String newRefreshToken = jwtService.generateRefreshToken(user.getId());
-
-        return Map.of(
-                "access_token", newAccessToken,
-                "refresh_token", newRefreshToken
+        List<Role> roles = roleRepository.findAllById(
+                roleIds != null ? roleIds : List.of()
         );
+
+        user.getRoles().addAll(roles);
+        return userRepository.save(user);
+    }
+
+    // ----------------------------------------------------
+    // Remove roles from user
+    // ----------------------------------------------------
+    public User removeRoles(Long userId, List<Long> roleIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Role> roles = roleRepository.findAllById(
+                roleIds != null ? roleIds : List.of()
+        );
+
+        user.getRoles().removeAll(roles);
+        return userRepository.save(user);
     }
 }

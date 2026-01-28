@@ -1,0 +1,6 @@
+need this methods
+
+public User create(String name, String email, String password, List<Long> roleIds);
+public List<User> getAll();
+public User assignRoles(Long userId, List<Long> roleIds);
+public User removeRoles(Long userId, List<Long> roleIds);

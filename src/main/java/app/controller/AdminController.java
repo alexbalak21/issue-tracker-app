@@ -1,7 +1,6 @@
 package app.controller;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.*;
 import app.security.RequiresPermission;
 import app.service.PermissionService;

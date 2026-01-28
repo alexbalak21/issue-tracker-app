@@ -26,8 +26,7 @@ public class RoleService {
     public Role create(
             String name,
             String description,
-            @NonNull List<Long> permissionIds
-    ) {
+            @NonNull List<Long> permissionIds) {
         Role role = new Role();
         role.setName(name);
         role.setDescription(description);
