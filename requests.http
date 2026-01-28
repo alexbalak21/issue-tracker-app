@@ -55,12 +55,19 @@ Authorization: Bearer {{newAccess_token}}
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
-### REGISTER USER ###
-POST {{baseUrl}}/api/auth/register
+### LOGIN ADMIN USER ###
+# @name admin
+POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-    "name": "max payne",
     "email": "max.payne@example.com",
     "password": "password@1234"
 }
+
+@adminAccess_token = {{admin.response.body.data.access_token}}
+@adminRefresh_token = {{admin.response.body.data.refresh_token}}
+
+### GET ADMIN USER ###
+GET {{baseUrl}}/api/user
+Authorization: Bearer {{adminAccess_token}}
