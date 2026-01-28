@@ -118,6 +118,59 @@ The system is designed to be extendable, minimal, and maintainable — with clea
 
 ---
 
+## 🔐 Role & Permission System (RBAC)
+
+The Issue Tracker includes a flexible **Role‑Based Access Control (RBAC)** system that allows administrators to create custom roles and assign granular permissions.
+
+### 🧱 Core Concepts
+
+- **Permissions** → Atomic actions such as `ticket.read`, `ticket.write`, `notes.write`, etc.  
+- **Roles** → Collections of permissions (e.g., *Manager*, *Agent*, *User*).  
+- **User Roles** → Users can have one or multiple roles.  
+- **Role Permissions** → Admins can assign or remove permissions from any role.
+
+This structure enables fine‑grained control over what each user can see or modify.
+
+### 🗄️ Database Tables
+
+| Table              | Purpose                                      |
+|--------------------|----------------------------------------------|
+| `permissions`      | Stores all available system permissions       |
+| `roles`            | Stores admin‑defined roles                    |
+| `role_permissions` | Many‑to‑many link between roles & permissions |
+| `user_roles`       | Assigns roles to users                        |
+
+### 🛠️ Examples
+
+**Permissions**
+- `ticket.read`
+- `ticket.write`
+- `ticket.assign`
+- `notes.read`
+- `notes.write`
+
+**Role Example: Manager**
+- `ticket.read`
+- `ticket.write`
+- `ticket.assign`
+- `notes.read`
+- `notes.write`
+
+### 🔧 Enforcement
+
+Permissions are embedded into the user’s JWT at login and validated by the backend.  
+Endpoints can require specific permissions, ensuring only authorized users can perform certain actions.
+
+### 🖥️ Admin Panel
+
+Admins can:
+- Create new roles  
+- Assign permissions via a checkbox grid  
+- Assign roles to users  
+
+This makes the system fully dynamic and extendable without code changes.
+
+
 ## 📂 Project Structure (High‑Level)
 
 issue-tracker-app/

@@ -1,0 +1,76 @@
+# psql_commands.txt
+# Essential psql meta-commands for PostgreSQL
+
+------------------------------------------------------------
+CONNECTION & SESSION INFO
+------------------------------------------------------------
+\c dbname                 - Connect to a database
+\conninfo                 - Show current connection details
+\password                 - Change your PostgreSQL password
+
+------------------------------------------------------------
+LISTING DATABASE OBJECTS
+------------------------------------------------------------
+\l                        - List all databases
+\dn                       - List schemas
+\dt                       - List tables in the current schema
+\dt+                      - List tables with size and extra info
+\dv                       - List views
+\ds                       - List sequences
+\di                       - List indexes
+\d                       - List all relations (tables, views, etc.)
+
+------------------------------------------------------------
+DESCRIBING OBJECTS
+------------------------------------------------------------
+\d table_name             - Describe a table (columns, types, indexes)
+\d+ table_name            - Detailed table description (storage, size)
+\df                       - List functions
+\df+                      - List functions with details
+\da                       - List aggregates
+\do                       - List operators
+
+------------------------------------------------------------
+QUERYING SYSTEM CATALOGS (SQL, not meta-commands)
+------------------------------------------------------------
+SELECT * FROM pg_tables;  - Show tables (all schemas)
+SELECT * FROM information_schema.columns
+WHERE table_name='name';  - Show column details
+
+------------------------------------------------------------
+RUNNING SQL & SCRIPTS
+------------------------------------------------------------
+\i file.sql               - Execute SQL file
+\ir file.sql              - Execute SQL file relative to current script
+\g                        - Re-run last query
+\g file.sql               - Save query output to file
+\o file.txt               - Redirect all output to file
+\o                        - Stop redirecting output
+
+------------------------------------------------------------
+EDITING & HISTORY
+------------------------------------------------------------
+\e                        - Open editor to write SQL
+\s                        - Show command history
+\s file.txt               - Save history to file
+
+------------------------------------------------------------
+OUTPUT FORMATTING
+------------------------------------------------------------
+\x                        - Toggle expanded output (great for wide tables)
+\pset format aligned      - Pretty table formatting
+\pset format unaligned    - Raw output (useful for scripts)
+\pset border 0|1|2        - Adjust table borders
+
+------------------------------------------------------------
+TRANSACTION CONTROL
+------------------------------------------------------------
+BEGIN;                    - Start transaction
+COMMIT;                   - Commit transaction
+ROLLBACK;                 - Roll back transaction
+
+------------------------------------------------------------
+MISC UTILITIES
+------------------------------------------------------------
+\! command                - Run a shell command
+\q                        - Quit psql
