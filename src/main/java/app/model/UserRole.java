@@ -9,6 +9,11 @@ public enum UserRole {
      * Administrator role with full access
      */
     ADMIN,
+
+    /**
+     * Manager role with elevated access
+     */
+    MANAGER,
     
     /**
      * Regular user role with standard access

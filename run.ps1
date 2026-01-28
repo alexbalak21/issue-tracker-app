@@ -1,2 +1,2 @@
-load-env.ps1
+.\load-env.ps1
 mvn spring-boot:run
