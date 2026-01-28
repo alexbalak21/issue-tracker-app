@@ -26,8 +26,11 @@ public class AdminUserController {
     @PostMapping
     @RequiresPermission("admin.manage")
     public UserDto createUser(@RequestBody CreateUserRequest req) {
-        return UserDto.from(
-                userService.create(req.name(), req.email(), req.password(), req.roleIds())
+        return userService.create(
+                req.name(),
+                req.email(),
+                req.password(),
+                req.roleIds()
         );
     }
 
@@ -37,9 +40,7 @@ public class AdminUserController {
     @GetMapping
     @RequiresPermission("admin.manage")
     public List<UserDto> getUsers() {
-        return userService.getAll().stream()
-                .map(UserDto::from)
-                .toList();
+        return userService.getAll();
     }
 
     // ----------------------------------------------------
@@ -51,9 +52,7 @@ public class AdminUserController {
             @PathVariable Long userId,
             @RequestBody AssignRolesRequest req
     ) {
-        return UserDto.from(
-                userService.assignRoles(userId, req.roleIds())
-        );
+        return userService.assignRoles(userId, req.roleIds());
     }
 
     // ----------------------------------------------------
@@ -65,8 +64,6 @@ public class AdminUserController {
             @PathVariable Long userId,
             @RequestBody AssignRolesRequest req
     ) {
-        return UserDto.from(
-                userService.removeRoles(userId, req.roleIds())
-        );
+        return userService.removeRoles(userId, req.roleIds());
     }
 }

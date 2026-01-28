@@ -1,11 +1,13 @@
 package app.service;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import app.dto.UserDto;
 import app.model.Role;
 import app.model.User;
 import app.repository.RoleRepository;
@@ -23,8 +25,7 @@ public class UserService {
     public UserService(
             UserRepository userRepository,
             RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder
-    ) {
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -33,14 +34,14 @@ public class UserService {
     // ----------------------------------------------------
     // Create user (admin)
     // ----------------------------------------------------
-    public User create(String name, String email, String password, List<Long> roleIds) {
+    public UserDto create(String name, String email, String password, List<Long> roleIds) {
 
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already in use");
         }
 
         List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : List.of()
+                roleIds != null ? roleIds : Collections.emptyList()
         );
 
         User user = new User(
@@ -50,44 +51,55 @@ public class UserService {
                 new HashSet<>(roles)
         );
 
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+
+        return UserDto.from(saved);
     }
 
     // ----------------------------------------------------
     // List all users (admin)
     // ----------------------------------------------------
     @Transactional(readOnly = true)
-    public List<User> getAll() {
-        return userRepository.findAllWithRoles(); // requires EntityGraph
+    public List<UserDto> getAll() {
+        return userRepository.findAllWithRoles()
+                .stream()
+                .map(UserDto::from)
+                .toList();
     }
 
     // ----------------------------------------------------
     // Assign roles to user
     // ----------------------------------------------------
-    public User assignRoles(Long userId, List<Long> roleIds) {
+    public UserDto assignRoles(Long userId, List<Long> roleIds) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : List.of()
+                roleIds != null ? roleIds : Collections.emptyList()
         );
 
         user.getRoles().addAll(roles);
-        return userRepository.save(user);
+
+        User saved = userRepository.save(user);
+
+        return UserDto.from(saved);
     }
 
     // ----------------------------------------------------
     // Remove roles from user
     // ----------------------------------------------------
-    public User removeRoles(Long userId, List<Long> roleIds) {
+    public UserDto removeRoles(Long userId, List<Long> roleIds) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : List.of()
+                roleIds != null ? roleIds : Collections.emptyList()
         );
 
         user.getRoles().removeAll(roles);
-        return userRepository.save(user);
+
+        User saved = userRepository.save(user);
+
+        return UserDto.from(saved);
     }
 }
