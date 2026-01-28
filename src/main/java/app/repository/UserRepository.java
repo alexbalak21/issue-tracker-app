@@ -34,7 +34,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
      *
      * This avoids LazyInitializationException when converting to DTOs.
      */
-    @EntityGraph(attributePaths = "roles")
+    @EntityGraph(attributePaths = { "roles", "roles.permissions" })
     @Query("select u from User u")
     List<User> findAllWithRoles();
+
 }

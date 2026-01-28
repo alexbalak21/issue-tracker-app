@@ -11,6 +11,7 @@
 ### REGISTER USER ###
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
+Authorization: Bearer {{adminAccess_token}}
 
 {
     "name": "test_user",
@@ -112,7 +113,7 @@ Content-Type: application/json
 GET {{baseUrl}}/api/admin/roles
 Authorization: Bearer {{adminAccess_token}}
 
-
+### CRUD USER OPERATIONS ###
 
 ### CREATE USER ###
 POST {{baseUrl}}/api/admin/users
