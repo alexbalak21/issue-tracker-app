@@ -1,27 +1,15 @@
-package app.model;
+package app.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "priority")
-public class Priority {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PriorityDto {
     private int id;
-
-    @Column(nullable = false, unique = true)
     private String name;
-
-    @Column(nullable = false)
     private int level;
-
-    @Column(nullable = false, length = 255)
     private String description;
 
-    public Priority() {}
+    public PriorityDto() {}
 
-    public Priority(String name, int level, String description) {
+    public PriorityDto(int id, String name, int level, String description) {
+        this.id = id;
         this.name = name;
         this.level = level;
         this.description = description;
@@ -29,6 +17,10 @@ public class Priority {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

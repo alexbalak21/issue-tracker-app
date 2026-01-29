@@ -14,9 +14,9 @@ Content-Type: application/json
 Authorization: Bearer {{adminAccess_token}}
 
 {
-    "name": "test_user",
-    "email": "testuser@example.com",
-    "password": "password123"
+    "name": "Gordon Freeman",
+    "email": "gordon.freeman@example.com",
+    "password": "password1234"
 }
 
 ### LOGIN REQUEST ###
@@ -25,8 +25,8 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "testuser@example.com",
-    "password": "password123"
+    "email": "gordon.freeman@example.com",
+    "password": "password1234"
 }
 
 @loginAccess_token = {{login.response.body.data.access_token}}
@@ -103,8 +103,8 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "SUPPORT",
-    "description": "Support team role",
+    "name": "USER",
+    "description": "User role",
     "permissionIds": [1, 2]
 }
 
@@ -121,10 +121,10 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "roleIds": [1]
+    "name": "Gordon Freeman",
+    "email": "gordon.freeman@example.com",
+    "password": "password1234",
+    "roleIds": [1, 2]
 }
 
 
@@ -139,5 +139,5 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "roleIds": [2]   // Add more roles
+    "roleIds": [1,2]
 }

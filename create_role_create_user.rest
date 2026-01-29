@@ -1,0 +1,37 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN ADMIN USER ###
+# @name admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "admin123"
+}
+
+@adminAccess_token = {{admin.response.body.data.access_token}}
+
+
+### CREATE USER ROLE ###
+POST {{baseUrl}}/api/admin/roles
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "USER",
+    "description": "User role",
+    "permissionIds": [1, 2]
+}
+
+### CREATE USER ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Gordon Freeman",
+    "email": "gordon.freeman@example.com",
+    "password": "password1234",
+    "roleIds": [1, 2]
+}
