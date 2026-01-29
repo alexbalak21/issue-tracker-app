@@ -108,6 +108,17 @@ Content-Type: application/json
     "permissionIds": [1, 2]
 }
 
+### UPDATE ROLE ###
+PUT {{baseUrl}}/api/admin/roles/2
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "ADMIN",
+    "description": "Administrator role",
+    "permissionIds": [1, 2, 3]
+}
+
 
 ### LIST ROLES ###
 GET {{baseUrl}}/api/admin/roles
