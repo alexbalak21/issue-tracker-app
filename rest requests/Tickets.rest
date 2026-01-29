@@ -1,0 +1,29 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN USER ###
+# @name user
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "gordon.freeman@example.com",
+    "password": "password1234"
+}
+
+@Access_token = {{user.response.body.data.access_token}}
+@Refresh_token = {{user.response.body.data.refresh_token}}
+@userId = {{user.response.body.data.user.id}}
+
+
+### CREATE TICKET ### 
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{Access_token}}
+
+{
+  "title": "Login issue",
+  "body": "Cannot log in with correct credentials",
+  "priorityId": 2,
+  "statusId": 1,
+  "createdBy": {{userId}}
+}
