@@ -1,0 +1,57 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN ADMIN USER ###
+# @name admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "admin123"
+}
+
+@adminAccess_token = {{admin.response.body.data.access_token}}
+
+### CREATE PRIORITY: Low ###
+POST {{baseUrl}}/api/admin/priorities
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Low",
+    "level": 1,
+    "description": "Minor inconvenience, cosmetic issues"
+}
+
+### CREATE PRIORITY: Medium ###
+POST {{baseUrl}}/api/admin/priorities
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Medium",
+    "level": 2,
+    "description": "Normal issues affecting a single user"
+}
+
+### CREATE PRIORITY: High ###
+POST {{baseUrl}}/api/admin/priorities
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "High",
+    "level": 3,
+    "description": "Major issue affecting work or multiple users"
+}
+
+### CREATE PRIORITY: Critical ###
+POST {{baseUrl}}/api/admin/priorities
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Critical",
+    "level": 4,
+    "description": "System down, security issue, production outage"
+}

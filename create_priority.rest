@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN ADMIN USER ###
+# @name admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "admin123"
+}
+
+@adminAccess_token = {{admin.response.body.data.access_token}}
+
+### CREATE PRIORITY ###
+POST {{baseUrl}}/api/admin/priorities
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "High",
+    "level": 1,
+    "description": "High priority ticket"
+}
+
+### GET ALL PRIORITIES ###
+GET {{baseUrl}}/api/admin/priorities
+Authorization: Bearer {{adminAccess_token}}
+
+### GET PRIORITY BY ID ###
+GET {{baseUrl}}/api/admin/priorities/1
+Authorization: Bearer {{adminAccess_token}}
+
+### UPDATE PRIORITY ###
+PUT {{baseUrl}}/api/admin/priorities/1
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "High Updated",
+    "level": 2,
+    "description": "Updated high priority ticket"
+}
+
+### DELETE PRIORITY ###
+DELETE {{baseUrl}}/api/admin/priorities/1
+Authorization: Bearer {{adminAccess_token}}
