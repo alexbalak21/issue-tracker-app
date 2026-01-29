@@ -18,88 +18,88 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Transactional
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+        private final UserRepository userRepository;
+        private final RoleRepository roleRepository;
+        private final PasswordEncoder passwordEncoder;
 
-    public UserService(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    // ----------------------------------------------------
-    // Create user (admin)
-    // ----------------------------------------------------
-    public UserDto create(String name, String email, String password, List<Long> roleIds) {
-
-        if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already in use");
+        public UserService(
+                        UserRepository userRepository,
+                        RoleRepository roleRepository,
+                        PasswordEncoder passwordEncoder) {
+                this.userRepository = userRepository;
+                this.roleRepository = roleRepository;
+                this.passwordEncoder = passwordEncoder;
         }
 
-        List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : Collections.emptyList()
-        );
+        // ----------------------------------------------------
+        // Create user (admin)
+        // ----------------------------------------------------
+        public UserDto create(String name, String email, String password, List<Long> roleIds) {
 
-        User user = new User(
-                name,
-                passwordEncoder.encode(password),
-                email,
-                new HashSet<>(roles)
-        );
+                if (userRepository.existsByEmail(email)) {
+                        throw new RuntimeException("Email already in use");
+                }
 
-        User saved = userRepository.save(user);
+                List<Role> roles = roleRepository.findAllById(
+                                roleIds != null ? roleIds : Collections.emptyList());
 
-        return UserDto.from(saved);
-    }
+                User user = new User(
+                                name,
+                                passwordEncoder.encode(password),
+                                email,
+                                new HashSet<>(roles));
 
-    // ----------------------------------------------------
-    // List all users (admin)
-    // ----------------------------------------------------
-    @Transactional(readOnly = true)
-    public List<UserDto> getAll() {
-        return userRepository.findAllWithRoles()
-                .stream()
-                .map(UserDto::from)
-                .toList();
-    }
+                User saved = userRepository.save(user);
 
-    // ----------------------------------------------------
-    // Assign roles to user
-    // ----------------------------------------------------
-    public UserDto assignRoles(Long userId, List<Long> roleIds) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                return UserDto.from(saved);
+        }
 
-        List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : Collections.emptyList()
-        );
+        // ----------------------------------------------------
+        // List all users (admin)
+        // ----------------------------------------------------
+        @Transactional(readOnly = true)
+        public List<UserDto> getAll() {
+                return userRepository.findAllWithRoles()
+                                .stream()
+                                .map(UserDto::from)
+                                .toList();
+        }
 
-        user.getRoles().addAll(roles);
+        // ----------------------------------------------------
+        // Assign roles to user
+        // ----------------------------------------------------
+        public UserDto assignRoles(Long userId, List<Long> roleIds) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User saved = userRepository.save(user);
+                List<Role> roles = roleRepository.findAllById(
+                                roleIds != null ? roleIds : Collections.emptyList());
 
-        return UserDto.from(saved);
-    }
+                user.getRoles().addAll(roles);
 
-    // ----------------------------------------------------
-    // Remove roles from user
-    // ----------------------------------------------------
-    public UserDto removeRoles(Long userId, List<Long> roleIds) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                User saved = userRepository.save(user);
 
-        List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : Collections.emptyList()
-        );
+                return UserDto.from(saved);
+        }
 
-        user.getRoles().removeAll(roles);
+        // ----------------------------------------------------
+        // Remove roles from user
+        // ----------------------------------------------------
+        public UserDto removeRoles(Long userId, List<Long> roleIds) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User saved = userRepository.save(user);
+                List<Role> roles = roleRepository.findAllById(
+                                roleIds != null ? roleIds : Collections.emptyList());
 
-        return UserDto.from(saved);
-    }
+                user.getRoles().removeAll(roles);
+
+                User saved = userRepository.save(user);
+
+                return UserDto.from(saved);
+        }
+
+        public boolean existsById(Long id) {
+                return userRepository.existsById(id);
+        }
 }
