@@ -14,29 +14,17 @@ Content-Type: application/json
 @adminRefresh_token = {{admin.response.body.data.refresh_token}}
 
 
-### CRUD USER OPERATIONS ###
-
-### CREATE USER ###
-POST {{baseUrl}}/api/admin/users
+### CREATE PERMISSION ###
+POST {{baseUrl}}/api/admin/permissions
 Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "password123",
-    "roleIds": [1]
+    "name": "ticket.assign",
+    "description": "Assign tickets to users"
 }
+
 
 ### LIST PERMISSIONS ###
 GET {{baseUrl}}/api/admin/permissions
-Authorization: Bearer {{adminAccess_token}}
-
-### LIST ROLES ###
-GET {{baseUrl}}/api/admin/roles
-Authorization: Bearer {{adminAccess_token}}
-
-
-### LIST USERS ###
-GET {{baseUrl}}/api/admin/users
 Authorization: Bearer {{adminAccess_token}}
