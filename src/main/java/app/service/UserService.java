@@ -3,13 +3,16 @@ package app.service;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.dto.UserDto;
+import app.dto.UserSummary;
 import app.model.Role;
 import app.model.User;
+import app.projection.UserSummaryProjection;
 import app.repository.RoleRepository;
 import app.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,97 +21,123 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Transactional
 public class UserService {
 
-        private final UserRepository userRepository;
-        private final RoleRepository roleRepository;
-        private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-        public UserService(
-                        UserRepository userRepository,
-                        RoleRepository roleRepository,
-                        PasswordEncoder passwordEncoder) {
-                this.userRepository = userRepository;
-                this.roleRepository = roleRepository;
-                this.passwordEncoder = passwordEncoder;
+    public UserService(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder
+    ) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    // ----------------------------------------------------
+    // Create user (admin)
+    // ----------------------------------------------------
+    public UserDto create(String name, String email, String password, List<Long> roleIds) {
+
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException("Email already in use");
         }
 
-        // ----------------------------------------------------
-        // Create user (admin)
-        // ----------------------------------------------------
-        public UserDto create(String name, String email, String password, List<Long> roleIds) {
+        List<Role> roles = roleRepository.findAllById(
+                roleIds != null ? roleIds : Collections.emptyList()
+        );
 
-                if (userRepository.existsByEmail(email)) {
-                        throw new RuntimeException("Email already in use");
-                }
+        User user = new User(
+                name,
+                passwordEncoder.encode(password),
+                email,
+                new HashSet<>(roles)
+        );
 
-                List<Role> roles = roleRepository.findAllById(
-                                roleIds != null ? roleIds : Collections.emptyList());
+        User saved = userRepository.save(user);
 
-                User user = new User(
-                                name,
-                                passwordEncoder.encode(password),
-                                email,
-                                new HashSet<>(roles));
+        return UserDto.from(saved);
+    }
 
-                User saved = userRepository.save(user);
+    // ----------------------------------------------------
+    // List all users (admin) — SUMMARY DTO
+    // ----------------------------------------------------
+    @Transactional(readOnly = true)
+    public List<UserSummary> getAll() {
 
-                return UserDto.from(saved);
-        }
+        return userRepository.findAllUserSummaries()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        UserSummaryProjection::getId
+                ))
+                .values()
+                .stream()
+                .map(list -> {
+                    var first = list.get(0);
 
-        // ----------------------------------------------------
-        // List all users (admin)
-        // ----------------------------------------------------
-        @Transactional(readOnly = true)
-        public List<UserDto> getAll() {
-                return userRepository.findAllWithRoles()
-                                .stream()
-                                .map(UserDto::from)
-                                .toList();
-        }
+                    List<String> roles = list.stream()
+                            .map(UserSummaryProjection::getRoleNames)
+                            .flatMap(List::stream)
+                            .toList();
 
-        // ----------------------------------------------------
-        // Assign roles to user
-        // ----------------------------------------------------
-        public UserDto assignRoles(Long userId, List<Long> roleIds) {
-                User user = userRepository.findById(userId)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+                    return new UserSummary(
+                            first.getId(),
+                            first.getName(),
+                            first.getEmail(),
+                            first.getCreatedAt(),
+                            first.getUpdatedAt(),
+                            roles
+                    );
+                })
+                .toList();
+    }
 
-                List<Role> roles = roleRepository.findAllById(
-                                roleIds != null ? roleIds : Collections.emptyList());
+    // ----------------------------------------------------
+    // Assign roles to user
+    // ----------------------------------------------------
+    public UserDto assignRoles(Long userId, List<Long> roleIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-                user.getRoles().addAll(roles);
+        List<Role> roles = roleRepository.findAllById(
+                roleIds != null ? roleIds : Collections.emptyList()
+        );
 
-                User saved = userRepository.save(user);
+        user.getRoles().addAll(roles);
 
-                return UserDto.from(saved);
-        }
+        User saved = userRepository.save(user);
 
-        // ----------------------------------------------------
-        // Remove roles from user
-        // ----------------------------------------------------
-        public UserDto removeRoles(Long userId, List<Long> roleIds) {
-                User user = userRepository.findById(userId)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+        return UserDto.from(saved);
+    }
 
-                List<Role> roles = roleRepository.findAllById(
-                                roleIds != null ? roleIds : Collections.emptyList());
+    // ----------------------------------------------------
+    // Remove roles from user
+    // ----------------------------------------------------
+    public UserDto removeRoles(Long userId, List<Long> roleIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-                user.getRoles().removeAll(roles);
+        List<Role> roles = roleRepository.findAllById(
+                roleIds != null ? roleIds : Collections.emptyList()
+        );
 
-                User saved = userRepository.save(user);
+        user.getRoles().removeAll(roles);
 
-                return UserDto.from(saved);
-        }
+        User saved = userRepository.save(user);
 
-        public boolean existsById(Long id) {
-                return userRepository.existsById(id);
-        }
+        return UserDto.from(saved);
+    }
 
-        @Transactional(readOnly = true)
-        public UserDto getById(Long userId) {
-                User user = userRepository.findById(userId)
-                                .orElseThrow(() -> new RuntimeException("User not found"));
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
 
-                return UserDto.from(user);
-        }
+    @Transactional(readOnly = true)
+    public UserDto getById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+        return UserDto.from(user);
+    }
 }

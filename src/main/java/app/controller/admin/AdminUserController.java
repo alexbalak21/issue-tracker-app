@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import app.dto.UserDto;
+import app.dto.UserSummary;
 import app.dto.CreateUserRequest;
 import app.dto.AssignRolesRequest;
 import app.security.RequiresPermission;
@@ -46,7 +47,7 @@ public class AdminUserController {
     // ----------------------------------------------------
     @GetMapping
     @RequiresPermission("admin.manage")
-    public List<UserDto> getUsers() {
+    public List<UserSummary> getUsers() {
         return userService.getAll();
     }
 
