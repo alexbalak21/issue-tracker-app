@@ -27,3 +27,8 @@ Authorization: Bearer {{Access_token}}
   "statusId": 1,
   "createdBy": {{userId}}
 }
+
+### LIST TICKETS ###
+GET {{baseUrl}}/api/tickets
+Authorization: Bearer {{Access_token}}
+

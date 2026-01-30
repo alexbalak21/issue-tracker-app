@@ -14,6 +14,17 @@ import app.repository.RoleRepository;
 
 @Service
 public class RoleService {
+    @Transactional
+    public Role update(Long roleId, String name, String description, @NonNull List<Long> permissionIds) {
+        Role role = roleRepo.findById(roleId)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleId));
+        role.setName(name);
+        role.setDescription(description);
+        List<Long> safeIds = permissionIds != null ? permissionIds : List.of();
+        List<Permission> permissions = permissionRepo.findAllById(safeIds);
+        role.setPermissions(new HashSet<>(permissions));
+        return roleRepo.save(role);
+    }
 
     private final RoleRepository roleRepo;
     private final PermissionRepository permissionRepo;
@@ -42,5 +53,14 @@ public class RoleService {
     @Transactional(readOnly = true)
     public List<Role> getAll() {
         return roleRepo.findAll();
+    }
+
+    @Transactional
+    public Role addPermissions(Long roleId, List<Long> permissionIds) {
+        Role role = roleRepo.findById(roleId)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleId));
+        List<Permission> permissions = permissionRepo.findAllById(permissionIds);
+        role.getPermissions().addAll(permissions);
+        return roleRepo.save(role);
     }
 }

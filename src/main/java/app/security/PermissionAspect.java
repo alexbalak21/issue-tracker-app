@@ -1,5 +1,6 @@
 package app.security;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,18 +18,25 @@ public class PermissionAspect {
     @Around("@annotation(requiresPermission)")
     public Object checkPermission(ProceedingJoinPoint pjp, RequiresPermission requiresPermission) throws Throwable {
 
-        String required = requiresPermission.value();
+        // NEW: now an array
+        String[] requiredPermissions = requiresPermission.value();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth instanceof JwtAuthenticationToken jwtAuth) {
             List<String> userPermissions = jwtAuth.getPermissions();
 
-            if (userPermissions.contains(required)) {
+            // OR logic: allow if user has ANY required permission
+            boolean allowed = Arrays.stream(requiredPermissions)
+                    .anyMatch(userPermissions::contains);
+
+            if (allowed) {
                 return pjp.proceed();
             }
         }
 
-        throw new AccessDeniedException("Missing permission: " + required);
+        throw new AccessDeniedException(
+                "Missing permission. Required: " + Arrays.toString(requiredPermissions)
+        );
     }
 }

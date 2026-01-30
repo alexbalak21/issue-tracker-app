@@ -28,6 +28,7 @@ $permissions = @(
     @{ name = "ticket.write";   description = "Create or update tickets" },
     @{ name = "ticket.assign";  description = "Assign tickets to users" },
     @{ name = "ticket.delete";  description = "Delete tickets" },
+    @{ name = "ticket.manage";  description = "Manage tickets" },
 
     # User Permissions
     @{ name = "user.read";      description = "Read user information" },
@@ -39,11 +40,23 @@ $permissions = @(
     @{ name = "role.read";      description = "Read roles" },
     @{ name = "role.write";     description = "Create or update roles" },
     @{ name = "role.delete";    description = "Delete roles" },
+    @{ name = "role.manage";    description = "Manage roles and their permissions" },
 
     # Permission Permissions
     @{ name = "permission.read";   description = "Read permissions" },
     @{ name = "permission.write";  description = "Create or update permissions" },
-    @{ name = "permission.delete"; description = "Delete permissions" }
+    @{ name = "permission.delete"; description = "Delete permissions" },
+    @{ name = "permission.manage"; description = "Manage permissions" },
+
+    # Status Permissions
+    @{ name = "status.manage";                 description = "Manage ticket statuses" },
+    @{ name = "status.read";                 description = "Read/view ticket statuses" },
+    @{ name = "status.write";                description = "Create or update statuses" },
+    @{ name = "status.delete";               description = "Delete statuses" },
+    @{ name = "status.transition";           description = "Change a ticket's status" },
+    @{ name = "status.transition.reopen";    description = "Reopen resolved or closed tickets" },
+    @{ name = "status.transition.close";     description = "Close tickets" },
+    @{ name = "status.transition.cancel";    description = "Cancel tickets" }
 )
 
 # -----------------------------

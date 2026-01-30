@@ -13,31 +13,30 @@ Content-Type: application/json
 @adminAccess_token = {{admin.response.body.data.access_token}}
 @adminRefresh_token = {{admin.response.body.data.refresh_token}}
 
-
-### CREATE PERMISSION ###
-POST {{baseUrl}}/api/admin/permissions
-Authorization: Bearer {{adminAccess_token}}
-Content-Type: application/json
-
-{
-    "name": "ticket.assign",
-    "description": "Assign tickets to users"
-}
-
-
-### CREATE PERMISSION ###
-POST {{baseUrl}}/api/admin/permissions
-Authorization: Bearer {{adminAccess_token}}
-Content-Type: application/json
-
-{
-    "name": "status.manage",
-    "description": "Manage ticket statuses"
-}
-
-
 ### LIST PERMISSIONS ###
 GET {{baseUrl}}/api/admin/permissions
 Authorization: Bearer {{adminAccess_token}}
 
+### LIST ROLES ###
+GET {{baseUrl}}/api/admin/roles
+Authorization: Bearer {{adminAccess_token}}
 
+
+### UPDATE ROLE ###
+PUT {{baseUrl}}/api/admin/roles/2
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "USER",
+    "description": "User role",
+    "permissionIds": [3, 4]
+}
+
+
+### ADD PERMISSIONS TO ROLE ###
+PATCH {{baseUrl}}/api/admin/roles/1/permissions
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+[38]

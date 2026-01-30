@@ -108,6 +108,8 @@ Content-Type: application/json
     "permissionIds": [1, 2]
 }
 
+
+
 ### UPDATE ROLE ###
 PUT {{baseUrl}}/api/admin/roles/2
 Authorization: Bearer {{adminAccess_token}}

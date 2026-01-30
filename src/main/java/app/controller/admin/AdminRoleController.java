@@ -34,4 +34,22 @@ public class AdminRoleController {
                 .map(RoleDto::from)
                 .toList();
     }
+
+    // UPDATE ROLE
+    @PutMapping("/{roleId}")
+    @RequiresPermission("admin.manage")
+    public RoleDto updateRole(@PathVariable Long roleId, @RequestBody CreateRoleRequest req) {
+        return RoleDto.from(
+                roleService.update(roleId, req.name(), req.description(), req.permissionIds())
+        );
+    }
+
+    // PATCH ADD PERMISSIONS TO ROLE
+    @PatchMapping("/{roleId}/permissions")
+    @RequiresPermission("admin.manage")
+    public RoleDto addPermissionsToRole(@PathVariable Long roleId, @RequestBody List<Long> permissionIds) {
+        return RoleDto.from(
+                roleService.addPermissions(roleId, permissionIds)
+        );
+    }
 }
