@@ -24,9 +24,9 @@ Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-  "title": "User Max Payne cannot reset password",
-  "body": "Max Payne is unable to reset his password as he is not receiving the reset email. Please investigate.",
-  "priorityId": 2
+  "title": "Max Payne Issue 1",
+  "body": "Max Payne create issue 1",
+  "priorityId": 1
 }
 
 
@@ -47,12 +47,12 @@ Authorization: Bearer {{Access_token}}
 
 
 ### UPDATE TICKET ###
-PUT {{baseUrl}}/api/tickets/5
+PUT {{baseUrl}}/api/tickets/6
 Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-  "title": "Updated Max Payne connection",
-    "body": "Max Payne create Update",
-    "priorityId": 3
+  "title": "Max Payne Issue 1 - updated 1",
+    "body": "Max Payne create issue 1 - updated 1",
+    "priorityId": 4
 }

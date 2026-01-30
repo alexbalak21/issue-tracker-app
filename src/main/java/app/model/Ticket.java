@@ -3,8 +3,13 @@ package app.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity
 @Table(name = "ticket")
+@EntityListeners(AuditingEntityListener.class)
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +33,11 @@ public class Ticket {
     @Column(name = "assigned_to")
     private Long assignedTo;
 
-    @Column(name = "created_at", nullable = false)
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
+    
+    @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -38,9 +45,11 @@ public class Ticket {
     private LocalDateTime resolvedAt;
 
     // Constructors
-    public Ticket() {}
+    public Ticket() {
+    }
 
-    public Ticket(String title, String body, int priorityId, int statusId, Long createdBy, Long assignedTo, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime resolvedAt) {
+    public Ticket(String title, String body, int priorityId, int statusId, Long createdBy, Long assignedTo,
+            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime resolvedAt) {
         this.title = title;
         this.body = body;
         this.priorityId = priorityId;
@@ -53,33 +62,83 @@ public class Ticket {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getBody() { return body; }
-    public void setBody(String body) { this.body = body; }
+    public String getTitle() {
+        return title;
+    }
 
-    public int getPriorityId() { return priorityId; }
-    public void setPriorityId(int priorityId) { this.priorityId = priorityId; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public int getStatusId() { return statusId; }
-    public void setStatusId(int statusId) { this.statusId = statusId; }
+    public String getBody() {
+        return body;
+    }
 
-    public Long getCreatedBy() { return createdBy; }
-    public void setCreatedBy(Long createdBy) { this.createdBy = createdBy; }
+    public void setBody(String body) {
+        this.body = body;
+    }
 
-    public Long getAssignedTo() { return assignedTo; }
-    public void setAssignedTo(Long assignedTo) { this.assignedTo = assignedTo; }
+    public int getPriorityId() {
+        return priorityId;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public void setPriorityId(int priorityId) {
+        this.priorityId = priorityId;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public int getStatusId() {
+        return statusId;
+    }
 
-    public LocalDateTime getResolvedAt() { return resolvedAt; }
-    public void setResolvedAt(LocalDateTime resolvedAt) { this.resolvedAt = resolvedAt; }
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Long getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(Long assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getResolvedAt() {
+        return resolvedAt;
+    }
+
+    public void setResolvedAt(LocalDateTime resolvedAt) {
+        this.resolvedAt = resolvedAt;
+    }
 }
