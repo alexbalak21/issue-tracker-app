@@ -31,20 +31,20 @@ public class TicketController {
 
     @GetMapping("/{id}")
     @RequiresPermission("ticket.read")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable int id) {
+    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
         Optional<Ticket> ticket = ticketService.getTicketById(id);
         return ticket.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/createdBy/{userId}")
     @RequiresPermission("ticket.read")
-    public List<Ticket> getTicketsByCreatedBy(@PathVariable int userId) {
+    public List<Ticket> getTicketsByCreatedBy(@PathVariable Long userId) {
         return ticketService.getTicketsByCreatedBy(userId);
     }
 
     @GetMapping("/assignedTo/{userId}")
     @RequiresPermission("ticket.read")
-    public List<Ticket> getTicketsByAssignedTo(@PathVariable Integer userId) {
+    public List<Ticket> getTicketsByAssignedTo(@PathVariable Long userId) {
         return ticketService.getTicketsByAssignedTo(userId);
     }
 
@@ -77,7 +77,7 @@ public class TicketController {
 
     @PutMapping("/{id}")
     @RequiresPermission("ticket.write")
-    public ResponseEntity<Ticket> updateTicket(@PathVariable int id, @RequestBody Ticket ticket) {
+    public ResponseEntity<Ticket> updateTicket(@PathVariable Long id, @RequestBody Ticket ticket) {
         if (!ticketService.getTicketById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
@@ -90,7 +90,7 @@ public class TicketController {
     // ----------------------------------------------------
     @DeleteMapping("/{id}")
     @RequiresPermission("ticket.delete")
-    public ResponseEntity<Void> deleteTicket(@PathVariable int id) {
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
         if (!ticketService.getTicketById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
@@ -104,7 +104,7 @@ public class TicketController {
     @PostMapping("/{id}/assign")
     @RequiresPermission("ticket.assign")
     public ResponseEntity<Ticket> assignTicket(
-            @PathVariable int id,
+            @PathVariable Long id,
             @RequestBody AssignTicketRequest req) {
         Ticket updated = ticketService.assignTicket(id, req.userId());
         return ResponseEntity.ok(updated);

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import app.service.CustomUserDetailsService;
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -64,12 +63,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // Extract permissions from JWT
                     List<String> permissions = jwtService.extractPermissions(jwt);
 
-                    // Build custom authentication token
+                    // Build custom authentication token (UPDATED)
                     JwtAuthenticationToken authToken = new JwtAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities(),
-                            permissions
+                            userId,                        // NEW: userId
+                            userDetails,                   // principal
+                            null,                          // credentials
+                            userDetails.getAuthorities(),  // authorities
+                            permissions                    // permissions
                     );
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

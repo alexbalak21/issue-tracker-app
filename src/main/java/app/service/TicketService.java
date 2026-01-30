@@ -12,7 +12,7 @@ import java.util.Optional;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
-    private final UserService userService; // optional but recommended
+    private final UserService userService;
 
     public TicketService(TicketRepository ticketRepository, UserService userService) {
         this.ticketRepository = ticketRepository;
@@ -26,15 +26,15 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public Optional<Ticket> getTicketById(int id) {
+    public Optional<Ticket> getTicketById(Long id) {
         return ticketRepository.findById(id);
     }
 
-    public List<Ticket> getTicketsByCreatedBy(int userId) {
+    public List<Ticket> getTicketsByCreatedBy(Long userId) {
         return ticketRepository.findByCreatedBy(userId);
     }
 
-    public List<Ticket> getTicketsByAssignedTo(Integer userId) {
+    public List<Ticket> getTicketsByAssignedTo(Long userId) {
         return ticketRepository.findByAssignedTo(userId);
     }
 
@@ -70,26 +70,31 @@ public class TicketService {
     // ----------------------------------------------------
     // DELETE
     // ----------------------------------------------------
-    public void deleteTicket(int id) {
+    public void deleteTicket(Long id) {
         ticketRepository.deleteById(id);
     }
 
     // ----------------------------------------------------
     // ASSIGN
     // ----------------------------------------------------
-    public Ticket assignTicket(int ticketId, Long userId) {
+    public Ticket assignTicket(Long ticketId, Long userId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        // Validate user exists
         if (!userService.existsById(userId)) {
             throw new RuntimeException("User not found");
         }
 
-        ticket.setAssignedTo(userId.intValue());
+        ticket.setAssignedTo(userId);
         ticket.setUpdatedAt(LocalDateTime.now());
 
         return ticketRepository.save(ticket);
     }
 
+    // ----------------------------------------------------
+    // OWNERSHIP FILTER
+    // ----------------------------------------------------
+    public List<Ticket> getTicketsByCreatedByOrAssignedTo(Long userId) {
+        return ticketRepository.findByCreatedByOrAssignedTo(userId, userId);
+    }
 }

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -23,10 +23,10 @@ public class Ticket {
     private int statusId;
 
     @Column(name = "created_by", nullable = false)
-    private int createdBy;
+    private Long createdBy;
 
     @Column(name = "assigned_to")
-    private Integer assignedTo;
+    private Long assignedTo;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -40,7 +40,7 @@ public class Ticket {
     // Constructors
     public Ticket() {}
 
-    public Ticket(String title, String body, int priorityId, int statusId, int createdBy, Integer assignedTo, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime resolvedAt) {
+    public Ticket(String title, String body, int priorityId, int statusId, Long createdBy, Long assignedTo, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime resolvedAt) {
         this.title = title;
         this.body = body;
         this.priorityId = priorityId;
@@ -53,8 +53,8 @@ public class Ticket {
     }
 
     // Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -68,11 +68,11 @@ public class Ticket {
     public int getStatusId() { return statusId; }
     public void setStatusId(int statusId) { this.statusId = statusId; }
 
-    public int getCreatedBy() { return createdBy; }
-    public void setCreatedBy(int createdBy) { this.createdBy = createdBy; }
+    public Long getCreatedBy() { return createdBy; }
+    public void setCreatedBy(Long createdBy) { this.createdBy = createdBy; }
 
-    public Integer getAssignedTo() { return assignedTo; }
-    public void setAssignedTo(Integer assignedTo) { this.assignedTo = assignedTo; }
+    public Long getAssignedTo() { return assignedTo; }
+    public void setAssignedTo(Long assignedTo) { this.assignedTo = assignedTo; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
