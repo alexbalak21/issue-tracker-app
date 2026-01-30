@@ -30,7 +30,7 @@ Content-Type: application/json
 {
     "name": "USER",
     "description": "User role",
-    "permissionIds": [3, 4]
+    "permissionIds": [39]
 }
 
 

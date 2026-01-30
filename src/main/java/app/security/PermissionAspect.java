@@ -1,17 +1,18 @@
 package app.security;
 
-import java.util.Arrays;
-import java.util.List;
-
 import app.model.Ticket;
 import app.service.TicketService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Aspect
 @Component
@@ -24,59 +25,97 @@ public class PermissionAspect {
     }
 
     @Around("@annotation(requiresPermission)")
-    public Object checkPermission(ProceedingJoinPoint pjp, RequiresPermission requiresPermission) throws Throwable {
-
-        String[] requiredPermissions = requiresPermission.value();
+    public Object check(ProceedingJoinPoint pjp,
+                        RequiresPermission requiresPermission) throws Throwable {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth instanceof JwtAuthenticationToken jwtAuth) {
-            List<String> userPermissions = jwtAuth.getPermissions();
-            Long currentUserId = jwtAuth.getUserId();
+        if (!(auth instanceof JwtAuthenticationToken jwt)) {
+            throw new AccessDeniedException("Not authenticated");
+        }
 
-            // 1. Admin / manager → allowed normally
-            boolean allowed = Arrays.stream(requiredPermissions)
-                    .anyMatch(userPermissions::contains);
+        Long userId = jwt.getUserId();
+        List<String> userPermissions = jwt.getPermissions();
 
-            if (allowed) {
-                return pjp.proceed();
+        // Required permissions
+        String[] requiredPermissions = requiresPermission.value();
+
+        boolean hasPermission = Arrays.stream(requiredPermissions)
+                .anyMatch(userPermissions::contains);
+
+        // Read @Ownership annotation if present
+        MethodSignature sig = (MethodSignature) pjp.getSignature();
+        Ownership ownershipAnn = sig.getMethod().getAnnotation(Ownership.class);
+
+        OwnershipType ownership = ownershipAnn != null
+                ? ownershipAnn.value()
+                : OwnershipType.ALL;
+
+        // ----------------------------------------------------
+        // CASE 1 — ALL: must have permission
+        // ----------------------------------------------------
+        if (ownership == OwnershipType.ALL) {
+            if (!hasPermission) {
+                throw new AccessDeniedException("Missing permission");
             }
+            return pjp.proceed();
+        }
 
-            // 2. Ownership rules for ticket.read
-            if (Arrays.asList(requiredPermissions).contains("ticket.read")) {
-                String method = pjp.getSignature().getName();
+        // ----------------------------------------------------
+        // Extract ticketId if present
+        // ----------------------------------------------------
+        Long ticketId = extractTicketId(pjp.getArgs());
 
-                if (method.equals("getTicketById")) {
-                    Long ticketId = (Long) pjp.getArgs()[0];
-                    Ticket t = ticketService.getTicketById(ticketId).orElse(null);
-
-                    if (t != null &&
-                        (t.getCreatedBy().equals(currentUserId) ||
-                         (t.getAssignedTo() != null && t.getAssignedTo().equals(currentUserId)))) {
-                        return pjp.proceed();
-                    }
-                }
-
-                if (method.equals("getAllTickets")) {
-                    return ticketService.getTicketsByCreatedByOrAssignedTo(currentUserId);
-                }
-            }
-
-            // 3. Ownership rules for ticket.write
-            if (Arrays.asList(requiredPermissions).contains("ticket.write")) {
-                String method = pjp.getSignature().getName();
-
-                if (method.equals("updateTicket")) {
-                    Long ticketId = (Long) pjp.getArgs()[0];
-                    Ticket t = ticketService.getTicketById(ticketId).orElse(null);
-
-                    if (t != null && t.getCreatedBy().equals(currentUserId)) {
-                        return pjp.proceed();
-                    }
-                }
+        // LIST endpoint (no ticketId)
+        if (ticketId == null) {
+            if (ownership == OwnershipType.SELF || ownership == OwnershipType.ALL_OR_SELF) {
+                return ticketService.getTicketsByCreatedByOrAssignedTo(userId);
             }
         }
 
-        throw new AccessDeniedException("Missing permission or ownership");
+        // SINGLE ticket endpoint
+        Ticket ticket = ticketService.getTicketById(ticketId).orElse(null);
+
+        if (ticket == null) {
+            throw new AccessDeniedException("Ticket not found");
+        }
+
+        boolean ownsTicket =
+                ticket.getCreatedBy().equals(userId) ||
+                (ticket.getAssignedTo() != null && ticket.getAssignedTo().equals(userId));
+
+        // ----------------------------------------------------
+        // CASE 2 — SELF: must own the ticket
+        // ----------------------------------------------------
+        if (ownership == OwnershipType.SELF) {
+            if (!ownsTicket) {
+                throw new AccessDeniedException("Not your ticket");
+            }
+            return pjp.proceed();
+        }
+
+        // ----------------------------------------------------
+        // CASE 3 — ALL_OR_SELF: permission OR ownership
+        // ----------------------------------------------------
+        if (ownership == OwnershipType.ALL_OR_SELF) {
+            if (hasPermission || ownsTicket) {
+                return pjp.proceed();
+            }
+            throw new AccessDeniedException("Missing permission or ownership");
+        }
+
+        throw new AccessDeniedException("Access denied");
+    }
+
+    // Extract ticketId from method arguments
+    private Long extractTicketId(Object[] args) {
+        if (args == null) return null;
+
+        for (Object arg : args) {
+            if (arg instanceof Long id) {
+                return id;
+            }
+        }
+        return null;
     }
 }

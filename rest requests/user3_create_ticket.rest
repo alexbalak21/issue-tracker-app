@@ -36,8 +36,8 @@ Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-  "title": "User Max Payne cannot connect issue",
-    "body": "Max Payne is unable to connect to the issue tracker. Please investigate.",
+  "title": "User Max Payne creating connection issues",
+    "body": "Max Payne create issue",
     "priorityId": 3
 }
 

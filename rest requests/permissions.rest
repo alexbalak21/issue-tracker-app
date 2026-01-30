@@ -20,8 +20,8 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "ticket.assign",
-    "description": "Assign tickets to users"
+    "name": "ticket.create",
+    "description": "Create new tickets"
 }
 
 
