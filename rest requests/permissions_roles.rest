@@ -35,8 +35,8 @@ Content-Type: application/json
 
 
 ### ADD PERMISSIONS TO ROLE ###
-PATCH {{baseUrl}}/api/admin/roles/1/permissions
+PATCH {{baseUrl}}/api/admin/roles/2/permissions
 Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
-[38]
+[31]

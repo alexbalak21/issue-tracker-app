@@ -40,3 +40,8 @@ Authorization: Bearer {{adminAccess_token}}
 ### LIST USERS ###
 GET {{baseUrl}}/api/admin/users
 Authorization: Bearer {{adminAccess_token}}
+
+
+### LIST Status ###
+GET {{baseUrl}}/api/status
+Authorization: Bearer {{adminAccess_token}}

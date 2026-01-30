@@ -15,6 +15,10 @@ Content-Type: application/json
 @userId = {{user.response.body.data.user.id}}
 
 
+### GET PRIORITIES ###
+GET {{baseUrl}}/api/priorities
+Authorization: Bearer {{Access_token}}
+
 ### CREATE TICKET ### 
 POST {{baseUrl}}/api/tickets
 Content-Type: application/json
@@ -31,4 +35,11 @@ Authorization: Bearer {{Access_token}}
 ### LIST TICKETS ###
 GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{Access_token}}
+
+
+
+### GET STATUSES ###
+GET {{baseUrl}}/api/status
+Authorization: Bearer {{Access_token}}
+
 
