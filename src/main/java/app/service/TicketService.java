@@ -94,6 +94,20 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    public Ticket updateTicketFields(Long id, String title, String body, Integer priorityId) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        if (title != null)
+            ticket.setTitle(title);
+        if (body != null)
+            ticket.setBody(body);
+        if (priorityId != null)
+            ticket.setPriorityId(priorityId);
+
+        return ticketRepository.save(ticket);
+    }
+
     // ----------------------------------------------------
     // DELETE
     // ----------------------------------------------------

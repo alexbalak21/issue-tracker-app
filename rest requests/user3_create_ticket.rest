@@ -45,3 +45,14 @@ Authorization: Bearer {{Access_token}}
 GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{Access_token}}
 
+
+### UPDATE TICKET ###
+PUT {{baseUrl}}/api/tickets/5
+Content-Type: application/json
+Authorization: Bearer {{Access_token}}
+
+{
+  "title": "Updated Max Payne connection",
+    "body": "Max Payne create Update",
+    "priorityId": 3
+}

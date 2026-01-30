@@ -2,6 +2,7 @@ package app.controller;
 
 import app.dto.AssignTicketRequest;
 import app.dto.CreateTicketRequest;
+import app.dto.UpdateTicketRequest;
 import app.model.Ticket;
 import app.security.Ownership;
 import app.security.OwnershipType;
@@ -83,11 +84,17 @@ public class TicketController {
     @PutMapping("/{id}")
     @RequiresPermission("ticket.write")
     @Ownership(OwnershipType.SELF)
-    public ResponseEntity<Ticket> updateTicket(@PathVariable Long id, @RequestBody Ticket ticket) {
+    public ResponseEntity<Ticket> updateTicket(
+            @PathVariable Long id,
+            @RequestBody UpdateTicketRequest req) {
         return ticketService.getTicketById(id)
                 .map(existing -> {
-                    ticket.setId(id);
-                    return ResponseEntity.ok(ticketService.updateTicket(ticket));
+                    Ticket updated = ticketService.updateTicketFields(
+                            id,
+                            req.title(),
+                            req.body(),
+                            req.priorityId());
+                    return ResponseEntity.ok(updated);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -95,8 +102,7 @@ public class TicketController {
     // ----------------------------------------------------
     // DELETE — requires ticket.delete (admin/manager only)
     // ----------------------------------------------------
-    //TO IMPLEMENT
-
+    // TO IMPLEMENT
 
     // ----------------------------------------------------
     // ASSIGN — requires ticket.assign (support/manager/admin)
