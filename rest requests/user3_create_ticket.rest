@@ -6,28 +6,39 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "gordon.freeman@example.com",
+    "email": "max.payne@example.com",
     "password": "password1234"
 }
 
 @Access_token = {{user.response.body.data.access_token}}
 @Refresh_token = {{user.response.body.data.refresh_token}}
-@userId = {{user.response.body.data.user.id}}
 
 
 ### GET PRIORITIES ###
 GET {{baseUrl}}/api/priorities
 Authorization: Bearer {{Access_token}}
 
-### CREATE TICKET ### 
+### CREATE TICKET 1 ### 
 POST {{baseUrl}}/api/tickets
 Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-  "title": "Password reset email missing",
-  "body": "I requested a password reset but never received the email. I checked spam and waited 15 minutes.",
+  "title": "User Max Payne cannot reset password",
+  "body": "Max Payne is unable to reset his password as he is not receiving the reset email. Please investigate.",
   "priorityId": 2
+}
+
+
+### CREATE TICKET 2 ### 
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{Access_token}}
+
+{
+  "title": "User Max Payne cannot connect issue",
+    "body": "Max Payne is unable to connect to the issue tracker. Please investigate.",
+    "priorityId": 3
 }
 
 ### LIST TICKETS ###
