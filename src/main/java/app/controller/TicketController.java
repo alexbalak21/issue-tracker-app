@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.dto.AssignTicketRequest;
+import app.dto.CreateTicketRequest;
 import app.model.Ticket;
 import app.security.RequiresPermission;
 import app.service.TicketService;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("/api/tickets")
 public class TicketController {
 
-        private final TicketService ticketService;
+    private final TicketService ticketService;
 
     public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
@@ -71,8 +72,8 @@ public class TicketController {
     // ----------------------------------------------------
     @PostMapping
     @RequiresPermission("ticket.write")
-    public Ticket createTicket(@RequestBody Ticket ticket) {
-        return ticketService.createTicket(ticket);
+    public Ticket createTicket(@RequestBody CreateTicketRequest req) {
+        return ticketService.createTicket(req.title(), req.body(), req.priorityId());
     }
 
     @PutMapping("/{id}")

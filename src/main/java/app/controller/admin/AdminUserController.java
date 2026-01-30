@@ -2,6 +2,7 @@ package app.controller.admin;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import app.dto.UserDto;
@@ -30,8 +31,14 @@ public class AdminUserController {
                 req.name(),
                 req.email(),
                 req.password(),
-                req.roleIds()
-        );
+                req.roleIds());
+    }
+
+    // GET ONE USER
+    @GetMapping("/{userId}")
+    @RequiresPermission("admin.manage")
+    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getById(userId));
     }
 
     // ----------------------------------------------------
@@ -50,8 +57,7 @@ public class AdminUserController {
     @RequiresPermission("admin.manage")
     public UserDto assignRoles(
             @PathVariable Long userId,
-            @RequestBody AssignRolesRequest req
-    ) {
+            @RequestBody AssignRolesRequest req) {
         return userService.assignRoles(userId, req.roleIds());
     }
 
@@ -62,8 +68,7 @@ public class AdminUserController {
     @RequiresPermission("admin.manage")
     public UserDto removeRoles(
             @PathVariable Long userId,
-            @RequestBody AssignRolesRequest req
-    ) {
+            @RequestBody AssignRolesRequest req) {
         return userService.removeRoles(userId, req.roleIds());
     }
 }

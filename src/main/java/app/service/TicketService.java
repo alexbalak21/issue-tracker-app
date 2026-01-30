@@ -2,7 +2,12 @@ package app.service;
 
 import app.model.Ticket;
 import app.repository.TicketRepository;
+import app.security.JwtAuthenticationToken;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,9 +58,31 @@ public class TicketService {
     // ----------------------------------------------------
     // CREATE
     // ----------------------------------------------------
-    public Ticket createTicket(Ticket ticket) {
+    public Ticket createTicket(String title, String body, int priorityId) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = null;
+
+        if (auth instanceof JwtAuthenticationToken jwtAuth) {
+            userId = jwtAuth.getUserId();
+        }
+
+        if (userId == null) {
+            throw new RuntimeException("Cannot determine authenticated user");
+        }
+
+        Ticket ticket = new Ticket();
+        ticket.setTitle(title);
+        ticket.setBody(body);
+        ticket.setPriorityId(priorityId);
+
+        // Default status
+        ticket.setStatusId(1); // "Open"
+
+        ticket.setCreatedBy(userId);
         ticket.setCreatedAt(LocalDateTime.now());
         ticket.setUpdatedAt(LocalDateTime.now());
+
         return ticketRepository.save(ticket);
     }
 

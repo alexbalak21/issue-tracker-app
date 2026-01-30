@@ -25,11 +25,9 @@ Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-  "title": "Login issue",
-  "body": "Cannot log in with correct credentials",
-  "priorityId": 2,
-  "statusId": 1,
-  "createdBy": {{userId}}
+  "title": "Password reset email missing",
+  "body": "I requested a password reset but never received the email. I checked spam and waited 15 minutes.",
+  "priorityId": 2
 }
 
 ### LIST TICKETS ###

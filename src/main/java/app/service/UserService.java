@@ -102,4 +102,13 @@ public class UserService {
         public boolean existsById(Long id) {
                 return userRepository.existsById(id);
         }
+
+        @Transactional(readOnly = true)
+        public UserDto getById(Long userId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+
+                return UserDto.from(user);
+        }
+
 }
