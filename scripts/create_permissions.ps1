@@ -24,6 +24,7 @@ $adminHeaders = @{ Authorization = "Bearer $adminAccessToken" }
 # -----------------------------
 $permissions = @(
     # Ticket Permissions
+    @{ name = "ticket.create";    description = "Create tickets, read & update own tickets" },
     @{ name = "ticket.read";    description = "Read/view tickets" },
     @{ name = "ticket.write";   description = "Create or update tickets" },
     @{ name = "ticket.assign";  description = "Assign tickets to users" },

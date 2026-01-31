@@ -21,7 +21,7 @@ Content-Type: application/json
 {
     "name": "USER",
     "description": "User role",
-    "permissionIds": [1, 2]
+    "permissionIds": [3]
 }
 
 ### CREATE USER ###
@@ -33,5 +33,9 @@ Content-Type: application/json
     "name": "Gordon Freeman",
     "email": "gordon.freeman@example.com",
     "password": "password1234",
-    "roleIds": [1, 2]
+    "roleIds": [2]
 }
+
+### LIST USERS ###
+GET {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}

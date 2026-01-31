@@ -12,7 +12,6 @@ Content-Type: application/json
 
 @Access_token = {{user.response.body.data.access_token}}
 @Refresh_token = {{user.response.body.data.refresh_token}}
-@userId = {{user.response.body.data.user.id}}
 
 
 ### GET PRIORITIES ###
@@ -32,5 +31,9 @@ Authorization: Bearer {{Access_token}}
 
 ### LIST TICKETS ###
 GET {{baseUrl}}/api/tickets
+Authorization: Bearer {{Access_token}}
+
+### GET STATUSES ###
+GET {{baseUrl}}/api/status
 Authorization: Bearer {{Access_token}}
 

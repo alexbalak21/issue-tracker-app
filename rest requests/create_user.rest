@@ -27,6 +27,19 @@ Content-Type: application/json
 }
 
 
+### CREATE USER ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Gordon Freeman",
+    "email": "gordon.freeman@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+
 ### GET CREATED USER ###
 GET {{baseUrl}}/api/admin/users/3
 Authorization: Bearer {{adminAccess_token}}
