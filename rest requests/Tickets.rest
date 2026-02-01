@@ -31,6 +31,13 @@ Authorization: Bearer {{Access_token}}
 }
 
 ### LIST TICKETS ###
-GET {{baseUrl}}/api/tickets
+GET {{baseUrl}}/api/tickets/1
 Authorization: Bearer {{Access_token}}
 
+
+### POST TICKET MESSAGE ###
+POST {{baseUrl}}/api/tickets/1/messages
+Content-Type: application/json
+Authorization: Bearer {{Access_token}}
+
+"I am still waiting for the password reset email. Please assist."

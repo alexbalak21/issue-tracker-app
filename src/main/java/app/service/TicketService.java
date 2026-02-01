@@ -103,7 +103,8 @@ public class TicketService {
         Ticket saved = ticketRepository.save(ticket);
 
         // Create conversation with SAME ID as ticket
-        Conversation conversation = new Conversation(saved);
+        Conversation conversation = new Conversation();
+        conversation.setId(saved.getId());  // Set ID without attaching the detached ticket
         conversationRepository.save(conversation);
 
         return saved;

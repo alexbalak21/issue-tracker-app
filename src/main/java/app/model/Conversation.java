@@ -13,9 +13,8 @@ public class Conversation {
     @Id
     private Long id; // SAME as ticket ID
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     private Ticket ticket;
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -27,11 +26,19 @@ public class Conversation {
     @Column(name = "last_sender_id")
     private Long lastSenderId; // NEW FIELD
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     public Conversation() {}
 
     public Conversation(Ticket ticket) {
         this.ticket = ticket;
         this.id = ticket.getId();
+    }
+
+    public Conversation(Long id) {
+        this.id = id;
     }
 
     @PrePersist
@@ -46,6 +53,10 @@ public class Conversation {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Ticket getTicket() {
@@ -79,5 +90,13 @@ public class Conversation {
 
     public void setLastSenderId(Long lastSenderId) {
         this.lastSenderId = lastSenderId;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

@@ -1,5 +1,6 @@
 package app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "ticket")
 @EntityListeners(AuditingEntityListener.class)
 public class Ticket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,7 +38,7 @@ public class Ticket {
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-    
+
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
@@ -44,12 +46,16 @@ public class Ticket {
     @Column(name = "resolved_at")
     private LocalDateTime resolvedAt;
 
-    // Constructors
-    public Ticket() {
-    }
+    // 🔥 Prevents Hibernate from loading Conversation too early
+    @JsonIgnore
+    @OneToOne(mappedBy = "ticket", fetch = FetchType.LAZY)
+    private Conversation conversation;
 
-    public Ticket(String title, String body, int priorityId, int statusId, Long createdBy, Long assignedTo,
-            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime resolvedAt) {
+    public Ticket() {}
+
+    public Ticket(String title, String body, int priorityId, int statusId,
+                  Long createdBy, Long assignedTo,
+                  LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime resolvedAt) {
         this.title = title;
         this.body = body;
         this.priorityId = priorityId;
@@ -62,83 +68,36 @@ public class Ticket {
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getBody() { return body; }
+    public void setBody(String body) { this.body = body; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public int getPriorityId() { return priorityId; }
+    public void setPriorityId(int priorityId) { this.priorityId = priorityId; }
 
-    public String getBody() {
-        return body;
-    }
+    public int getStatusId() { return statusId; }
+    public void setStatusId(int statusId) { this.statusId = statusId; }
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+    public Long getCreatedBy() { return createdBy; }
+    public void setCreatedBy(Long createdBy) { this.createdBy = createdBy; }
 
-    public int getPriorityId() {
-        return priorityId;
-    }
+    public Long getAssignedTo() { return assignedTo; }
+    public void setAssignedTo(Long assignedTo) { this.assignedTo = assignedTo; }
 
-    public void setPriorityId(int priorityId) {
-        this.priorityId = priorityId;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public int getStatusId() {
-        return statusId;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
-    }
+    public LocalDateTime getResolvedAt() { return resolvedAt; }
+    public void setResolvedAt(LocalDateTime resolvedAt) { this.resolvedAt = resolvedAt; }
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Long getAssignedTo() {
-        return assignedTo;
-    }
-
-    public void setAssignedTo(Long assignedTo) {
-        this.assignedTo = assignedTo;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getResolvedAt() {
-        return resolvedAt;
-    }
-
-    public void setResolvedAt(LocalDateTime resolvedAt) {
-        this.resolvedAt = resolvedAt;
-    }
+    public Conversation getConversation() { return conversation; }
+    public void setConversation(Conversation conversation) { this.conversation = conversation; }
 }
