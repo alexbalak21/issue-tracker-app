@@ -1,0 +1,1279 @@
+// --- File: dto/ApiResponse.java ---
+package app.dto;
+
+public class ApiResponse<T> {
+    private String message;
+    private T data;
+
+    public ApiResponse(String message) {
+        this.message = message;
+    }
+
+    public ApiResponse(String message, T data) {
+        this.message = message;
+        this.data = data;
+    }
+
+    // Getters and Setters
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+}
+
+// --- File: dto/AssignRolesRequest.java ---
+package app.dto;
+
+import java.util.List;
+
+public record AssignRolesRequest(List<Long> roleIds) {}
+
+// --- File: dto/AssignTicketRequest.java ---
+package app.dto;
+
+public record AssignTicketRequest(Long userId) {}
+
+// --- File: dto/CreatePermissionRequest.java ---
+package app.dto;
+
+public record CreatePermissionRequest(
+    String name,
+    String description
+) {}
+
+// --- File: dto/CreateRoleRequest.java ---
+package app.dto;
+
+import java.util.List;
+
+public record CreateRoleRequest(
+    String name,
+    String description,
+    List<Long> permissionIds
+) {}
+
+// --- File: dto/CreateTicketRequest.java ---
+package app.dto;
+
+public record CreateTicketRequest(
+        String title,
+        String body,
+        int priorityId
+) {}
+
+// --- File: dto/CreateUserRequest.java ---
+package app.dto;
+
+import java.util.List;
+
+public record CreateUserRequest(
+        String name,
+        String email,
+        String password,
+        List<Long> roleIds
+) {}
+
+// --- File: dto/LoginRequest.java ---
+package app.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public class LoginRequest {
+
+    @Email
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String password;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+
+// --- File: dto/NoteCreateRequest.java ---
+package app.dto;
+
+public record NoteCreateRequest(Long ticketId, String body ) {}
+
+// --- File: dto/NoteResponse.java ---
+package app.dto;
+
+import java.time.LocalDateTime;
+
+public record NoteResponse(
+        Long id,
+        Long ticketId,
+        Long createdBy,
+        Long updatedBy,
+        String body,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+) {}
+
+// --- File: dto/NoteUpdateRequest.java ---
+package app.dto;
+
+public record NoteUpdateRequest( String body ) {}
+
+// --- File: dto/PermissionDto.java ---
+package app.dto;
+
+import app.model.Permission;
+
+public record PermissionDto(
+        Long id,
+        String name,
+        String description
+) {
+    public static PermissionDto from(Permission p) {
+        return new PermissionDto(p.getId(), p.getName(), p.getDescription());
+    }
+}
+
+// --- File: dto/PriorityDto.java ---
+package app.dto;
+
+public class PriorityDto {
+    private int id;
+    private String name;
+    private int level;
+    private String description;
+
+    public PriorityDto() {}
+
+    public PriorityDto(int id, String name, int level, String description) {
+        this.id = id;
+        this.name = name;
+        this.level = level;
+        this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+}
+
+// --- File: dto/RefreshTokenRequest.java ---
+package app.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+
+public class RefreshTokenRequest {
+
+    @JsonProperty("refresh_token")
+    @NotBlank(message = "Refresh token is required")
+    private String refreshToken;
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+}
+
+// --- File: dto/RegisterRequest.java ---
+package app.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public class RegisterRequest {
+    @NotBlank(message = "Name is required")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
+    private String name;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
+    private String email;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
+    private String password;
+
+    // Getters and Setters
+    public String getName() {
+        return name;    
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+
+// --- File: dto/RoleDto.java ---
+package app.dto;
+
+import java.util.List;
+import app.model.Role;
+
+public record RoleDto(
+        Long id,
+        String name,
+        String description,
+        List<PermissionDto> permissions
+) {
+    public static RoleDto from(Role role) {
+        return new RoleDto(
+                role.getId(),
+                role.getName(),
+                role.getDescription(),
+                role.getPermissions().stream()
+                        .map(PermissionDto::from)
+                        .toList()
+        );
+    }
+}
+
+// --- File: dto/StatusDto.java ---
+package app.dto;
+
+public class StatusDto {
+    private int id;
+    private String name;
+    private String type;
+
+    public StatusDto() {}
+
+    public StatusDto(int id, String name, String type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+}
+
+// --- File: dto/UpdateTicketRequest.java ---
+package app.dto;
+
+public record UpdateTicketRequest(
+        String title,
+        String body,
+        Integer priorityId
+) {}
+
+// --- File: dto/UserDto.java ---
+package app.dto;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import app.model.User;
+
+public record UserDto(
+        Long id,
+        String name,
+        String email,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        List<RoleDto> roles,
+        List<String> permissions
+) {
+    public static UserDto from(User user) {
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
+
+                // Convert roles to RoleDto
+                user.getRoles().stream()
+                        .map(RoleDto::from)
+                        .toList(),
+
+                // Flatten permissions across all roles
+                user.getRoles().stream()
+                        .flatMap(role -> role.getPermissions().stream())
+                        .map(p -> p.getName())
+                        .distinct()
+                        .toList()
+        );
+    }
+}
+
+// --- File: dto/UserInfo.java ---
+package app.dto;
+
+import app.model.Role;
+import app.security.CustomUserDetails;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.List;
+
+public class UserInfo {
+
+    private Long id;
+    private String name;
+    private String email;
+    private List<String> roles;
+    private String createdAt;
+    private String updatedAt;
+
+    // Construct from CustomUserDetails (recommended)
+    public UserInfo(CustomUserDetails user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.roles = user.getRoles(); // already returns List<String>
+        this.createdAt = user.getCreatedAt() != null ? user.getCreatedAt().toString() : null;
+        this.updatedAt = user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : null;
+    }
+
+    // Construct from Spring Security's User (rarely used)
+    public UserInfo(org.springframework.security.core.userdetails.User springUser) {
+        this.id = null;
+        this.name = null;
+        this.email = springUser.getUsername();
+        this.roles = springUser.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        this.createdAt = null;
+        this.updatedAt = null;
+    }
+
+    // Construct from app.model.User entity (RBAC version)
+    public UserInfo(app.model.User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+
+        // Convert Set<Role> → List<String>
+        this.roles = user.getRoles().stream()
+                .map(Role::getName)
+                .toList();
+
+        this.createdAt = user.getCreatedAt() != null ? user.getCreatedAt().toString() : null;
+        this.updatedAt = user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : null;
+    }
+
+    // Getters
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public List<String> getRoles() { return roles; }
+    public String getCreatedAt() { return createdAt; }
+    public String getUpdatedAt() { return updatedAt; }
+}
+
+// --- File: dto/UserSummary.java ---
+package app.dto;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record UserSummary(
+        Long id,
+        String name,
+        String email,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        List<String> roles
+) {
+    public static UserSummary from(Long id,
+                                   String name,
+                                   String email,
+                                   LocalDateTime createdAt,
+                                   LocalDateTime updatedAt,
+                                   List<String> roles) {
+        return new UserSummary(id, name, email, createdAt, updatedAt, roles);
+    }
+}
+
+// --- File: model/Conversation.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "conversation")
+public class Conversation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @OneToOne
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
+
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages = new ArrayList<>();
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public Conversation() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+}
+
+// --- File: model/Message.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "messages")
+public class Message {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conversation_id", nullable = false)
+    private Conversation conversation;
+
+    @Column(name = "sender_id", nullable = false)
+    private int senderId;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String body;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public Message() {}
+
+    public Message(Conversation conversation, int senderId, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.conversation = conversation;
+        this.senderId = senderId;
+        this.body = body;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+}
+
+// --- File: model/Note.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "notes")
+public class Note {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "ticket_id", nullable = false)
+    private Long ticketId;
+
+    @Column(name = "created_by", nullable = false)
+    private Long createdBy;
+
+    @Column(name = "updated_by")
+    private Long updatedBy;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String body;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    // Constructors
+    public Note() {}
+
+    public Note(Long ticketId, Long createdBy, Long updatedBy, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.ticketId = ticketId;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.body = body;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Long getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Long updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+}
+
+// --- File: model/Permission.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.util.Objects;
+import java.util.Set;
+
+@Entity
+@Table(name = "permissions")
+public class Permission {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column
+    private String description;
+
+    @ManyToMany(mappedBy = "permissions")
+    private Set<Role> roles;
+
+    public Permission() {}
+
+    public Permission(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Permission that = (Permission) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+}
+
+// --- File: model/Priority.java ---
+package app.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "priority")
+public class Priority {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column(nullable = false)
+    private int level;
+
+    @Column(nullable = false, length = 255)
+    private String description;
+
+    public Priority() {}
+
+    public Priority(String name, int level, String description) {
+        this.name = name;
+        this.level = level;
+        this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+}
+
+// --- File: model/Role.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.util.Objects;
+import java.util.Set;
+
+@Entity
+@Table(name = "roles")
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column
+    private String description;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "role_permissions",
+        joinColumns = @JoinColumn(name = "role_id"),
+        inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<Permission> permissions;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
+
+    public Role() {}
+
+    public Role(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id) && Objects.equals(name, role.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+}
+
+// --- File: model/Status.java ---
+package app.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "status")
+public class Status {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column(nullable = false)
+    private String type;
+
+    public Status() {}
+
+    public Status(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+}
+
+// --- File: model/Ticket.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "ticket")
+public class Ticket {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "body", nullable = false)
+    private String body;
+
+    @Column(name = "priority_id", nullable = false)
+    private int priorityId;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Note> notes = new ArrayList<>();
+
+    public Ticket() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public int getPriorityId() {
+        return priorityId;
+    }
+
+    public void setPriorityId(int priorityId) {
+        this.priorityId = priorityId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+}
+
+// --- File: model/User.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import app.model.UserRole;
+
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserRole> userRoles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Note> notes = new ArrayList<>();
+
+    public User() {}
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+}
+
+// --- File: model/UserRole.java ---
+package app.model;
+
+import jakarta.persistence.*;
+import java.util.Objects;
+
+@Entity
+@Table(name = "user_role")
+public class UserRole {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
+    private Long roleId;
+
+    public UserRole() {}
+
+    public UserRole(Long userId, Long roleId) {
+        this.userId = userId;
+        this.roleId = roleId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRole role = (UserRole) o;
+        return Objects.equals(id, role.id) && Objects.equals(userId, role.userId) && Objects.equals(roleId, role.roleId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, roleId);
+    }
+}

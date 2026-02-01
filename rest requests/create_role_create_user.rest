@@ -13,6 +13,11 @@ Content-Type: application/json
 @adminAccess_token = {{admin.response.body.data.access_token}}
 
 
+### LIST PERMISSIONS ###
+GET {{baseUrl}}/api/admin/permissions
+Authorization: Bearer {{adminAccess_token}}
+
+
 ### CREATE USER ROLE ###
 POST {{baseUrl}}/api/admin/roles
 Authorization: Bearer {{adminAccess_token}}
@@ -21,7 +26,7 @@ Content-Type: application/json
 {
     "name": "USER",
     "description": "User role",
-    "permissionIds": [3]
+    "permissionIds": [3,4,5,30,31,32,41,42]
 }
 
 ### CREATE USER ###
@@ -39,3 +44,22 @@ Content-Type: application/json
 ### LIST USERS ###
 GET {{baseUrl}}/api/admin/users
 Authorization: Bearer {{adminAccess_token}}
+
+
+### LOGIN NEW USER ###
+# @name gordon
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "gordon.freeman@example.com",
+    "password": "password1234"
+}
+
+
+@userAccess_token = {{gordon.response.body.data.access_token}}
+
+
+### GET ALL TICKETS AS NEW USER ###
+GET {{baseUrl}}/api/tickets
+Authorization: Bearer {{userAccess_token}}
