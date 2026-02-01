@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.dto.AddMessageRequest;
 import app.model.Message;
 import app.security.Ownership;
 import app.security.OwnershipType;
@@ -38,10 +39,10 @@ public class MessageController {
     @Ownership(OwnershipType.ALL_OR_SELF)
     public ResponseEntity<Message> addMessage(
             @PathVariable Long ticketId,
-            @RequestBody String body
+            @RequestBody AddMessageRequest request
     ) {
         return ResponseEntity.ok(
-                messageService.addMessageToTicket(ticketId, body)
+                messageService.addMessageToTicket(ticketId, request.getMessage())
         );
     }
 }

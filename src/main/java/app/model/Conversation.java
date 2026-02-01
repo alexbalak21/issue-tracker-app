@@ -17,7 +17,7 @@ public class Conversation {
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private Ticket ticket;
 
-    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messages = new ArrayList<>();
 
     @Column(name = "updated_at")

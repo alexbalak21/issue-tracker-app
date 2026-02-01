@@ -25,12 +25,49 @@ Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-  "title": "Password reset email missing",
-  "body": "I requested a password reset but never received the email. I checked spam and waited 15 minutes.",
+  "title": "Ticket 1",
+  "body": "Ticke 1 body content",
+  "priorityId": 1
+}
+
+### CREATE TICKET ### 
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{Access_token}}
+
+{
+  "title": "Ticket 2",
+  "body": "Ticke 2 body content",
   "priorityId": 2
 }
 
+### CREATE TICKET ### 
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{Access_token}}
+
+{
+  "title": "Ticket 3",
+  "body": "Ticke 3 body content",
+  "priorityId": 3
+}
+
+### CREATE TICKET ### 
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{Access_token}}
+
+{
+  "title": "Ticket 4",
+  "body": "Ticke 4 body content",
+  "priorityId": 4
+}
+
 ### LIST TICKETS ###
+GET {{baseUrl}}/api/tickets
+Authorization: Bearer {{Access_token}}
+
+### GET 1 TICKETS ###
 GET {{baseUrl}}/api/tickets/1
 Authorization: Bearer {{Access_token}}
 
@@ -40,4 +77,6 @@ POST {{baseUrl}}/api/tickets/1/messages
 Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
-"I am still waiting for the password reset email. Please assist."
+{
+    "message": "Do Something"
+}
