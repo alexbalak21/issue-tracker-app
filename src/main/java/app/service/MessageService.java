@@ -24,24 +24,37 @@ public class MessageService {
         this.authService = authService;
     }
 
-    public Message addMessage(int conversationId, String body) {
+    // ----------------------------------------------------
+    // ADD MESSAGE TO A TICKET'S CONVERSATION
+    // ----------------------------------------------------
+    public Message addMessageToTicket(Long ticketId, String body) {
 
         Long userId = authService.getCurrentUserId();
 
-        Conversation conv = conversationRepository.findById(conversationId)
+        Conversation conv = conversationRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
 
         Message msg = new Message();
         msg.setConversation(conv);
-        msg.setSenderId(userId.intValue());
+        msg.setSenderId(userId);
         msg.setBody(body);
         msg.setCreatedAt(LocalDateTime.now());
         msg.setUpdatedAt(LocalDateTime.now());
 
-        return messageRepository.save(msg);
+        Message saved = messageRepository.save(msg);
+
+        // Update conversation metadata
+        conv.setUpdatedAt(LocalDateTime.now());
+        conv.setLastSenderId(userId);
+        conversationRepository.save(conv);
+
+        return saved;
     }
 
-    public List<Message> getMessages(int conversationId) {
-        return messageRepository.findByConversationIdOrderByCreatedAtAsc(conversationId);
+    // ----------------------------------------------------
+    // GET MESSAGES FOR A TICKET'S CONVERSATION
+    // ----------------------------------------------------
+    public List<Message> getMessagesForTicket(Long ticketId) {
+        return messageRepository.findByConversationIdOrderByCreatedAtAsc(ticketId);
     }
 }

@@ -9,14 +9,14 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conversation_id", nullable = false)
     private Conversation conversation;
 
     @Column(name = "sender_id", nullable = false)
-    private int senderId;
+    private Long senderId; // FIXED: use Long
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String body;
@@ -29,7 +29,8 @@ public class Message {
 
     public Message() {}
 
-    public Message(Conversation conversation, int senderId, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Message(Conversation conversation, Long senderId, String body,
+                   LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.conversation = conversation;
         this.senderId = senderId;
         this.body = body;
@@ -38,11 +39,11 @@ public class Message {
     }
 
     // Getters and Setters
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -54,11 +55,11 @@ public class Message {
         this.conversation = conversation;
     }
 
-    public int getSenderId() {
+    public Long getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(int senderId) {
+    public void setSenderId(Long senderId) {
         this.senderId = senderId;
     }
 

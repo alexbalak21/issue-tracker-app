@@ -33,13 +33,14 @@ public class TicketController {
         return ticketService.getAllTickets();
     }
 
+    // ----------------------------------------------------
+    // READ DETAILS — requires ticket.read (ALL) or OWN (SELF)
+    // ----------------------------------------------------
     @GetMapping("/{id}")
     @RequiresPermission("ticket.read")
     @Ownership(OwnershipType.ALL_OR_SELF)
-    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
-        return ticketService.getTicketById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getTicketDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(ticketService.getTicketDetails(id));
     }
 
     // ----------------------------------------------------

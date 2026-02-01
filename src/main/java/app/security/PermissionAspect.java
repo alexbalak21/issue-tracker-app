@@ -98,7 +98,7 @@ public class PermissionAspect {
         // ----------------------------------------------------
         // If not a ticket, try Conversation
         // ----------------------------------------------------
-        Conversation conv = conversationService.getConversationById(id.intValue());
+        Conversation conv = conversationService.getConversationById(id);
 
         if (conv != null) {
             Long ticketOwner = conv.getTicket().getCreatedBy();

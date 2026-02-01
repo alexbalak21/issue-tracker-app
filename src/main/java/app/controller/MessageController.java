@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/conversations")
+@RequestMapping("/api/tickets")
 public class MessageController {
 
     private final MessageService messageService;
@@ -21,29 +21,27 @@ public class MessageController {
     }
 
     // ----------------------------------------------------
-    // GET messages for a conversation
-    // USER can only view their own conversation
+    // GET messages for a ticket
     // ----------------------------------------------------
-    @GetMapping("/{conversationId}/messages")
+    @GetMapping("/{ticketId}/messages")
     @RequiresPermission("conversation.read")
     @Ownership(OwnershipType.ALL_OR_SELF)
-    public List<Message> getMessages(@PathVariable int conversationId) {
-        return messageService.getMessages(conversationId);
+    public List<Message> getMessages(@PathVariable Long ticketId) {
+        return messageService.getMessagesForTicket(ticketId);
     }
 
     // ----------------------------------------------------
-    // POST message (reply)
-    // USER can only reply to their own conversation
+    // POST message to a ticket
     // ----------------------------------------------------
-    @PostMapping("/{conversationId}/messages")
+    @PostMapping("/{ticketId}/messages")
     @RequiresPermission("conversation.reply")
     @Ownership(OwnershipType.ALL_OR_SELF)
     public ResponseEntity<Message> addMessage(
-            @PathVariable int conversationId,
+            @PathVariable Long ticketId,
             @RequestBody String body
     ) {
         return ResponseEntity.ok(
-                messageService.addMessage(conversationId, body)
+                messageService.addMessageToTicket(ticketId, body)
         );
     }
 }

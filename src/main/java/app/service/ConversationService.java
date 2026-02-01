@@ -20,12 +20,12 @@ public class ConversationService {
         this.ticketRepository = ticketRepository;
     }
 
-    public Conversation getConversationById(int id) {
+    public Conversation getConversationById(Long id) {
         return conversationRepository.findById(id).orElse(null);
     }
 
     public Conversation getByTicketId(Long ticketId) {
-        return conversationRepository.findByTicketId(ticketId);
+        return conversationRepository.findById(ticketId).orElse(null);
     }
 
     public Conversation createConversationForTicket(Long ticketId) {
@@ -34,7 +34,6 @@ public class ConversationService {
 
         Conversation conv = new Conversation();
         conv.setTicket(ticket);
-        conv.setCreatedAt(LocalDateTime.now());
         conv.setUpdatedAt(LocalDateTime.now());
 
         return conversationRepository.save(conv);

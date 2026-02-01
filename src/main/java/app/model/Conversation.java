@@ -1,6 +1,7 @@
 package app.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,30 +11,41 @@ import java.util.List;
 public class Conversation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id; // SAME as ticket ID
 
     @OneToOne
-    @JoinColumn(name = "ticket_id", nullable = false)
+    @MapsId
+    @JoinColumn(name = "id")
     private Ticket ticket;
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages = new ArrayList<>();
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "last_sender_id")
+    private Long lastSenderId; // NEW FIELD
+
     public Conversation() {}
 
-    public int getId() {
-        return id;
+    public Conversation(Ticket ticket) {
+        this.ticket = ticket;
+        this.id = ticket.getId();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @PrePersist
+    public void onCreate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Ticket getTicket() {
@@ -42,6 +54,7 @@ public class Conversation {
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
+        this.id = ticket.getId();
     }
 
     public List<Message> getMessages() {
@@ -52,19 +65,19 @@ public class Conversation {
         this.messages = messages;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getLastSenderId() {
+        return lastSenderId;
+    }
+
+    public void setLastSenderId(Long lastSenderId) {
+        this.lastSenderId = lastSenderId;
     }
 }

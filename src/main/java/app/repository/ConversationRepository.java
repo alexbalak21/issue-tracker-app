@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ConversationRepository extends JpaRepository<Conversation, Integer> {
+public interface ConversationRepository extends JpaRepository<Conversation, Long> {
 
-    // Optional helper: find conversation by ticket ID
-    Conversation findByTicketId(Long ticketId);
+    // Conversation ID == Ticket ID, so this is enough:
+    // findById(ticketId)
 }

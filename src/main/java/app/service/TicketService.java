@@ -1,13 +1,18 @@
 package app.service;
 
+import app.dto.NoteResponse;
+import app.dto.TicketDetailsResponse;
+import app.model.Conversation;
+import app.model.Message;
 import app.model.Ticket;
+import app.repository.ConversationRepository;
+import app.repository.MessageRepository;
 import app.repository.TicketRepository;
 import app.security.JwtAuthenticationToken;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,10 +23,25 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final UserService userService;
+    private final ConversationRepository conversationRepository;
+    private final MessageRepository messageRepository;
+    private final NoteService noteService;
+    private final AuthService authService;
 
-    public TicketService(TicketRepository ticketRepository, UserService userService) {
+    public TicketService(
+            TicketRepository ticketRepository,
+            UserService userService,
+            ConversationRepository conversationRepository,
+            MessageRepository messageRepository,
+            NoteService noteService,
+            AuthService authService
+    ) {
         this.ticketRepository = ticketRepository;
         this.userService = userService;
+        this.conversationRepository = conversationRepository;
+        this.messageRepository = messageRepository;
+        this.noteService = noteService;
+        this.authService = authService;
     }
 
     // ----------------------------------------------------
@@ -75,15 +95,18 @@ public class TicketService {
         ticket.setTitle(title);
         ticket.setBody(body);
         ticket.setPriorityId(priorityId);
-
-        // Default status
-        ticket.setStatusId(1); // "Open"
-
+        ticket.setStatusId(1); // default: Open
         ticket.setCreatedBy(userId);
         ticket.setCreatedAt(LocalDateTime.now());
         ticket.setUpdatedAt(LocalDateTime.now());
 
-        return ticketRepository.save(ticket);
+        Ticket saved = ticketRepository.save(ticket);
+
+        // Create conversation with SAME ID as ticket
+        Conversation conversation = new Conversation(saved);
+        conversationRepository.save(conversation);
+
+        return saved;
     }
 
     // ----------------------------------------------------
@@ -98,21 +121,51 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        if (title != null)
-            ticket.setTitle(title);
-        if (body != null)
-            ticket.setBody(body);
-        if (priorityId != null)
-            ticket.setPriorityId(priorityId);
+        if (title != null) ticket.setTitle(title);
+        if (body != null) ticket.setBody(body);
+        if (priorityId != null) ticket.setPriorityId(priorityId);
 
+        ticket.setUpdatedAt(LocalDateTime.now());
         return ticketRepository.save(ticket);
     }
 
     // ----------------------------------------------------
-    // DELETE
+    // DETAILS (Ticket + Conversation + Messages + Notes)
     // ----------------------------------------------------
-    public void deleteTicket(Long id) {
-        ticketRepository.deleteById(id);
+    public TicketDetailsResponse getTicketDetails(Long ticketId) {
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        // Load conversation (may be empty)
+        Conversation conversation = conversationRepository.findById(ticketId)
+                .orElse(null);
+
+        List<Message> messages = null;
+
+        if (conversation != null) {
+            List<Message> foundMessages = messageRepository.findByConversationIdOrderByCreatedAtAsc(ticketId);
+
+            if (!foundMessages.isEmpty()) {
+                messages = foundMessages;
+            } else {
+                // hide empty conversation
+                conversation = null;
+            }
+        }
+
+        // Notes only if user has note.read
+        List<NoteResponse> notes = null;
+
+        if (authService.hasPermission("note.read")) {
+            List<NoteResponse> foundNotes = noteService.getNotes(ticketId);
+
+            if (!foundNotes.isEmpty()) {
+                notes = foundNotes;
+            }
+        }
+
+        return new TicketDetailsResponse(ticket, conversation, messages, notes);
     }
 
     // ----------------------------------------------------
