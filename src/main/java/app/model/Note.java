@@ -8,16 +8,16 @@ import java.time.LocalDateTime;
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "ticket_id", nullable = false)
-    private int ticketId;
+    private Long ticketId;
 
     @Column(name = "created_by", nullable = false)
-    private int createdBy;
+    private Long createdBy;
 
     @Column(name = "updated_by")
-    private int updatedBy;
+    private Long updatedBy;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String body;
@@ -31,7 +31,7 @@ public class Note {
     // Constructors
     public Note() {}
 
-    public Note(int ticketId, int createdBy, int updatedBy, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Note(Long ticketId, Long createdBy, Long updatedBy, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.ticketId = ticketId;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
@@ -41,35 +41,35 @@ public class Note {
     }
 
     // Getters and Setters
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getTicketId() {
+    public Long getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(int ticketId) {
+    public void setTicketId(Long ticketId) {
         this.ticketId = ticketId;
     }
 
-    public int getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(int createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
-    public int getUpdatedBy() {
+    public Long getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(int updatedBy) {
+    public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
     }
 

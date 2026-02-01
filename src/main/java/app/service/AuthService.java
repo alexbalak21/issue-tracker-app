@@ -32,8 +32,7 @@ public class AuthService {
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService
-    ) {
+            JwtService jwtService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -55,8 +54,7 @@ public class AuthService {
                 req.getName(),
                 passwordEncoder.encode(req.getPassword()),
                 req.getEmail(),
-                Collections.singleton(defaultRole)
-        );
+                Collections.singleton(defaultRole));
 
         return userRepository.save(user);
     }
@@ -74,10 +72,8 @@ public class AuthService {
 
         // Set authentication in SecurityContext
         CustomUserDetails userDetails = new CustomUserDetails(user);
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         String accessToken = jwtService.generateAccessToken(user);
@@ -111,21 +107,33 @@ public class AuthService {
 
         return Map.of(
                 "access_token", newAccessToken,
-                "refresh_token", newRefreshToken
-        );
+                "refresh_token", newRefreshToken);
     }
-    
+
     // ----------------------------------------------------
     // Get Current User ID
     // ----------------------------------------------------
     public Long getCurrentUserId() {
-    var auth = SecurityContextHolder.getContext().getAuthentication();
+        var auth = SecurityContextHolder.getContext().getAuthentication();
 
-    if (auth == null || !(auth.getPrincipal() instanceof CustomUserDetails userDetails)) {
-        throw new RuntimeException("Not authenticated");
+        if (auth == null || !(auth.getPrincipal() instanceof CustomUserDetails userDetails)) {
+            throw new RuntimeException("Not authenticated");
+        }
+
+        return userDetails.getId();
     }
 
-    return userDetails.getId();
-}
+    // ----------------------------------------------------
+    // Check if current user has a specific permission
+    // ----------------------------------------------------
+    public boolean hasPermission(String permissionName) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
 
+        if (auth == null || !(auth.getPrincipal() instanceof CustomUserDetails userDetails)) {
+            return false;
+        }
+
+        return userDetails.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals(permissionName));
+    }
 }

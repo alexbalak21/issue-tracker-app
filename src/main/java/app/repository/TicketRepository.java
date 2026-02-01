@@ -2,6 +2,7 @@ package app.repository;
 
 import app.model.Ticket;
 
+import java.lang.foreign.Linker.Option;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;

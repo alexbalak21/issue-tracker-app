@@ -49,7 +49,9 @@ $permissions = @(
     @{ name = "message.transition.cancel"; description = "Cancel tickets" },
 
     @{ name = "note.manage"; description = "Manage ticket notes" },
+    @{ name = "note.write"; description = "Create or update ticket notes" },
     @{ name = "note.read"; description = "Read/view ticket notes" },
+    
 
     @{ name = "conversation.manage"; description = "Manage ticket conversations" },
     @{ name = "conversation.read"; description = "Read/view ticket conversations" },
