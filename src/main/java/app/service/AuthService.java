@@ -114,4 +114,18 @@ public class AuthService {
                 "refresh_token", newRefreshToken
         );
     }
+    
+    // ----------------------------------------------------
+    // Get Current User ID
+    // ----------------------------------------------------
+    public Long getCurrentUserId() {
+    var auth = SecurityContextHolder.getContext().getAuthentication();
+
+    if (auth == null || !(auth.getPrincipal() instanceof CustomUserDetails userDetails)) {
+        throw new RuntimeException("Not authenticated");
+    }
+
+    return userDetails.getId();
+}
+
 }

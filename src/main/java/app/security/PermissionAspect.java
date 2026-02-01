@@ -1,7 +1,9 @@
 package app.security;
 
 import app.model.Ticket;
+import app.model.Conversation;
 import app.service.TicketService;
+import app.service.ConversationService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,9 +21,12 @@ import java.util.List;
 public class PermissionAspect {
 
     private final TicketService ticketService;
+    private final ConversationService conversationService;
 
-    public PermissionAspect(TicketService ticketService) {
+    public PermissionAspect(TicketService ticketService,
+                            ConversationService conversationService) {
         this.ticketService = ticketService;
+        this.conversationService = conversationService;
     }
 
     @Around("@annotation(requiresPermission)")
@@ -37,13 +42,11 @@ public class PermissionAspect {
         Long userId = jwt.getUserId();
         List<String> userPermissions = jwt.getPermissions();
 
-        // Required permissions
         String[] requiredPermissions = requiresPermission.value();
 
         boolean hasPermission = Arrays.stream(requiredPermissions)
                 .anyMatch(userPermissions::contains);
 
-        // Read @Ownership annotation if present
         MethodSignature sig = (MethodSignature) pjp.getSignature();
         Ownership ownershipAnn = sig.getMethod().getAnnotation(Ownership.class);
 
@@ -62,59 +65,64 @@ public class PermissionAspect {
         }
 
         // ----------------------------------------------------
-        // Extract ticketId if present
+        // Extract ID (ticketId or conversationId)
         // ----------------------------------------------------
-        Long ticketId = extractTicketId(pjp.getArgs());
+        Long id = extractId(pjp.getArgs());
 
-        // LIST endpoint (no ticketId)
-        if (ticketId == null) {
+        if (id == null) {
+            // LIST endpoints
             if (ownership == OwnershipType.SELF || ownership == OwnershipType.ALL_OR_SELF) {
                 return ticketService.getTicketsByCreatedByOrAssignedTo(userId);
             }
         }
 
-        // SINGLE ticket endpoint
-        Ticket ticket = ticketService.getTicketById(ticketId).orElse(null);
-
-        if (ticket == null) {
-            throw new AccessDeniedException("Ticket not found");
-        }
-
-        boolean ownsTicket =
-                ticket.getCreatedBy().equals(userId) ||
-                (ticket.getAssignedTo() != null && ticket.getAssignedTo().equals(userId));
-
         // ----------------------------------------------------
-        // CASE 2 — SELF: must own the ticket
+        // Try to load a Ticket first
         // ----------------------------------------------------
-        if (ownership == OwnershipType.SELF) {
-            if (!ownsTicket) {
+        Ticket ticket = ticketService.getTicketById(id).orElse(null);
+
+        if (ticket != null) {
+            boolean ownsTicket =
+                    ticket.getCreatedBy().equals(userId) ||
+                    (ticket.getAssignedTo() != null && ticket.getAssignedTo().equals(userId));
+
+            if (ownership == OwnershipType.SELF && !ownsTicket)
                 throw new AccessDeniedException("Not your ticket");
-            }
+
+            if (ownership == OwnershipType.ALL_OR_SELF && !(hasPermission || ownsTicket))
+                throw new AccessDeniedException("Missing permission or ownership");
+
             return pjp.proceed();
         }
 
         // ----------------------------------------------------
-        // CASE 3 — ALL_OR_SELF: permission OR ownership
+        // If not a ticket, try Conversation
         // ----------------------------------------------------
-        if (ownership == OwnershipType.ALL_OR_SELF) {
-            if (hasPermission || ownsTicket) {
-                return pjp.proceed();
-            }
-            throw new AccessDeniedException("Missing permission or ownership");
+        Conversation conv = conversationService.getConversationById(id.intValue());
+
+        if (conv != null) {
+            Long ticketOwner = conv.getTicket().getCreatedBy();
+
+            boolean ownsConversation = ticketOwner.equals(userId);
+
+            if (ownership == OwnershipType.SELF && !ownsConversation)
+                throw new AccessDeniedException("Not your conversation");
+
+            if (ownership == OwnershipType.ALL_OR_SELF && !(hasPermission || ownsConversation))
+                throw new AccessDeniedException("Missing permission or ownership");
+
+            return pjp.proceed();
         }
 
-        throw new AccessDeniedException("Access denied");
+        throw new AccessDeniedException("Resource not found");
     }
 
-    // Extract ticketId from method arguments
-    private Long extractTicketId(Object[] args) {
+    private Long extractId(Object[] args) {
         if (args == null) return null;
 
         for (Object arg : args) {
-            if (arg instanceof Long id) {
-                return id;
-            }
+            if (arg instanceof Long l) return l;
+            if (arg instanceof Integer i) return i.longValue();
         }
         return null;
     }

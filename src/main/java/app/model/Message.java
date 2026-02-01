@@ -6,12 +6,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "messages")
 public class Message {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "conversation_id", nullable = false)
-    private int conversationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conversation_id", nullable = false)
+    private Conversation conversation;
 
     @Column(name = "sender_id", nullable = false)
     private int senderId;
@@ -25,11 +27,10 @@ public class Message {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Constructors
     public Message() {}
 
-    public Message(int conversationId, int senderId, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.conversationId = conversationId;
+    public Message(Conversation conversation, int senderId, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.conversation = conversation;
         this.senderId = senderId;
         this.body = body;
         this.createdAt = createdAt;
@@ -45,12 +46,12 @@ public class Message {
         this.id = id;
     }
 
-    public int getConversationId() {
-        return conversationId;
+    public Conversation getConversation() {
+        return conversation;
     }
 
-    public void setConversationId(int conversationId) {
-        this.conversationId = conversationId;
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
 
     public int getSenderId() {

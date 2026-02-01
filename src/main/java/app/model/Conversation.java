@@ -2,16 +2,23 @@ package app.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "conversation")
 public class Conversation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "ticket_id", nullable = false)
-    private int ticketId;
+    @OneToOne
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
+
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -19,16 +26,8 @@ public class Conversation {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Constructors
     public Conversation() {}
 
-    public Conversation(int ticketId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.ticketId = ticketId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -37,12 +36,20 @@ public class Conversation {
         this.id = id;
     }
 
-    public int getTicketId() {
-        return ticketId;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setTicketId(int ticketId) {
-        this.ticketId = ticketId;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
     public LocalDateTime getCreatedAt() {

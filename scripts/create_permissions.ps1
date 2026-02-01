@@ -58,6 +58,22 @@ $permissions = @(
     @{ name = "status.transition.reopen";    description = "Reopen resolved or closed tickets" },
     @{ name = "status.transition.close";     description = "Close tickets" },
     @{ name = "status.transition.cancel";    description = "Cancel tickets" }
+
+
+    # Message Permissions
+    @{ name = "message.manage";               description = "Manage ticket messages" },
+    @{ name = "message.create";               description = "Create ticket messages" },
+    @{ name = "message.read";                 description = "Read/view ticket messages" },
+    @{ name = "message.write";                description = "Create or update messages" },
+    @{ name = "message.delete";               description = "Delete messages" },
+    @{ name = "message.transition";           description = "Change a ticket's status" },
+    @{ name = "message.transition.reopen";    description = "Reopen resolved or closed tickets" },
+    @{ name = "message.transition.close";     description = "Close tickets" },
+    @{ name = "message.transition.cancel";    description = "Cancel tickets" }
+
+    # Notes Permissions
+    @{ name = "note.manage";                  description = "Manage ticket notes" },
+    @{ name = "note.read";                    description = "Read/view ticket notes" },
 )
 
 # -----------------------------

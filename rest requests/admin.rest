@@ -45,3 +45,42 @@ Authorization: Bearer {{adminAccess_token}}
 ### LIST Status ###
 GET {{baseUrl}}/api/status
 Authorization: Bearer {{adminAccess_token}}
+
+
+### CREATE USER ROLE ###
+POST {{baseUrl}}/api/admin/roles
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "USER",
+    "description": "User role",
+    "permissionIds": [3]
+}
+
+
+### CREATE USER ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Gordon Freeman",
+    "email": "gordon.freeman@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+
+### LIST USERS ###
+GET {{baseUrl}}/api/admin/users/1
+Authorization: Bearer {{adminAccess_token}}
+
+
+### ADD STATUS MANAGE TO ADMIN ###
+### ADD PERMISSIONS TO ROLE ###
+PATCH {{baseUrl}}/api/admin/roles/1/permissions
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+[21]
