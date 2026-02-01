@@ -1,5 +1,6 @@
 package app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class Conversation {
     @JoinColumn(name = "id", insertable = false, updatable = false)
     private Ticket ticket;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messages = new ArrayList<>();
 
