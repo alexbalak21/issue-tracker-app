@@ -74,6 +74,11 @@ $permissions = @(
     # Notes Permissions
     @{ name = "note.manage";                  description = "Manage ticket notes" },
     @{ name = "note.read";                    description = "Read/view ticket notes" },
+
+    # Conversation Permissions
+    @{ name = "conversation.manage";         description = "Manage ticket conversations" },
+    @{ name = "conversation.read";           description = "Read/view ticket conversations" },
+    @{ name = "conversation.reply";           description = "Reply to ticket conversations" } 
 )
 
 # -----------------------------
