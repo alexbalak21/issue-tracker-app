@@ -19,6 +19,11 @@ Content-Type: application/json
 GET {{baseUrl}}/api/priorities
 Authorization: Bearer {{Access_token}}
 
+### GET STATUSES ###
+GET {{baseUrl}}/api/status
+Authorization: Bearer {{Access_token}}
+
+
 ### CREATE TICKET ### 
 POST {{baseUrl}}/api/tickets
 Content-Type: application/json

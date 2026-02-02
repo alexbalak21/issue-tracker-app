@@ -37,6 +37,20 @@ GET {{baseUrl}}/api/admin/roles
 Authorization: Bearer {{adminAccess_token}}
 
 
+### GET STATUSES ###
+GET {{baseUrl}}/api/status
+Authorization: Bearer {{adminAccess_token}}
+
+### CREATE STATUS ###
+POST {{baseUrl}}/api/admin/status
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "In Review",
+    "description": "The ticket is being reviewed"
+}   
+
 ### LIST USERS ###
 GET {{baseUrl}}/api/admin/users
 Authorization: Bearer {{adminAccess_token}}
@@ -76,6 +90,15 @@ Content-Type: application/json
 GET {{baseUrl}}/api/admin/users/1
 Authorization: Bearer {{adminAccess_token}}
 
+
+###GET PERMISSIONS ###
+GET {{baseUrl}}/api/admin/permissions
+Authorization: Bearer {{adminAccess_token}}
+
+
+###GET ROLES ###
+GET {{baseUrl}}/api/admin/roles
+Authorization: Bearer {{adminAccess_token}}
 
 ### ADD STATUS MANAGE TO ADMIN ###
 ### ADD PERMISSIONS TO ROLE ###
