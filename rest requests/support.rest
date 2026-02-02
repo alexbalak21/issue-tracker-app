@@ -1,0 +1,19 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN SUPPORT USER ###
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "max.payne@example.com",
+    "password": "password1234"
+}
+
+@Access_token = {{login.response.body.data.access_token}}
+@Refresh_token = {{login.response.body.data.refresh_token}}
+
+
+### GET TICKETS ###
+GET {{baseUrl}}/api/tickets
+Authorization: Bearer {{Access_token}}

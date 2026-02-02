@@ -83,7 +83,7 @@ Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-    "message": "message 4 for ticket 1"
+    "message": "message for ticket 1"
 }
 
 

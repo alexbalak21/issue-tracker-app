@@ -67,9 +67,9 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "USER",
-    "description": "User role",
-    "permissionIds": [3]
+    "name": "SUPPORT",
+    "description": "support role",
+    "permissionIds": [4,5,6,31,32,41,42]
 }
 
 
@@ -79,11 +79,15 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "Gordon Freeman",
-    "email": "gordon.freeman@example.com",
+    "name": "Max Payne",
+    "email": "max.payne@example.com",
     "password": "password1234",
-    "roleIds": [2]
+    "roleIds": [3]
 }
+
+### GET 1 USER ###
+GET {{baseUrl}}/api/admin/users/3
+Authorization: Bearer {{adminAccess_token}}
 
 
 ### LIST USERS ###
@@ -106,7 +110,7 @@ PATCH {{baseUrl}}/api/admin/roles/1/permissions
 Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
-[21]
+[4]
 
 
 ### GET PRIORITIES ###
@@ -116,9 +120,14 @@ Authorization: Bearer {{adminAccess_token}}
 
 ###PATCH TICKET PRIORITY ###
 PATCH {{baseUrl}}/api/admin/tickets/1
-Authorization: Bearer {{Access_token}}
+Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
     "priorityId": 2
 }   
+
+
+### GET TICKETS ###
+GET {{baseUrl}}/api/tickets
+Authorization: Bearer {{adminAccess_token}}
