@@ -54,26 +54,41 @@ public class PermissionAspect {
                 ? ownershipAnn.value()
                 : OwnershipType.ALL;
 
-        // ----------------------------------------------------
+        // Extract ID (ticketId or conversationId)
+        Long id = extractId(pjp.getArgs());
+
+        // LIST endpoints (no ID provided)
+        if (id == null) {
+            if (ownership == OwnershipType.SELF) {
+                // User must own the resources
+                return ticketService.getTicketsByCreatedByOrAssignedTo(userId);
+            }
+            
+            if (ownership == OwnershipType.ALL_OR_SELF) {
+                // If user has permission, show all; otherwise show only their own
+                if (hasPermission) {
+                    return pjp.proceed();
+                } else {
+                    return ticketService.getTicketsByCreatedByOrAssignedTo(userId);
+                }
+            }
+            
+            // ALL ownership for list - must have permission
+            if (ownership == OwnershipType.ALL) {
+                if (!hasPermission) {
+                    throw new AccessDeniedException("Missing permission");
+                }
+                return pjp.proceed();
+            }
+        }
+
+        // SINGLE ITEM endpoints (ID provided)
         // CASE 1 — ALL: must have permission
-        // ----------------------------------------------------
         if (ownership == OwnershipType.ALL) {
             if (!hasPermission) {
                 throw new AccessDeniedException("Missing permission");
             }
             return pjp.proceed();
-        }
-
-        // ----------------------------------------------------
-        // Extract ID (ticketId or conversationId)
-        // ----------------------------------------------------
-        Long id = extractId(pjp.getArgs());
-
-        if (id == null) {
-            // LIST endpoints
-            if (ownership == OwnershipType.SELF || ownership == OwnershipType.ALL_OR_SELF) {
-                return ticketService.getTicketsByCreatedByOrAssignedTo(userId);
-            }
         }
 
         // ----------------------------------------------------

@@ -28,8 +28,8 @@ Content-Type: application/json
 Authorization: Bearer {{Access_token}}
 
 {
-  "title": "John Doe creating issue 1",
-  "body": "John Doe create issue 1",
+  "title": "John Doe ID 4 creating issue",
+  "body": "John Doe ID 4 create issue 1",
   "priorityId": 1
 }
 

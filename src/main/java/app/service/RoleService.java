@@ -69,4 +69,13 @@ public class RoleService {
         role.getPermissions().addAll(permissions);
         return roleRepo.save(role);
     }
+
+    @Transactional
+    public Role removePermissions(Long roleId, List<Long> permissionIds) {
+        Role role = roleRepo.findById(roleId)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleId));
+        List<Permission> permissions = permissionRepo.findAllById(permissionIds);
+        role.getPermissions().removeAll(permissions);
+        return roleRepo.save(role);
+    }
 }

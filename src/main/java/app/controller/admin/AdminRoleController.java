@@ -61,4 +61,13 @@ public class AdminRoleController {
                 roleService.addPermissions(roleId, permissionIds)
         );
     }
+
+    // DELETE PERMISSIONS FROM ROLE
+    @DeleteMapping("/{roleId}/permissions")
+    @RequiresPermission("admin.manage")
+    public RoleDto removePermissionsFromRole(@PathVariable Long roleId, @RequestBody List<Long> permissionIds) {
+        return RoleDto.from(
+                roleService.removePermissions(roleId, permissionIds)
+        );
+    }
 }

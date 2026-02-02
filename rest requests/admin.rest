@@ -51,7 +51,7 @@ Content-Type: application/json
     "description": "The ticket is being reviewed"
 }   
 
-### LIST USERS ###
+### USER 4 ###
 GET {{baseUrl}}/api/admin/users/4
 Authorization: Bearer {{adminAccess_token}}
 
@@ -106,12 +106,14 @@ Authorization: Bearer {{adminAccess_token}}
 
 
 ###GET ROLES ###
-GET {{baseUrl}}/api/admin/roles
+GET {{baseUrl}}/api/admin/roles/2
 Authorization: Bearer {{adminAccess_token}}
+
+
 
 ### ADD STATUS MANAGE TO ADMIN ###
 ### ADD PERMISSIONS TO ROLE ###
-PATCH {{baseUrl}}/api/admin/roles/1/permissions
+PATCH {{baseUrl}}/api/admin/roles/2/permissions
 Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
@@ -136,3 +138,11 @@ Content-Type: application/json
 ### GET TICKETS ###
 GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{adminAccess_token}}
+
+
+### DELETE PERMISSIONS FROM ROLE ###
+DELETE {{baseUrl}}/api/admin/roles/2/permissions
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+[4]
