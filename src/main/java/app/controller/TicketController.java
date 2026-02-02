@@ -27,11 +27,13 @@ public class TicketController {
     }
 
     // ----------------------------------------------------
-    // READ — requires ticket.read (ALL) or OWN (SELF)
+    // READ — requires ticket.read (must have permission to see all)
+    // Regular users only see tickets they created or are assigned to
+    // Support/Admin have ticket.read permission so they see all
     // ----------------------------------------------------
     @GetMapping
     @RequiresPermission("ticket.read")
-    @Ownership(OwnershipType.ALL_OR_SELF)
+    @Ownership(OwnershipType.ALL)
     public List<Ticket> getAllTickets() {
         return ticketService.getAllTickets();
     }

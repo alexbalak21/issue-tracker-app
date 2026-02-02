@@ -2,6 +2,7 @@ package app.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,11 @@ public class RoleService {
     @Transactional(readOnly = true)
     public List<Role> getAll() {
         return roleRepo.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Role> getById(Long roleId) {
+        return roleRepo.findById(roleId);
     }
 
     @Transactional

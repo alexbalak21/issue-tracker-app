@@ -24,7 +24,7 @@ Content-Type: application/json
 {
     "name": "John Doe",
     "email": "john@example.com",
-    "password": "password123",
+    "password": "password1234",
     "roleIds": [2]
 }
 
@@ -33,7 +33,7 @@ GET {{baseUrl}}/api/admin/permissions
 Authorization: Bearer {{adminAccess_token}}
 
 ### LIST ROLES ###
-GET {{baseUrl}}/api/admin/roles
+GET {{baseUrl}}/api/admin/roles/2
 Authorization: Bearer {{adminAccess_token}}
 
 
@@ -52,7 +52,12 @@ Content-Type: application/json
 }   
 
 ### LIST USERS ###
-GET {{baseUrl}}/api/admin/users
+GET {{baseUrl}}/api/admin/users/4
+Authorization: Bearer {{adminAccess_token}}
+
+
+### GET USER 4 ###
+GET {{baseUrl}}/api/admin/users/4
 Authorization: Bearer {{adminAccess_token}}
 
 
@@ -91,7 +96,7 @@ Authorization: Bearer {{adminAccess_token}}
 
 
 ### LIST USERS ###
-GET {{baseUrl}}/api/admin/users/1
+GET {{baseUrl}}/api/admin/users/3
 Authorization: Bearer {{adminAccess_token}}
 
 

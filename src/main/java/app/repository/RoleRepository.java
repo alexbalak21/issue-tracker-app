@@ -12,4 +12,7 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
     @EntityGraph(attributePaths = "permissions")
     List<Role> findAll();
+
+    @EntityGraph(attributePaths = "permissions")
+    Optional<Role> findById(Long id);
 }

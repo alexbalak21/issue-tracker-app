@@ -2,6 +2,7 @@ package app.controller.admin;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import app.dto.CreateRoleRequest;
@@ -33,6 +34,14 @@ public class AdminRoleController {
         return roleService.getAll().stream()
                 .map(RoleDto::from)
                 .toList();
+    }
+
+    @GetMapping("/{roleId}")
+    @RequiresPermission("admin.manage")
+    public ResponseEntity<RoleDto> getRole(@PathVariable Long roleId) {
+        return roleService.getById(roleId)
+                .map(role -> ResponseEntity.ok(RoleDto.from(role)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // UPDATE ROLE

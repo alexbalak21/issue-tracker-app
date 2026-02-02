@@ -17,3 +17,4 @@ Content-Type: application/json
 ### GET TICKETS ###
 GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{Access_token}}
+
