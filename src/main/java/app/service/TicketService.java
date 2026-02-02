@@ -130,6 +130,16 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    public Ticket updateTicketPriority(Long id, int priorityId) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        ticket.setPriorityId(priorityId);
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        return ticketRepository.save(ticket);
+    }
+
     // ----------------------------------------------------
     // DETAILS (Ticket + Conversation + Messages + Notes)
     // ----------------------------------------------------

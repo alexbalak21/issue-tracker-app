@@ -85,3 +85,13 @@ Authorization: Bearer {{Access_token}}
 {
     "message": "message 4 for ticket 1"
 }
+
+
+###PATCH TICKET PRIORITY ###
+PATCH {{baseUrl}}/api/tickets/1
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+    "priority_id": 1
+}   

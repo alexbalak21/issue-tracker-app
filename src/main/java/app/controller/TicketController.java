@@ -2,12 +2,15 @@ package app.controller;
 
 import app.dto.AssignTicketRequest;
 import app.dto.CreateTicketRequest;
+import app.dto.PatchPriorityRequest;
+import app.dto.PatchPriorityResponse;
 import app.dto.UpdateTicketRequest;
 import app.model.Ticket;
 import app.security.Ownership;
 import app.security.OwnershipType;
 import app.security.RequiresPermission;
 import app.service.TicketService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,6 +102,21 @@ public class TicketController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+    @PatchMapping("/{id}")
+    @RequiresPermission("ticket.write")
+    @Ownership(OwnershipType.SELF)
+    public ResponseEntity<PatchPriorityResponse> patchPriority(
+            @PathVariable Long id,
+            @RequestBody PatchPriorityRequest req) {
+        Ticket updated = ticketService.updateTicketPriority(id, req.getPriorityId());
+        PatchPriorityResponse response = new PatchPriorityResponse(updated.getPriorityId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+
+
 
     // ----------------------------------------------------
     // DELETE — requires ticket.delete (admin/manager only)
