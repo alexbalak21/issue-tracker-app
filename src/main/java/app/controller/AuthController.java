@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,8 +77,7 @@ public class AuthController {
                     .status(HttpStatus.CREATED)
                     .body(new ApiResponse<>(
                             "User registered successfully",
-                            user.getName()
-                    ));
+                            user.getName()));
 
         } catch (RuntimeException e) {
             log.error("Registration failed for {}: {}", req.getEmail(), e.getMessage());
@@ -85,6 +85,20 @@ public class AuthController {
                     .badRequest()
                     .body(new ApiResponse<>(e.getMessage()));
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserInfo> currentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).build();
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof CustomUserDetails user) {
+            return ResponseEntity.ok(new UserInfo(user));
+        }
+
+        return ResponseEntity.status(500).build();
     }
 
     // ----------------------------------------------------

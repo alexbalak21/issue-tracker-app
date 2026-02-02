@@ -1,30 +1,33 @@
 package app.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.dto.UserInfo;
-import app.security.CustomUserDetails;
+import app.dto.UserBasic;
+import app.security.RequiresPermission;
+import app.service.UserService;
 
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-    @GetMapping("/user")
-    public ResponseEntity<UserInfo> currentUser(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
+    private final UserService userService;
 
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof CustomUserDetails user) {
-            return ResponseEntity.ok(new UserInfo(user));
-        }
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-        return ResponseEntity.status(500).build();
+    /**
+     * Get all users (id and name only)
+     * Requires user.read permission
+     */
+    @GetMapping("/users")
+    @RequiresPermission("user.read")
+    public List<UserBasic> getAllUsers() {
+        return userService.getAllBasic();
     }
 }

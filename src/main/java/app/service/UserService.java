@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import app.dto.UserBasic;
 import app.dto.UserDto;
 import app.dto.UserSummary;
 import app.model.Role;
@@ -90,6 +91,17 @@ public class UserService {
                             roles
                     );
                 })
+                .toList();
+    }
+
+    // ----------------------------------------------------
+    // List all users (basic: id and name only)
+    // ----------------------------------------------------
+    @Transactional(readOnly = true)
+    public List<UserBasic> getAllBasic() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new UserBasic(user.getId(), user.getName()))
                 .toList();
     }
 

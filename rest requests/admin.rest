@@ -33,7 +33,7 @@ GET {{baseUrl}}/api/admin/permissions
 Authorization: Bearer {{adminAccess_token}}
 
 ### LIST ROLES ###
-GET {{baseUrl}}/api/admin/roles/2
+GET {{baseUrl}}/api/admin/roles
 Authorization: Bearer {{adminAccess_token}}
 
 
@@ -113,11 +113,11 @@ Authorization: Bearer {{adminAccess_token}}
 
 ### ADD STATUS MANAGE TO ADMIN ###
 ### ADD PERMISSIONS TO ROLE ###
-PATCH {{baseUrl}}/api/admin/roles/2/permissions
+PATCH {{baseUrl}}/api/admin/roles/3/permissions
 Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
-[4]
+[9]
 
 
 ### GET PRIORITIES ###
