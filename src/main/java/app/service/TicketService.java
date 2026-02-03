@@ -186,8 +186,10 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        if (!userService.existsById(userId)) {
-            throw new RuntimeException("User not found");
+        if (userId != null) {
+            if (!userService.existsById(userId)) {
+                throw new RuntimeException("User not found");
+            }
         }
 
         ticket.setAssignedTo(userId);

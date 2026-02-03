@@ -51,13 +51,13 @@ Content-Type: application/json
     "description": "The ticket is being reviewed"
 }   
 
-### USER 4 ###
-GET {{baseUrl}}/api/admin/users/4
+### USERS ###
+GET {{baseUrl}}/api/admin/users
 Authorization: Bearer {{adminAccess_token}}
 
 
-### GET USER 4 ###
-GET {{baseUrl}}/api/admin/users/4
+### GET USER 3 ###
+GET {{baseUrl}}/api/admin/users/3
 Authorization: Bearer {{adminAccess_token}}
 
 
@@ -117,7 +117,7 @@ PATCH {{baseUrl}}/api/admin/roles/3/permissions
 Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
-[9]
+[22]
 
 
 ### GET PRIORITIES ###

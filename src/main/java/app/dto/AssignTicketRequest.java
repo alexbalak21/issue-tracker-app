@@ -1,3 +1,3 @@
 package app.dto;
 
-public record AssignTicketRequest(Long userId) {}
+public record AssignTicketRequest(Long user_id) {}

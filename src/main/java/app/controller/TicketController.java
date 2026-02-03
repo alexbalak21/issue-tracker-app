@@ -105,7 +105,6 @@ public class TicketController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
     @PatchMapping("/{id}")
     @RequiresPermission("ticket.write")
     @Ownership(OwnershipType.SELF)
@@ -117,9 +116,6 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
-
-
     // ----------------------------------------------------
     // DELETE — requires ticket.delete (admin/manager only)
     // ----------------------------------------------------
@@ -128,12 +124,12 @@ public class TicketController {
     // ----------------------------------------------------
     // ASSIGN — requires ticket.assign (support/manager/admin)
     // ----------------------------------------------------
-    @PostMapping("/{id}/assign")
+    @PatchMapping("/{id}/assign")
     @RequiresPermission("ticket.assign")
     public ResponseEntity<Ticket> assignTicket(
             @PathVariable Long id,
             @RequestBody AssignTicketRequest req) {
 
-        return ResponseEntity.ok(ticketService.assignTicket(id, req.userId()));
+        return ResponseEntity.ok(ticketService.assignTicket(id, req.user_id()));
     }
 }

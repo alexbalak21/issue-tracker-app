@@ -14,7 +14,24 @@ Content-Type: application/json
 @Refresh_token = {{login.response.body.data.refresh_token}}
 
 
+### GET ME ###
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{Access_token}}
+
 ### GET TICKETS ###
 GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{Access_token}}
 
+
+### GET STATUSES ###
+GET {{baseUrl}}/api/status
+Authorization: Bearer {{Access_token}}
+
+### ASSIGN TICKET 1 TO SELF ###
+PATCH {{baseUrl}}/api/tickets/6/assign
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+    "user_id": null
+}
