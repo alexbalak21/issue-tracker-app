@@ -4,6 +4,8 @@ import app.dto.AssignTicketRequest;
 import app.dto.CreateTicketRequest;
 import app.dto.PatchPriorityRequest;
 import app.dto.PatchPriorityResponse;
+import app.dto.PatchStatusRequest;
+import app.dto.PatchStatusResponse;
 import app.dto.UpdateTicketRequest;
 import app.model.Ticket;
 import app.security.Ownership;
@@ -113,6 +115,17 @@ public class TicketController {
             @RequestBody PatchPriorityRequest req) {
         Ticket updated = ticketService.updateTicketPriority(id, req.getPriorityId());
         PatchPriorityResponse response = new PatchPriorityResponse(updated.getPriorityId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PatchMapping("/{id}/status")
+    @RequiresPermission("ticket.write")
+    @Ownership(OwnershipType.SELF)
+    public ResponseEntity<PatchStatusResponse> patchStatus(
+            @PathVariable Long id,
+            @RequestBody PatchStatusRequest req) {
+        Ticket updated = ticketService.updateTicketStatus(id, req.getStatusId());
+        PatchStatusResponse response = new PatchStatusResponse(updated.getStatusId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

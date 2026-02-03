@@ -140,6 +140,16 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    public Ticket updateTicketStatus(Long id, int statusId) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        ticket.setStatusId(statusId);
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        return ticketRepository.save(ticket);
+    }
+
     // ----------------------------------------------------
     // DETAILS (Ticket + Conversation + Messages + Notes)
     // ----------------------------------------------------
