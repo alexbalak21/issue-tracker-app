@@ -23,13 +23,13 @@ $adminHeaders = @{ Authorization = "Bearer $adminAccessToken" }
 # 2. Create Statuses
 # -----------------------------
 $statuses = @(
-    @{ name = "Open";        type = "workflow" },
-    @{ name = "In Progress"; type = "workflow" },
-    @{ name = "Waiting";     type = "workflow" },
-    @{ name = "On Hold";     type = "workflow" },
-    @{ name = "Resolved";    type = "workflow" },
-    @{ name = "Closed";      type = "workflow" },
-    @{ name = "Canceled";    type = "workflow" }
+    @{ name = "Open";        description = "Ticket has been created and is awaiting action"; color = "blue" },
+    @{ name = "In Progress"; description = "Work has started and is actively being handled"; color = "violet" },
+    @{ name = "Waiting";     description = "Ticket is paused, pending user input or information"; color = "yellow" },
+    @{ name = "On Hold";     description = "Ticket is temporarily on hold"; color = "orange" },
+    @{ name = "Resolved";    description = "Issue has been resolved"; color = "green" },
+    @{ name = "Closed";      description = "Ticket is closed"; color = "gray" },
+    @{ name = "Canceled";    description = "Ticket has been canceled"; color = "brown" }
 )
 
 $index = 1

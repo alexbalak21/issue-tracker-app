@@ -42,3 +42,13 @@ Authorization: Bearer {{Access_token}}
 GET {{baseUrl}}/api/users
 Authorization: Bearer {{Access_token}}
 
+
+### UPDATE / PATCH STATUS OF TICKET 1 ###
+PATCH {{baseUrl}}/api/tickets/1/status
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+    "status_id": 1
+}
+

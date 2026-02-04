@@ -2,6 +2,8 @@ package app.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,15 +19,19 @@ public class Status {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    private String type; // open, active, closed
+    @Column(nullable = true)
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private Color color;
 
     // Constructors
     public Status() {}
 
-    public Status(String name, String type) {
+    public Status(String name, String description) {
         this.name = name;
-        this.type = type;
+        this.description = description;
     }
 
     // Getters and Setters
@@ -45,11 +51,19 @@ public class Status {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }

@@ -2,6 +2,7 @@ package app.mapper;
 
 import app.dto.StatusDto;
 import app.model.Status;
+import app.model.Color;
 
 public class StatusMapper {
 
@@ -9,14 +10,19 @@ public class StatusMapper {
         return new StatusDto(
                 status.getId(),
                 status.getName(),
-                status.getType()
+                status.getDescription(),
+                status.getColor() != null ? status.getColor().getValue() : null
         );
     }
 
     public static Status toEntity(StatusDto dto) {
-        return new Status(
+        Status status = new Status(
                 dto.getName(),
-                dto.getType()
+                dto.getDescription()
         );
+        if (dto.getColor() != null) {
+            status.setColor(Color.fromValue(dto.getColor()));
+        }
+        return status;
     }
 }

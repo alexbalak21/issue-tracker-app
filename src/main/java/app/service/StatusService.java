@@ -12,7 +12,7 @@ public interface StatusService {
 
     Optional<Status> findByName(String name);
 
-    Optional<Status> findByType(String type);
+    Optional<Status> findByDescription(String description);
 
     Status save(Status status);
 

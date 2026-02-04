@@ -107,6 +107,7 @@ public class TicketController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    //UPDATE PRIORITY
     @PatchMapping("/{id}")
     @RequiresPermission("ticket.write")
     @Ownership(OwnershipType.SELF)
@@ -118,6 +119,7 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    //UPDATE STATUS
     @PatchMapping("/{id}/status")
     @RequiresPermission("ticket.write")
     @Ownership(OwnershipType.SELF)

@@ -3,6 +3,7 @@ package app.controller;
 import app.dto.StatusDto;
 import app.mapper.StatusMapper;
 import app.model.Status;
+import app.model.Color;
 import app.security.RequiresPermission;
 import app.service.StatusService;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,10 @@ public class StatusController {
         return statusService.findById(id)
                 .map(existing -> {
                     existing.setName(dto.getName());
-                    existing.setType(dto.getType());
+                    existing.setDescription(dto.getDescription());
+                    if (dto.getColor() != null) {
+                        existing.setColor(Color.fromValue(dto.getColor()));
+                    }
                     Status updated = statusService.save(existing);
                     return ResponseEntity.ok(StatusMapper.toDTO(updated));
                 })

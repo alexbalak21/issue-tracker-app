@@ -3,14 +3,16 @@ package app.dto;
 public class StatusDto {
     private int id;
     private String name;
-    private String type;
+    private String description;
+    private String color;
 
     public StatusDto() {}
 
-    public StatusDto(int id, String name, String type) {
+    public StatusDto(int id, String name, String description, String color) {
         this.id = id;
         this.name = name;
-        this.type = type;
+        this.description = description;
+        this.color = color;
     }
 
     public int getId() {
@@ -29,11 +31,19 @@ public class StatusDto {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

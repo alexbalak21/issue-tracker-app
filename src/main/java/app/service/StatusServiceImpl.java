@@ -32,8 +32,8 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public Optional<Status> findByType(String type) {
-        return statusRepository.findByType(type);
+    public Optional<Status> findByDescription(String description) {
+        return statusRepository.findByDescription(description);
     }
 
     @Override

@@ -33,7 +33,7 @@ GET {{baseUrl}}/api/admin/permissions
 Authorization: Bearer {{adminAccess_token}}
 
 ### LIST ROLES ###
-GET {{baseUrl}}/api/admin/roles
+GET {{baseUrl}}/api/admin/roles/3
 Authorization: Bearer {{adminAccess_token}}
 
 

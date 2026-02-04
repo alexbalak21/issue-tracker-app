@@ -19,7 +19,7 @@ GET {{baseUrl}}/api/auth/me
 Authorization: Bearer {{Access_token}}
 
 ### GET TICKETS ###
-GET {{baseUrl}}/api/tickets/1
+GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{Access_token}}
 
 
@@ -44,4 +44,14 @@ Content-Type: application/json
 
 {
     "status_id": 3
+}
+
+
+### POST A MESSAGE TO TICKET 1 ###
+POST {{baseUrl}}/api/tickets/1/messages
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+    "message": ""
 }
