@@ -53,5 +53,5 @@ Authorization: Bearer {{Access_token}}
 Content-Type: application/json
 
 {
-    "message": ""
+    "message": "New Mesage"
 }

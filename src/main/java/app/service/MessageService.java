@@ -39,7 +39,6 @@ public class MessageService {
         msg.setSenderId(userId);
         msg.setBody(body);
         msg.setCreatedAt(LocalDateTime.now());
-        msg.setUpdatedAt(LocalDateTime.now());
 
         Message saved = messageRepository.save(msg);
 

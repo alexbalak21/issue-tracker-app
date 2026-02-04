@@ -26,18 +26,14 @@ public class Message {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
     public Message() {}
 
     public Message(Conversation conversation, Long senderId, String body,
-                   LocalDateTime createdAt, LocalDateTime updatedAt) {
+                   LocalDateTime createdAt) {
         this.conversation = conversation;
         this.senderId = senderId;
         this.body = body;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     // Getters and Setters
@@ -79,13 +75,5 @@ public class Message {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
