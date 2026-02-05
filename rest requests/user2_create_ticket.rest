@@ -30,7 +30,7 @@ Authorization: Bearer {{Access_token}}
 }
 
 ### LIST TICKETS ###
-GET {{baseUrl}}/api/tickets
+GET {{baseUrl}}/api/tickets/1
 Authorization: Bearer {{Access_token}}
 
 ### GET STATUSES ###
@@ -50,5 +50,16 @@ Content-Type: application/json
 
 {
     "status_id": 1
+}
+
+### UPDATE / PUT TICKET 1 ###
+PUT {{baseUrl}}/api/tickets/1
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+  "title": "Password reset email missing - URGENT",
+  "body": "I requested a password reset but never received the email. I checked spam and waited 15 minutes. Please resolve ASAP.",
+  "priorityId": 3
 }
 

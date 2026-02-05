@@ -23,10 +23,10 @@ $adminHeaders = @{ Authorization = "Bearer $adminAccessToken" }
 # 2. Create Priorities
 # -----------------------------
 $priorities = @(
-    @{ name = "Low"; level = 1; description = "Minor inconvenience, cosmetic issues" },
-    @{ name = "Medium"; level = 2; description = "Normal issues affecting a single user" },
-    @{ name = "High"; level = 3; description = "Major issue affecting work or multiple users" },
-    @{ name = "Critical"; level = 4; description = "System down, security issue, production outage" }
+    @{ name = "Low"; level = 1; description = "Minor inconvenience, cosmetic issues"; color = "green" },
+    @{ name = "Medium"; level = 2; description = "Normal issues affecting a single user"; color = "yellow" },
+    @{ name = "High"; level = 3; description = "Major issue affecting work or multiple users"; color = "orange" },
+    @{ name = "Critical"; level = 4; description = "System down, security issue, production outage"; color = "red" }
 )
 
 $index = 1

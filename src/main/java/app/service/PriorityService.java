@@ -27,7 +27,7 @@ public class PriorityService {
     }
 
     public PriorityDto createPriority(PriorityDto dto) {
-        Priority priority = new Priority(dto.getName(), dto.getLevel(), dto.getDescription());
+        Priority priority = new Priority(dto.getName(), dto.getLevel(), dto.getDescription(), dto.getColor());
         Priority saved = priorityRepository.save(priority);
         return toDto(saved);
     }
@@ -39,6 +39,7 @@ public class PriorityService {
             priority.setName(dto.getName());
             priority.setLevel(dto.getLevel());
             priority.setDescription(dto.getDescription());
+            priority.setColor(dto.getColor());
             Priority updated = priorityRepository.save(priority);
             return toDto(updated);
         }
@@ -54,6 +55,6 @@ public class PriorityService {
     }
 
     private PriorityDto toDto(Priority priority) {
-        return new PriorityDto(priority.getId(), priority.getName(), priority.getLevel(), priority.getDescription());
+        return new PriorityDto(priority.getId(), priority.getName(), priority.getLevel(), priority.getDescription(), priority.getColor());
     }
 }

@@ -5,14 +5,16 @@ public class PriorityDto {
     private String name;
     private int level;
     private String description;
+    private String color;
 
     public PriorityDto() {}
 
-    public PriorityDto(int id, String name, int level, String description) {
+    public PriorityDto(int id, String name, int level, String description, String color) {
         this.id = id;
         this.name = name;
         this.level = level;
         this.description = description;
+        this.color = color;
     }
 
     public int getId() {
@@ -45,5 +47,13 @@ public class PriorityDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

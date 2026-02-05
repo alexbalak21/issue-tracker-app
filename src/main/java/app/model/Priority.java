@@ -3,7 +3,7 @@ package app.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "priority")
+@Table(name = "priorities")
 public class Priority {
 
     @Id
@@ -16,15 +16,25 @@ public class Priority {
     @Column(nullable = false)
     private int level;
 
+
     @Column(nullable = false, length = 255)
     private String description;
 
+    @Column(nullable = false, length = 32)
+    private String color;
+
+
     public Priority() {}
 
-    public Priority(String name, int level, String description) {
+    public Priority(String name, int level, String description, String color) {
         this.name = name;
         this.level = level;
         this.description = description;
+        this.color = color;
+    }
+
+    public Priority(String name, int level, String description) {
+        this(name, level, description, "#000000"); // default color
     }
 
     public int getId() {
@@ -53,5 +63,13 @@ public class Priority {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

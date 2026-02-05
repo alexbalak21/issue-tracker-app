@@ -119,10 +119,22 @@ Content-Type: application/json
 
 [22]
 
+### CREATE PRIORITY ###
+POST {{baseUrl}}/api/admin/priorities
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Low",
+    "description": "Low priority"
+}
+
 
 ### GET PRIORITIES ###
 GET {{baseUrl}}/api/priorities
 Authorization: Bearer {{adminAccess_token}}
+
+
 
 
 ###PATCH TICKET PRIORITY ###
