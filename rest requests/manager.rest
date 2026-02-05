@@ -1,0 +1,57 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN MANAGER USER ###
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "manager@example.com",
+    "password": "password1234"
+}
+
+@Access_token = {{login.response.body.data.access_token}}
+@Refresh_token = {{login.response.body.data.refresh_token}}
+
+
+### GET ME ###
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{Access_token}}
+
+### GET TICKETS ###
+GET {{baseUrl}}/api/tickets
+Authorization: Bearer {{Access_token}}
+
+
+### GET STATUSES ###
+GET {{baseUrl}}/api/status
+Authorization: Bearer {{Access_token}}
+
+### ASSIGN TICKET 1 TO SELF ###
+PATCH {{baseUrl}}/api/tickets/6/assign
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+    "user_id": null
+}
+
+
+### UPDATE / PATCH STATUS OF TICKET 1 ###
+PATCH {{baseUrl}}/api/tickets/1/status
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+    "status_id": 3
+}
+
+
+### POST A MESSAGE TO TICKET 1 ###
+POST {{baseUrl}}/api/tickets/1/messages
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+    "message": "New Mesage"
+}

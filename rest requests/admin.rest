@@ -22,10 +22,10 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "John Doe",
-    "email": "john@example.com",
+    "name": "Manager",
+    "email": "manager@example.com",
     "password": "password1234",
-    "roleIds": [2]
+    "roleIds": [4]
 }
 
 ### LIST PERMISSIONS ###
@@ -33,7 +33,7 @@ GET {{baseUrl}}/api/admin/permissions
 Authorization: Bearer {{adminAccess_token}}
 
 ### LIST ROLES ###
-GET {{baseUrl}}/api/admin/roles/3
+GET {{baseUrl}}/api/admin/roles
 Authorization: Bearer {{adminAccess_token}}
 
 
@@ -66,16 +66,17 @@ GET {{baseUrl}}/api/status
 Authorization: Bearer {{adminAccess_token}}
 
 
-### CREATE USER ROLE ###
+### CREATE ROLE ###
 POST {{baseUrl}}/api/admin/roles
 Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "SUPPORT",
-    "description": "support role",
-    "permissionIds": [4,5,6,31,32,41,42]
+    "name": "MANAGER",
+    "description": "Manager role with elevated support capabilities",
+    "permissionIds": [22, 5, 42, 9, 6, 31, 41, 32, 4]
 }
+
 
 
 ### CREATE USER ###
