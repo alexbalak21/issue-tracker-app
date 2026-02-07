@@ -22,10 +22,10 @@ Authorization: Bearer {{adminAccess_token}}
 Content-Type: application/json
 
 {
-    "name": "Manager",
-    "email": "manager@example.com",
+    "name": "Jane Doe",
+    "email": "jane.doe@example.com",
     "password": "password1234",
-    "roleIds": [4]
+    "roleIds": [2]
 }
 
 ### LIST PERMISSIONS ###

@@ -1,6 +1,7 @@
 package app.controller;
 
 import app.dto.AssignTicketRequest;
+import app.dto.CreateTicketForUserRequest;
 import app.dto.CreateTicketRequest;
 import app.dto.PatchPriorityRequest;
 import app.dto.PatchPriorityResponse;
@@ -86,6 +87,16 @@ public class TicketController {
         return ticketService.createTicket(req.title(), req.body(), req.priorityId());
     }
 
+    @PostMapping("/create-for-user")
+    @RequiresPermission("ticket.manage")
+    public Ticket createTicketForUser(@RequestBody CreateTicketForUserRequest req) {
+        return ticketService.createTicketForUser(
+                req.title(),
+                req.body(),
+                req.priorityId(),
+                req.createdByUserId());
+    }
+
     // ----------------------------------------------------
     // UPDATE — requires ticket.write OR SELF ownership
     // ----------------------------------------------------
@@ -107,7 +118,7 @@ public class TicketController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    //UPDATE PRIORITY
+    // UPDATE PRIORITY
     @PatchMapping("/{id}")
     @RequiresPermission("ticket.write")
     @Ownership(OwnershipType.SELF)
@@ -119,7 +130,7 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //UPDATE STATUS
+    // UPDATE STATUS
     @PatchMapping("/{id}/status")
     @RequiresPermission("ticket.write")
     @Ownership(OwnershipType.SELF)

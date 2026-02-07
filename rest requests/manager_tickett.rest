@@ -1,0 +1,17 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN ADMIN USER ###
+# @name admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "admin123"
+}
+
+@adminAccess_token = {{admin.response.body.data.access_token}}
+@adminRefresh_token = {{admin.response.body.data.refresh_token}}
+
+
+

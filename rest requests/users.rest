@@ -1,0 +1,137 @@
+@baseUrl = http://localhost:8100
+
+### LOGIN ADMIN USER ###
+# @name admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "admin123"
+}
+
+@adminAccess_token = {{admin.response.body.data.access_token}}
+@adminRefresh_token = {{admin.response.body.data.refresh_token}}
+
+
+
+
+### CREATE USER 6 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Alyx Vance",
+    "email": "alyx.vance@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 7 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Sarah Connor",
+    "email": "sarah.connor@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 8 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Ethan Winters",
+    "email": "ethan.winters@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 9 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Lara Croft",
+    "email": "lara.croft@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 10 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Marcus Holloway",
+    "email": "marcus.holloway@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 11 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Jill Valentine",
+    "email": "jill.valentine@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 12 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Isaac Clarke",
+    "email": "isaac.clarke@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 13 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Faith Connors",
+    "email": "faith.connors@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 14 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Booker DeWitt",
+    "email": "booker.dewitt@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}
+
+### CREATE USER 15 ###
+POST {{baseUrl}}/api/admin/users
+Authorization: Bearer {{adminAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Elizabeth Comstock",
+    "email": "elizabeth.comstock@example.com",
+    "password": "password1234",
+    "roleIds": [2]
+}

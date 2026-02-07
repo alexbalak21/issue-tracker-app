@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "ticket")
+@Table(name = "tickets")
 @EntityListeners(AuditingEntityListener.class)
 public class Ticket {
 
@@ -46,28 +46,32 @@ public class Ticket {
     @Column(name = "resolved_at")
     private LocalDateTime resolvedAt;
 
-    // 🔥 Prevents Hibernate from loading Conversation too early
     @JsonIgnore
     @OneToOne(mappedBy = "ticket", fetch = FetchType.LAZY)
     private Conversation conversation;
 
+    // ----------------------------------------------------
+    // REQUIRED BY JPA
+    // ----------------------------------------------------
     public Ticket() {}
 
-    public Ticket(String title, String body, int priorityId, int statusId,
-                  Long createdBy, Long assignedTo,
-                  LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime resolvedAt) {
+    // ----------------------------------------------------
+    // CONVENIENCE CONSTRUCTOR FOR NEW TICKETS
+    // ----------------------------------------------------
+    public Ticket(String title, String body, int priorityId, Long createdBy) {
         this.title = title;
         this.body = body;
         this.priorityId = priorityId;
-        this.statusId = statusId;
         this.createdBy = createdBy;
-        this.assignedTo = assignedTo;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.resolvedAt = resolvedAt;
+
+        this.statusId = 1;        // Default: Open
+        this.assignedTo = null;   // Not assigned yet
+        this.resolvedAt = null;   // Not resolved yet
     }
 
-    // Getters and Setters
+    // ----------------------------------------------------
+    // GETTERS & SETTERS
+    // ----------------------------------------------------
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -34,8 +34,7 @@ public class TicketService {
             ConversationRepository conversationRepository,
             MessageRepository messageRepository,
             NoteService noteService,
-            AuthService authService
-    ) {
+            AuthService authService) {
         this.ticketRepository = ticketRepository;
         this.userService = userService;
         this.conversationRepository = conversationRepository;
@@ -104,7 +103,7 @@ public class TicketService {
 
         // Create conversation with SAME ID as ticket
         Conversation conversation = new Conversation();
-        conversation.setId(saved.getId());  // Set ID without attaching the detached ticket
+        conversation.setId(saved.getId()); // Set ID without attaching the detached ticket
         conversationRepository.save(conversation);
 
         return saved;
@@ -122,9 +121,12 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        if (title != null) ticket.setTitle(title);
-        if (body != null) ticket.setBody(body);
-        if (priorityId != null) ticket.setPriorityId(priorityId);
+        if (title != null)
+            ticket.setTitle(title);
+        if (body != null)
+            ticket.setBody(body);
+        if (priorityId != null)
+            ticket.setPriorityId(priorityId);
 
         ticket.setUpdatedAt(LocalDateTime.now());
         return ticketRepository.save(ticket);
@@ -213,5 +215,10 @@ public class TicketService {
     // ----------------------------------------------------
     public List<Ticket> getTicketsByCreatedByOrAssignedTo(Long userId) {
         return ticketRepository.findByCreatedByOrAssignedTo(userId, userId);
+    }
+
+    public Ticket createTicketForUser(String title, String body, int priorityId, Long createdByUserId) {
+        return ticketRepository.save(
+                new Ticket(title, body, priorityId, createdByUserId));
     }
 }
