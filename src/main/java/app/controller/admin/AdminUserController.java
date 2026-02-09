@@ -47,8 +47,19 @@ public class AdminUserController {
     // ----------------------------------------------------
     @GetMapping
     @RequiresPermission("admin.manage")
-    public List<UserSummary> getUsers() {
+    public List<UserSummary> getUsers(@RequestParam(value = "role", required = false) Long roleId) {
+        if (roleId != null) {
+            return userService.getAll()
+                .stream()
+                .filter(user -> user.roles().contains(getRoleNameById(roleId)))
+                .toList();
+        }
         return userService.getAll();
+    }
+
+    // Helper method to get role name by id
+    private String getRoleNameById(Long roleId) {
+        return userService.getRoleNameById(roleId);
     }
 
     // ----------------------------------------------------

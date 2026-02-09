@@ -21,6 +21,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 @Transactional
 public class UserService {
+        // ----------------------------------------------------
+        // List all users by role (basic: id and name only)
+        // ----------------------------------------------------
+        @Transactional(readOnly = true)
+        public List<UserBasic> getAllUsersByRole(Long roleId) {
+                Role role = roleRepository.findById(roleId)
+                        .orElseThrow(() -> new RuntimeException("Role not found"));
+                return userRepository.findAll()
+                        .stream()
+                        .filter(user -> user.getRoles().contains(role))
+                        .map(user -> new UserBasic(user.getId(), user.getName()))
+                        .toList();
+        }
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;

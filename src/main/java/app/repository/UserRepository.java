@@ -13,6 +13,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query("select u from User u join u.roles r where r.id = :roleId")
+    List<User> findAllByRoleId(Long roleId);
 
     boolean existsByEmail(String email);
 

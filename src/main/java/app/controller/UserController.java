@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.dto.UserBasic;
 import app.security.RequiresPermission;
 import app.service.UserService;
-
 
 @RestController
 @RequestMapping("/api")
@@ -27,7 +27,10 @@ public class UserController {
      */
     @GetMapping("/users")
     @RequiresPermission("user.read")
-    public List<UserBasic> getAllUsers() {
+    public List<UserBasic> getUsers(@RequestParam(value = "role", required = false) Long roleId) {
+        if (roleId != null) {
+            return userService.getAllUsersByRole(roleId);
+        }
         return userService.getAllBasic();
     }
 }

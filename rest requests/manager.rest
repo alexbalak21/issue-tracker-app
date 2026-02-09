@@ -55,3 +55,9 @@ Content-Type: application/json
 {
     "message": "New Mesage"
 }
+
+
+### GET USERS BY ROLE ###
+GET {{baseUrl}}/api/users?role=3
+Authorization: Bearer {{Access_token}}  
+
