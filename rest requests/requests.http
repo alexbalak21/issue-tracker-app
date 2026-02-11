@@ -33,7 +33,7 @@ Content-Type: application/json
 @loginRefresh_token = {{login.response.body.data.refresh_token}}
 
 ### GET CURRENT USER (using login token) ###
-GET {{baseUrl}}/api/user
+GET {{baseUrl}}/auth/me
 Authorization: Bearer {{loginAccess_token}}
 
 ### REFRESH TOKEN ###
@@ -153,4 +153,23 @@ Content-Type: application/json
 
 {
     "roleIds": [1,2]
+}
+
+
+### UPDATE CURRENT USER (self-update) ###
+PATCH {{baseUrl}}/api/users/me
+Authorization: Bearer {{loginAccess_token}}
+Content-Type: application/json
+
+{
+    "name": "Gordon Freeman updated"
+}
+
+### UPDATE CURRENT USER (self-update) ###
+PATCH {{baseUrl}}/api/users/me
+Authorization: Bearer {{loginAccess_token}}
+Content-Type: application/json
+
+{
+    "email": "gordon.freeman@example.com"
 }

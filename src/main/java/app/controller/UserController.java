@@ -7,6 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Map;
+import java.util.HashMap;
+
 import app.dto.UserBasic;
 import app.security.RequiresPermission;
 import app.service.UserService;
@@ -32,5 +39,24 @@ public class UserController {
             return userService.getAllUsersByRole(roleId);
         }
         return userService.getAllBasic();
+    }
+
+    /**
+     * Update current user's name and/or email
+     * Only allows the authenticated user to update their own info
+     * Requires user.update.self permission
+     */
+    @PatchMapping("/users/me")
+    public Map<String, String> updateMe(@AuthenticationPrincipal UserDetails userDetails,
+                                        @RequestBody Map<String, String> updates) {
+        String username = userDetails.getUsername();
+        String name = updates.get("name");
+        String email = updates.get("email");
+        var updated = userService.updateCurrentUser(username, name, email);
+        Map<String, String> result = new HashMap<>();
+        result.put("name", updated.name());
+        // If email was updated, return the new email, otherwise return the current one
+        result.put("email", email != null && !email.isBlank() ? email : userDetails.getUsername());
+        return result;
     }
 }

@@ -1,5 +1,7 @@
 package app.service;
 
+import org.springframework.dao.DataIntegrityViolationException;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +23,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 @Transactional
 public class UserService {
+        /**
+         * Update the current user's name and/or email by username (email is unique)
+         * @param username the username (email) of the authenticated user
+         * @param name new name (nullable)
+         * @param email new email (nullable)
+         * @return UserBasic with updated info
+         */
+        public UserBasic updateCurrentUser(String username, String name, String email) {
+                User user = userRepository.findByEmail(username)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+                boolean changed = false;
+                if (name != null && !name.isBlank() && !name.equals(user.getName())) {
+                        user.setName(name);
+                        changed = true;
+                }
+                if (email != null && !email.isBlank() && !email.equals(user.getEmail())) {
+                        if (userRepository.existsByEmail(email)) {
+                                throw new DataIntegrityViolationException("Email already in use");
+                        }
+                        user.setEmail(email);
+                        changed = true;
+                }
+                if (changed) {
+                        userRepository.save(user);
+                }
+                return new UserBasic(user.getId(), user.getName());
+        }
         // ----------------------------------------------------
         // List all users by role (basic: id and name only)
         // ----------------------------------------------------
@@ -165,4 +194,13 @@ public class UserService {
 
         return UserDto.from(user);
     }
+        /**
+         * Returns the role name for a given role ID, or throws if not found.
+         */
+        @Transactional(readOnly = true)
+        public String getRoleNameById(Long roleId) {
+                return roleRepository.findById(roleId)
+                                .map(Role::getName)
+                                .orElseThrow(() -> new RuntimeException("Role not found: " + roleId));
+        }
 }
