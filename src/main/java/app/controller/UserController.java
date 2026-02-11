@@ -48,7 +48,7 @@ public class UserController {
      */
     @PatchMapping("/users/me")
     public Map<String, String> updateMe(@AuthenticationPrincipal UserDetails userDetails,
-                                        @RequestBody Map<String, String> updates) {
+            @RequestBody Map<String, String> updates) {
         String username = userDetails.getUsername();
         String name = updates.get("name");
         String email = updates.get("email");
@@ -57,6 +57,24 @@ public class UserController {
         result.put("name", updated.name());
         // If email was updated, return the new email, otherwise return the current one
         result.put("email", email != null && !email.isBlank() ? email : userDetails.getUsername());
+        return result;
+    }
+
+    /**
+     * Change current user's password
+     * Only allows the authenticated user to change their own password
+     * Body: { "currentPassword": "...", "newPassword": "..." }
+     */
+    @PatchMapping("/users/me/password")
+    public Map<String, String> changePassword(@AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody Map<String, String> body) {
+        String username = userDetails.getUsername();
+        String currentPassword = body.get("currentPassword");
+        String newPassword = body.get("newPassword");
+        userService.changeCurrentUserPassword(username, currentPassword, newPassword);
+        Map<String, String> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("message", "Password updated");
         return result;
     }
 }

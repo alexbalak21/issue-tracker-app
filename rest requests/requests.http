@@ -173,3 +173,14 @@ Content-Type: application/json
 {
     "email": "gordon.freeman@example.com"
 }
+
+
+#### UPDATE PASSWORD ###
+PATCH {{baseUrl}}/api/users/me/password
+Authorization: Bearer {{loginAccess_token}}
+Content-Type: application/json
+
+{
+    "currentPassword": "password1234",
+    "newPassword": "password12345"
+}

@@ -23,6 +23,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 @Transactional
 public class UserService {
+                /**
+                 * Change the current user's password after verifying the current password
+                 * @param username the username (email) of the authenticated user
+                 * @param currentPassword the current password
+                 * @param newPassword the new password
+                 */
+                public void changeCurrentUserPassword(String username, String currentPassword, String newPassword) {
+                        User user = userRepository.findByEmail(username)
+                                        .orElseThrow(() -> new RuntimeException("User not found"));
+                        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+                                throw new RuntimeException("Current password is incorrect");
+                        }
+                        user.setPassword(passwordEncoder.encode(newPassword));
+                        userRepository.save(user);
+                }
         /**
          * Update the current user's name and/or email by username (email is unique)
          * @param username the username (email) of the authenticated user
