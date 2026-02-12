@@ -25,6 +25,9 @@ public class User {
     private Set<Role> roles;
     @Column(nullable = false)
     private String password;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_image_id")
+    private UserProfileImage profileImage;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -40,6 +43,13 @@ public class User {
         this.password = password;
         this.email = email;
         this.roles = roles;
+    }
+    public UserProfileImage getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(UserProfileImage profileImage) {
+        this.profileImage = profileImage;
     }
 
     // Getters and Setters
