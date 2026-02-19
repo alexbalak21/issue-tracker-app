@@ -21,6 +21,15 @@ import java.util.Optional;
 @Service
 public class TicketService {
 
+    /**
+     * Returns all tickets assigned to the given user.
+     * @param userId the user id
+     * @return list of tickets assigned to user
+     */
+    public List<Ticket> getTicketsAssignedToUser(Long userId) {
+        return getTicketsByAssignedTo(userId);
+    }
+
     private final TicketRepository ticketRepository;
     private final UserService userService;
     private final ConversationRepository conversationRepository;

@@ -22,6 +22,10 @@ Authorization: Bearer {{Access_token}}
 GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{Access_token}}
 
+### GET MY TICKETS ###
+GET {{baseUrl}}/api/tickets/assigned/me
+Authorization: Bearer {{Access_token}}
+
 
 ### GET STATUSES ###
 GET {{baseUrl}}/api/status

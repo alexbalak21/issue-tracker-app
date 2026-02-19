@@ -22,6 +22,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tickets")
 public class TicketController {
+        // ----------------------------------------------------
+        // GET ALL TICKETS ASSIGNED TO CURRENT USER
+        // ----------------------------------------------------
+        @GetMapping("/assigned/me")
+        @RequiresPermission("ticket.read")
+        @Ownership(OwnershipType.SELF)
+        public List<Ticket> getTicketsAssignedToCurrentUser() {
+            // Get current user ID from security context
+            org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            if (auth instanceof app.security.JwtAuthenticationToken jwtAuth) {
+                Long userId = jwtAuth.getUserId();
+                return ticketService.getTicketsAssignedToUser(userId);
+            }
+            return List.of();
+        }
+    // ----------------------------------------------------
+    // GET ALL TICKETS ASSIGNED TO A USER
+    // ----------------------------------------------------
+    @GetMapping("/assigned/{userId}")
+    @RequiresPermission("ticket.read")
+    @Ownership(OwnershipType.ALL_OR_SELF)
+    public List<Ticket> getTicketsAssignedToUser(@PathVariable Long userId) {
+        return ticketService.getTicketsAssignedToUser(userId);
+    }
 
     private final TicketService ticketService;
 
