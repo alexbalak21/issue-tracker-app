@@ -84,11 +84,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
 
+
         } catch (io.jsonwebtoken.ExpiredJwtException ex) {
             logger.warn("Access token expired");
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setHeader("X-Token-Expired", "true");
+            response.setHeader("Access-Control-Expose-Headers", "X-Token-Expired");
             response.setContentType("application/json");
             response.getWriter().write("{\"error\":\"access_token_expired\"}");
 

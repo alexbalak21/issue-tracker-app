@@ -162,5 +162,5 @@ Content-Type: application/json
 
 
 ### GET USERS BY ROLE ###
-GET {{baseUrl}}/api/admin/users?role=1
+GET {{baseUrl}}/api/admin/users?role=3
 Authorization: Bearer {{adminAccess_token}}  
