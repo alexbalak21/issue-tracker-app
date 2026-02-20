@@ -18,6 +18,12 @@ Content-Type: application/json
 GET {{baseUrl}}/api/auth/me
 Authorization: Bearer {{Access_token}}
 
+
+### GET PROFIEL IMAGE ###
+GET {{baseUrl}}/api/users/profile-image/2.jpg
+Authorization: Bearer {{Access_token}}
+
+
 ### GET TICKETS ###
 GET {{baseUrl}}/api/tickets
 Authorization: Bearer {{Access_token}}

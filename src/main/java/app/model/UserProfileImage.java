@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "user_profile_image")
 public class UserProfileImage {
+    @Version
+    private Long version;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // This will be set to the user's ID
 
     @Column(nullable = true)
     private String filename;

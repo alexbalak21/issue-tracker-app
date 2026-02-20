@@ -13,6 +13,8 @@ import app.security.Ownership;
 import app.security.OwnershipType;
 import app.security.RequiresPermission;
 import app.service.TicketService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +27,19 @@ public class TicketController {
         // ----------------------------------------------------
         // GET ALL TICKETS ASSIGNED TO CURRENT USER
         // ----------------------------------------------------
+        @Autowired
+        private app.service.AuthService authService;
+
         @GetMapping("/assigned/me")
         @RequiresPermission("ticket.read")
         @Ownership(OwnershipType.SELF)
         public List<Ticket> getTicketsAssignedToCurrentUser() {
-            // Get current user ID from security context
-            org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-            if (auth instanceof app.security.JwtAuthenticationToken jwtAuth) {
-                Long userId = jwtAuth.getUserId();
+            try {
+                Long userId = authService.getCurrentUserId();
                 return ticketService.getTicketsAssignedToUser(userId);
+            } catch (RuntimeException e) {
+                return List.of();
             }
-            return List.of();
         }
     // ----------------------------------------------------
     // GET ALL TICKETS ASSIGNED TO A USER

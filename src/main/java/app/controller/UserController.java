@@ -47,8 +47,7 @@ public class UserController {
      * Requires user.update.self permission
      */
     @PatchMapping("/users/me")
-    public Map<String, String> updateMe(@AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody Map<String, String> updates) {
+    public Map<String, String> updateMe(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Map<String, String> updates) {
         String username = userDetails.getUsername();
         String name = updates.get("name");
         String email = updates.get("email");
