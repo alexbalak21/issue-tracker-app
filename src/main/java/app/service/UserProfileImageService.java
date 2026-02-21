@@ -47,12 +47,10 @@ public class UserProfileImageService {
         } else {
             img = new UserProfileImage();
         }
+        img.setId(id); // Always set ID to user ID
         img.setFilename(file.getOriginalFilename());
         img.setMimeType("image/jpeg");
         img.setData(compressedData);
-        if (existing.isPresent()) {
-            img.setId(id); // Only set ID if updating
-        }
         log.info("Saving UserProfileImage entity to repository");
         UserProfileImage saved = repo.save(img);
         log.info("Profile image saved with id: {}", saved.getId());

@@ -43,9 +43,21 @@ public class UserProfileImageController {
         }
     }
 
-    @GetMapping("/users/profile-image/{id}.jpg")
+    @GetMapping("/users/profile-image/{id}")
     public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id) {
         UserProfileImage img = userProfileImageService.getProfileImageById(id);
+        if (img == null || img.getData() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + img.getFilename() + "\"")
+                .contentType(MediaType.parseMediaType(img.getMimeType()))
+                .body(img.getData());
+    }
+    @GetMapping("/users/profile-image/me")
+    public ResponseEntity<byte[]> getMyProfileImage() {
+        Long userId = authService.getCurrentUserId();
+        UserProfileImage img = userProfileImageService.getProfileImageById(userId);
         if (img == null || img.getData() == null) {
             return ResponseEntity.notFound().build();
         }

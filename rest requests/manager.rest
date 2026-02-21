@@ -20,7 +20,12 @@ Authorization: Bearer {{Access_token}}
 
 
 ### GET PROFIEL IMAGE ###
-GET {{baseUrl}}/api/users/profile-image/2.jpg
+GET {{baseUrl}}/api/users/profile-image/5
+Authorization: Bearer {{Access_token}}
+
+
+### GET PROFIEL IMAGE ###
+GET {{baseUrl}}/api/users/profile-image/me
 Authorization: Bearer {{Access_token}}
 
 
