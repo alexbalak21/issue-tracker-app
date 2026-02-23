@@ -46,11 +46,11 @@ public class UserController {
     
     @GetMapping("/users/me")
     @RequiresPermission("user.read")
-    public app.dto.UserDto getMyUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+    public app.dto.UserInfo getMyUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         if (!(userDetails instanceof app.security.CustomUserDetails customUser)) {
             throw new RuntimeException("Not authenticated or invalid principal");
         }
-        return userService.getUserDtoWithProfileImage(customUser.getId());
+        return userService.getUserInfoWithProfileImage(customUser.getId());
     }
 
     /**

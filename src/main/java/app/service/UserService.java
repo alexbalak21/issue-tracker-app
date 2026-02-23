@@ -23,39 +23,61 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 @Transactional
 public class UserService {
-                        @org.springframework.beans.factory.annotation.Autowired
-                        private app.service.UserProfileImageService userProfileImageService;
 
-                        /**
-                         * Get current user as UserDto with profile image base64 data
-                         */
-                        @Transactional(readOnly = true)
-                        public UserDto getUserDtoWithProfileImage(Long userId) {
-                                User user = userRepository.findById(userId)
-                                                .orElseThrow(() -> new RuntimeException("User not found"));
-                                String profileImageBase64 = userProfileImageService.getBase64Image(userId);
-                                return UserDto.from(user, profileImageBase64);
-                        }
-                /**
-                 * Change the current user's password after verifying the current password
-                 * @param username the username (email) of the authenticated user
-                 * @param currentPassword the current password
-                 * @param newPassword the new password
-                 */
-                public void changeCurrentUserPassword(String username, String currentPassword, String newPassword) {
-                        User user = userRepository.findByEmail(username)
-                                        .orElseThrow(() -> new RuntimeException("User not found"));
-                        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-                                throw new RuntimeException("Current password is incorrect");
-                        }
-                        user.setPassword(passwordEncoder.encode(newPassword));
-                        userRepository.save(user);
+        /**
+         * Fetch the user's profile image as a base64 string (or null if not set)
+         */
+        @Transactional(readOnly = true)
+        public String getUserProfileImageBase64(Long userId) {
+                return userProfileImageService.getBase64Image(userId);
+        }
+
+        @org.springframework.beans.factory.annotation.Autowired
+        private app.service.UserProfileImageService userProfileImageService;
+
+        /**
+         * Get current user as UserInfo with profile image base64 data
+         */
+        @Transactional(readOnly = true)
+        public app.dto.UserInfo getUserInfoWithProfileImage(Long userId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+                String profileImageBase64 = userProfileImageService.getBase64Image(userId);
+                app.dto.UserInfo info = new app.dto.UserInfo(new app.security.CustomUserDetails(user));
+                // Use reflection or setter if available, else extend UserInfo to support
+                // profileImage
+                try {
+                        java.lang.reflect.Field f = info.getClass().getDeclaredField("profileImage");
+                        f.setAccessible(true);
+                        f.set(info, profileImageBase64);
+                } catch (Exception ignored) {
                 }
+                return info;
+        }
+
+        /**
+         * Change the current user's password after verifying the current password
+         * 
+         * @param username        the username (email) of the authenticated user
+         * @param currentPassword the current password
+         * @param newPassword     the new password
+         */
+        public void changeCurrentUserPassword(String username, String currentPassword, String newPassword) {
+                User user = userRepository.findByEmail(username)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+                if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+                        throw new RuntimeException("Current password is incorrect");
+                }
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user);
+        }
+
         /**
          * Update the current user's name and/or email by username (email is unique)
+         * 
          * @param username the username (email) of the authenticated user
-         * @param name new name (nullable)
-         * @param email new email (nullable)
+         * @param name     new name (nullable)
+         * @param email    new email (nullable)
          * @return UserBasic with updated info
          */
         public UserBasic updateCurrentUser(String username, String name, String email) {
@@ -78,150 +100,145 @@ public class UserService {
                 }
                 return new UserBasic(user.getId(), user.getName());
         }
+
         // ----------------------------------------------------
         // List all users by role (basic: id and name only)
         // ----------------------------------------------------
         @Transactional(readOnly = true)
         public List<UserBasic> getAllUsersByRole(Long roleId) {
                 Role role = roleRepository.findById(roleId)
-                        .orElseThrow(() -> new RuntimeException("Role not found"));
+                                .orElseThrow(() -> new RuntimeException("Role not found"));
                 return userRepository.findAll()
-                        .stream()
-                        .filter(user -> user.getRoles().contains(role))
-                        .map(user -> new UserBasic(user.getId(), user.getName()))
-                        .toList();
+                                .stream()
+                                .filter(user -> user.getRoles().contains(role))
+                                .map(user -> new UserBasic(user.getId(), user.getName()))
+                                .toList();
         }
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+        private final UserRepository userRepository;
+        private final RoleRepository roleRepository;
+        private final PasswordEncoder passwordEncoder;
 
-    public UserService(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    // ----------------------------------------------------
-    // Create user (admin)
-    // ----------------------------------------------------
-    public UserDto create(String name, String email, String password, List<Long> roleIds) {
-
-        if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already in use");
+        public UserService(
+                        UserRepository userRepository,
+                        RoleRepository roleRepository,
+                        PasswordEncoder passwordEncoder) {
+                this.userRepository = userRepository;
+                this.roleRepository = roleRepository;
+                this.passwordEncoder = passwordEncoder;
         }
 
-        List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : Collections.emptyList()
-        );
+        // ----------------------------------------------------
+        // Create user (admin)
+        // ----------------------------------------------------
+        public UserDto create(String name, String email, String password, List<Long> roleIds) {
 
-        User user = new User(
-                name,
-                passwordEncoder.encode(password),
-                email,
-                new HashSet<>(roles)
-        );
+                if (userRepository.existsByEmail(email)) {
+                        throw new RuntimeException("Email already in use");
+                }
 
-        User saved = userRepository.save(user);
+                List<Role> roles = roleRepository.findAllById(
+                                roleIds != null ? roleIds : Collections.emptyList());
 
-        return UserDto.from(saved, null);
-    }
+                User user = new User(
+                                name,
+                                passwordEncoder.encode(password),
+                                email,
+                                new HashSet<>(roles));
 
-    // ----------------------------------------------------
-    // List all users (admin) — SUMMARY DTO
-    // ----------------------------------------------------
-    @Transactional(readOnly = true)
-    public List<UserSummary> getAll() {
+                User saved = userRepository.save(user);
 
-        return userRepository.findAllUserSummaries()
-                .stream()
-                .collect(Collectors.groupingBy(
-                        UserSummaryProjection::getId
-                ))
-                .values()
-                .stream()
-                .map(list -> {
-                    var first = list.get(0);
+                return UserDto.from(saved, null);
+        }
 
-                    List<String> roles = list.stream()
-                            .map(UserSummaryProjection::getRoleNames)
-                            .flatMap(List::stream)
-                            .toList();
+        // ----------------------------------------------------
+        // List all users (admin) — SUMMARY DTO
+        // ----------------------------------------------------
+        @Transactional(readOnly = true)
+        public List<UserSummary> getAll() {
 
-                    return new UserSummary(
-                            first.getId(),
-                            first.getName(),
-                            first.getEmail(),
-                            first.getCreatedAt(),
-                            first.getUpdatedAt(),
-                            roles
-                    );
-                })
-                .toList();
-    }
+                return userRepository.findAllUserSummaries()
+                                .stream()
+                                .collect(Collectors.groupingBy(
+                                                UserSummaryProjection::getId))
+                                .values()
+                                .stream()
+                                .map(list -> {
+                                        var first = list.get(0);
 
-    // ----------------------------------------------------
-    // List all users (basic: id and name only)
-    // ----------------------------------------------------
-    @Transactional(readOnly = true)
-    public List<UserBasic> getAllBasic() {
-        return userRepository.findAll()
-                .stream()
-                .map(user -> new UserBasic(user.getId(), user.getName()))
-                .toList();
-    }
+                                        List<String> roles = list.stream()
+                                                        .map(UserSummaryProjection::getRoleNames)
+                                                        .flatMap(List::stream)
+                                                        .toList();
 
-    // ----------------------------------------------------
-    // Assign roles to user
-    // ----------------------------------------------------
-    public UserDto assignRoles(Long userId, List<Long> roleIds) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                                        return new UserSummary(
+                                                        first.getId(),
+                                                        first.getName(),
+                                                        first.getEmail(),
+                                                        first.getCreatedAt(),
+                                                        first.getUpdatedAt(),
+                                                        roles);
+                                })
+                                .toList();
+        }
 
-        List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : Collections.emptyList()
-        );
+        // ----------------------------------------------------
+        // List all users (basic: id and name only)
+        // ----------------------------------------------------
+        @Transactional(readOnly = true)
+        public List<UserBasic> getAllBasic() {
+                return userRepository.findAll()
+                                .stream()
+                                .map(user -> new UserBasic(user.getId(), user.getName()))
+                                .toList();
+        }
 
-        user.getRoles().addAll(roles);
+        // ----------------------------------------------------
+        // Assign roles to user
+        // ----------------------------------------------------
+        public UserDto assignRoles(Long userId, List<Long> roleIds) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User saved = userRepository.save(user);
+                List<Role> roles = roleRepository.findAllById(
+                                roleIds != null ? roleIds : Collections.emptyList());
 
-        return UserDto.from(saved, null);
-    }
+                user.getRoles().addAll(roles);
 
-    // ----------------------------------------------------
-    // Remove roles from user
-    // ----------------------------------------------------
-    public UserDto removeRoles(Long userId, List<Long> roleIds) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                User saved = userRepository.save(user);
 
-        List<Role> roles = roleRepository.findAllById(
-                roleIds != null ? roleIds : Collections.emptyList()
-        );
+                return UserDto.from(saved, null);
+        }
 
-        user.getRoles().removeAll(roles);
+        // ----------------------------------------------------
+        // Remove roles from user
+        // ----------------------------------------------------
+        public UserDto removeRoles(Long userId, List<Long> roleIds) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User saved = userRepository.save(user);
+                List<Role> roles = roleRepository.findAllById(
+                                roleIds != null ? roleIds : Collections.emptyList());
 
-        return UserDto.from(saved, null);
-    }
+                user.getRoles().removeAll(roles);
 
-    public boolean existsById(Long id) {
-        return userRepository.existsById(id);
-    }
+                User saved = userRepository.save(user);
 
-    @Transactional(readOnly = true)
-    public UserDto getById(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                return UserDto.from(saved, null);
+        }
 
-        return UserDto.from(user, null);
-    }
+        public boolean existsById(Long id) {
+                return userRepository.existsById(id);
+        }
+
+        @Transactional(readOnly = true)
+        public UserDto getById(Long userId) {
+                User user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+
+                return UserDto.from(user, null);
+        }
+
         /**
          * Returns the role name for a given role ID, or throws if not found.
          */

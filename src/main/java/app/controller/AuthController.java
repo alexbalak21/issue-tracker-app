@@ -7,6 +7,7 @@ import app.dto.RegisterRequest;
 import app.dto.UserInfo;
 import app.security.CustomUserDetails;
 import app.service.AuthService;
+import app.service.UserService;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -28,9 +29,11 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthService authService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     // ----------------------------------------------------
@@ -69,6 +72,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<?>> register(@Valid @RequestBody RegisterRequest req) {
         log.info("Registration attempt for {}", req.getEmail());
+
         try {
             var user = authService.register(req);
 
@@ -91,10 +95,13 @@ public class AuthController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(401).build();
         }
-        Object principal = authentication.getPrincipal();
+         Object principal = authentication.getPrincipal();
         if (principal instanceof CustomUserDetails user) {
-            return ResponseEntity.ok(new UserInfo(user));
+             Long userId = user.getId();
+             UserInfo userInfo = userService.getUserInfoWithProfileImage(userId);
+             return ResponseEntity.ok(userInfo);
         }
+
         return ResponseEntity.status(500).build();
     }
 

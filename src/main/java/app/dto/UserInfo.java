@@ -13,6 +13,7 @@ public class UserInfo {
     private String email;
     private List<String> roles;
     private String createdAt;
+    private String profileImage; // base64 or null
     private String updatedAt;
 
     // Construct from CustomUserDetails (recommended)
@@ -22,6 +23,7 @@ public class UserInfo {
         this.email = user.getEmail();
         this.roles = user.getRoles(); // already returns List<String>
         this.createdAt = user.getCreatedAt() != null ? user.getCreatedAt().toString() : null;
+        this.profileImage = null;
         this.updatedAt = user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : null;
     }
 
@@ -34,6 +36,7 @@ public class UserInfo {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         this.createdAt = null;
+        this.profileImage = null;
         this.updatedAt = null;
     }
 
@@ -45,8 +48,9 @@ public class UserInfo {
 
         // Convert Set<Role> → List<String>
         this.roles = user.getRoles().stream()
-                .map(Role::getName)
-                .toList();
+            .map(Role::getName)
+            .toList();
+        this.profileImage = null;
 
         this.createdAt = user.getCreatedAt() != null ? user.getCreatedAt().toString() : null;
         this.updatedAt = user.getUpdatedAt() != null ? user.getUpdatedAt().toString() : null;
@@ -55,6 +59,7 @@ public class UserInfo {
     // Getters
     public Long getId() { return id; }
     public String getName() { return name; }
+    public String getProfileImage() { return profileImage; }
     public String getEmail() { return email; }
     public List<String> getRoles() { return roles; }
     public String getCreatedAt() { return createdAt; }
