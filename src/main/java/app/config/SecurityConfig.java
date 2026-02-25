@@ -40,20 +40,23 @@ public class SecurityConfig {
         http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(auth -> auth
-                // React static build
-                .requestMatchers(
-                        "/",
-                        "/index.html",
-                        "/assets/**",
-                        "/favicon.svg",
-                        "/static/**"
-                ).permitAll()
+            // React static build
+            .requestMatchers(
+                "/",
+                "/index.html",
+                "/assets/**",
+                "/favicon.svg",
+                "/static/**"
+            ).permitAll()
 
-                // Public API endpoints
-                .requestMatchers("/api/auth/**").permitAll()
+            // Public API endpoints
+            .requestMatchers("/api/auth/**").permitAll()
 
-                // Everything else requires authentication
-                .anyRequest().authenticated()
+            // Allow all non-API, non-static routes for SPA
+            .requestMatchers("/{path:[^\\.]*}", "/**/{path:[^\\.]*}").permitAll()
+
+            // Everything else requires authentication
+            .anyRequest().authenticated()
             );
 
         // Disable form login + HTTP Basic (API uses tokens or custom auth)
