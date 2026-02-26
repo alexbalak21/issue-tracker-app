@@ -14,7 +14,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>issue-tracker</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>issue-tracker</name>
 	<description>Issue tracker API with React frontend</description>
 
