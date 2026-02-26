@@ -1,0 +1,14 @@
+BUILD APPLICATION 
+mvn clean package -DskipTests
+
+BUILD DOCKER IMAGE 
+docker build -t issue-tracker .
+
+Login to DOCKER
+docker login
+
+Tag the Image
+docker tag issue-tracker alexbalak/issue-tracker:latest
+
+Push to docker hub
+docker push alexbalak/issue-tracker:latest
