@@ -141,6 +141,20 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+        /**
+     * Updates only the body of a ticket.
+     * @param id the ticket id
+     * @param body the new body
+     * @return the updated Ticket
+     */
+    public Ticket updateTicketBody(Long id, String body) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+        ticket.setBody(body);
+        ticket.setUpdatedAt(LocalDateTime.now());
+        return ticketRepository.save(ticket);
+    }
+
     public Ticket updateTicketPriority(Long id, int priorityId) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));

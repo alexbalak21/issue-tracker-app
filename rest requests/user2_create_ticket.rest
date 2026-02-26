@@ -6,7 +6,7 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "gordon.freeman@example.com",
+    "email": "sarah.connor@example.com",
     "password": "password1234"
 }
 
@@ -61,5 +61,15 @@ Content-Type: application/json
   "title": "Password reset email missing - URGENT",
   "body": "I requested a password reset but never received the email. I checked spam and waited 15 minutes. Please resolve ASAP.",
   "priorityId": 3
+}
+
+
+### UPDATE TICKET 92 BODY ONLY ###
+PATCH {{baseUrl}}/api/tickets/92/body
+Authorization: Bearer {{Access_token}}
+Content-Type: application/json
+
+{
+  "body": "I requested a password reset but never received the email. I checked spam and waited 15 minutes. Please resolve ASAP Updated body only."
 }
 

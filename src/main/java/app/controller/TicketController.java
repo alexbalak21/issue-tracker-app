@@ -26,7 +26,6 @@ import java.util.List;
 @RequestMapping("/api/tickets")
 public class TicketController {
 
-
     // ----------------------------------------------------
     // GET ALL TICKETS ASSIGNED TO CURRENT USER
     // ----------------------------------------------------
@@ -147,6 +146,19 @@ public class TicketController {
                     return ResponseEntity.ok(updated);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // ----------------------------------------------------
+    // UPDATE BODY — requires ticket.write OR SELF ownership
+    // ----------------------------------------------------
+    @PatchMapping("/{id}/body")
+    @RequiresPermission("ticket.write")
+    @Ownership(OwnershipType.SELF)
+    public ResponseEntity<Ticket> patchBody(
+            @PathVariable Long id,
+            @RequestBody app.dto.PatchBodyRequest req) {
+        Ticket updated = ticketService.updateTicketBody(id, req.getBody());
+        return ResponseEntity.ok(updated);
     }
 
     // UPDATE PRIORITY
