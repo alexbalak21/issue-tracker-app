@@ -1,4 +1,4 @@
-﻿# Issue Tracker API
+﻿# Support Portal API
 
 A full-stack Issue Tracker application for managing, assigning, and resolving issues within a team. Built with a Spring Boot REST API backend and a React/TypeScript frontend served as static assets.
 
